@@ -829,16 +829,16 @@ public partial class GameDemo : MonoBehaviour
         });
 
 
-        for (int i = 0; i < barPrefabParent.childCount; i++)
-        {
-            BarsDemo bar = barPrefabParent.Find("Bar" + (i + 1)).GetComponent<BarsDemo>();
-            BarsDemoPrefabList.Add(bar);
+        //for (int i = 0; i < barPrefabParent.childCount; i++)
+        //{
+        //    BarsDemo bar = barPrefabParent.Find("Bar" + (i + 1)).GetComponent<BarsDemo>();
+        //    BarsDemoPrefabList.Add(bar);
 
-            if (bar.beiginOffset < barsAppearMinOffset)
-            {
-                barsAppearMinOffset = bar.beiginOffset;
-            }
-        }
+        //    if (bar.beiginOffset < barsAppearMinOffset)
+        //    {
+        //        barsAppearMinOffset = bar.beiginOffset;
+        //    }
+        //}
 
         UpdateCamera();
 
