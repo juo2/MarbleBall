@@ -1,0 +1,60 @@
+{
+    "BarConfigList": [
+        {
+            "prefabIndex": 0,
+            "beiginOffset": 0.18,
+            "endOffset": 0.2,
+            "modifyVelocityX": -1.1,
+            "modifyVelocityY": -0.48,
+            "remainFrame" : 2
+        },
+        {
+            "prefabIndex": 1,
+            "beiginOffset": 0.15,
+            "endOffset": 0.1,
+            "modifyVelocityX": -1.1,
+            "modifyVelocityY": -0.48,
+            "remainFrame" : 2
+        },
+        {
+            "prefabIndex": 2,
+            "beiginOffset": 0.1,
+            "endOffset": 0.1,
+            "modifyVelocityX": -1.1,
+            "modifyVelocityY": -0.48,
+            "remainFrame" : 2
+        },
+        {
+            "prefabIndex": 3,
+            "beiginOffset": 0.1,
+            "endOffset": 0.1,
+            "modifyVelocityX": -1.1,
+            "modifyVelocityY": -0.48,
+            "remainFrame" : 2
+        },
+        {
+            "prefabIndex": 4,
+            "beiginOffset": 0.1,
+            "endOffset": 0.1,
+            "modifyVelocityX": -1.1,
+            "modifyVelocityY": -0.48,
+            "remainFrame" : 2
+        },
+        {
+            "prefabIndex": 5,
+            "beiginOffset": 0.1,
+            "endOffset": 0.1,
+            "modifyVelocityX": -1.1,
+            "modifyVelocityY": -0.48,
+            "remainFrame" : 4
+        },
+        {
+            "prefabIndex": 6,
+            "beiginOffset": 0.1,
+            "endOffset": 0.1,
+            "modifyVelocityX": -1.1,
+            "modifyVelocityY": -0.48,
+            "remainFrame" : 4
+        }
+    ]
+}
