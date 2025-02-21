@@ -18,6 +18,11 @@
     #define _DETAIL 1
 #endif
 
+sampler2D _GrabBlurTexture_0;
+sampler2D _GrabBlurTexture_1;
+sampler2D _GrabBlurTexture_2;
+sampler2D _GrabBlurTexture_3;
+
 //---------------------------------------
 half4       _Color;
 half        _Cutoff;

@@ -98,7 +98,7 @@ public class MidiHelper : MonoBehaviour
                 }
             }
 
-            File.WriteAllText(Path.Combine(Application.dataPath, "test.txt"), contents);
+            //File.WriteAllText(Path.Combine(Application.dataPath, "test.txt"), contents);
             Debug.Log($"AllMidiEvents.Count:{AllMidiEvents.Count}");
             //Debug.Log($"ind:{ind}");
             midiFilePlayer.MPTK_StartPlayAtFirstNote = true;

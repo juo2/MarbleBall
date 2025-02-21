@@ -75,6 +75,8 @@ namespace AkilliMum.Standard.Mirror
         SerializedProperty UIImage;
         SerializedProperty UIImageDepth;
 
+        SerializedProperty SeparableGlassBlurShader;
+
         string space = "          ";
         GUIStyle headerStyle;
 
@@ -142,6 +144,7 @@ namespace AkilliMum.Standard.Mirror
             DepthBlurVerticalMultiplier = serializedObject.FindProperty("DepthBlurVerticalMultiplier");
 
             CustomShaders = serializedObject.FindProperty("CustomShaders");
+            SeparableGlassBlurShader = serializedObject.FindProperty("SeparableGlassBlurShader");
         }
 
         public override void OnInspectorGUI()
@@ -266,7 +269,7 @@ namespace AkilliMum.Standard.Mirror
             EditorGUILayout.Space();
             EditorGUILayout.PropertyField(UIImage, new GUIContent { text = "Mirror Tex to Visualize" });
             EditorGUILayout.PropertyField(UIImageDepth, new GUIContent { text = "Depth Tex to Visualize" });
-
+            EditorGUILayout.PropertyField(SeparableGlassBlurShader, new GUIContent { text = "SeparableGlassBlurShader" });
 
             if (GUILayout.Button("Apply Changes"))
                 (target as MirrorManager).InitializeMirror();

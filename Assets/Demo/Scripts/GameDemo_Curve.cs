@@ -11,6 +11,7 @@ public partial class GameDemo : MonoBehaviour
     System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
     List<CurveType> curveTypeList = new List<CurveType>();
 
+    [System.Serializable]
     public enum TryingType
     {
         None,
@@ -858,101 +859,6 @@ public partial class GameDemo : MonoBehaviour
             passType = PassType.pass;
         }
 
-        if (passType != PassType.pass)
-        {
-            //passType = PassType.less;
-
-            //if (ball.velocity.x > 0 && minPos.x > currentPad.bounds.max.x)
-            //{
-            //    passType = PassType.greater;
-            //}
-            //else if (ball.velocity.x < 0 && minPos.x < currentPad.bounds.min.x)
-            //{
-            //    passType = PassType.greater;
-            //}
-
-            //if (minPos.y < currentPad.bounds.min.y)
-            //{
-            //    passType = PassType.greater;
-            //}
-
-            //if (passType == PassType.less)
-            //{
-            //    distanceType = DistanceType.Speed;
-
-            //    bool isV = false;
-            //    bool isH = false;
-            //    if (minPos.y > currentPad.bounds.max.y)
-            //    {
-            //        isV = true;
-            //    }
-
-            //    if (ball.velocity.x > 0 && minPos.x < currentPad.bounds.min.x)
-            //    {
-            //        isH = true;
-            //    }
-            //    else if (ball.velocity.x < 0 && minPos.x > currentPad.bounds.max.x)
-            //    {
-            //        isH = true;
-            //    }
-
-            //    int LengthX = 1;
-            //    int LengthY = 1;
-
-            //    if (isV)
-            //    {
-            //        LengthY = 10;
-            //    }
-
-            //    if (isH)
-            //    {
-            //        LengthX = 10;
-            //    }
-
-            //    for (int y = 0; y < LengthY; y++)
-            //    {
-            //        for (int x = 0; x < LengthX; x++)
-            //        {
-            //            simulateToFrame(backFrame, true, true);
-            //            SetRotation(offsetIndex - 1, minRotation);
-            //            SetPhysicMaterialBounciness(offsetIndex - 1, minBounciness);
-
-            //            float vOffsetX = x * 0.2f;
-            //            float vOffsetY = y * 0.2f;
-
-            //            ModifyFrameVelocity(backFrame + 1, vOffsetX, vOffsetY);
-
-            //            ClearMistakeCollisionTimes();
-
-            //            for (int i = 0; i < offsetFrame; i++)
-            //            {
-            //                simulateNextFrame();
-            //            }
-
-            //            bool mistakeCollision = DetectMistakeCollisionTimes();
-
-            //            List<PhysicsState> _list = GetCurrentPhysicsState(backFrame);
-            //            RecordPadInfo_Simluate(backFrame, currentPad.debugCenter, currentPad.debugSize, currentPad.debugBestPos, minRotation, minBounciness, _list, vOffsetX, vOffsetY);
-
-            //            if (currentPad.bounds.Contains(ball.transform.position) && !mistakeCollision)
-            //            {
-            //                RecordBestPoint_Simluate(backFrame, minRotation, minBounciness, vOffsetX, vOffsetY);
-            //                g_isPass = true;
-            //                break;
-            //            }
-            //        }
-
-            //        if (g_isPass)
-            //        {
-            //            break;
-            //        }
-            //    }
-
-            //    RemoveFrameVelocityRecord(backFrame + 1);
-            //    Debug.Log($"ball.transform.position.x:{ball.transform.position.x}  ball.transform.position.y:{ball.transform.position.y}  currentPad.bounds.min.x:{currentPad.bounds.min.x} currentPad.bounds.min.y:{currentPad.bounds.min.y}  currentPad.bounds.max.x:{currentPad.bounds.max.x}  currentPad.bounds.max.y:{currentPad.bounds.max.y} isV:{isV} isH:{isH}");
-            //}
-        }
-
         if (!g_isPass)
         {
             simulateToFrame(backFrame, true, true);
@@ -963,6 +869,7 @@ public partial class GameDemo : MonoBehaviour
     void VerticalToVerticalSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
     {
         logger($"    ³¢ÊÔ curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
+
 
         if (tryingType == TryingType.Try_Vertical)
             ContinuousCount++;
@@ -986,7 +893,7 @@ public partial class GameDemo : MonoBehaviour
     void HorizontalToHorizontalSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
     {
         logger($"    ³¢ÊÔ curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- success!!!");
-
+        
         if (tryingType == TryingType.Try_Horizontal)
             ContinuousCount++;
 
@@ -1075,6 +982,7 @@ public partial class GameDemo : MonoBehaviour
 
     void UpdateCurveType(CurveType _curveType)
     {
+        currentRecordJson.successCurveType = _curveType;
         curveTypeList.Add(_curveType);
 
         CurveType preCurveType = LastCurveType();
@@ -1217,6 +1125,10 @@ public partial class GameDemo : MonoBehaviour
                         tryingType = TryingType.Try_Vertical;
                         ContinuousCount = 0;
                     }
+                }
+                else
+                {
+                    nextCurveType = _curveType;
                 }
             }
         }
@@ -1612,6 +1524,8 @@ public partial class GameDemo : MonoBehaviour
 
     void BackupPlan(int backFrame, int offsetIndex, int offsetFrame)
     {
+        currentRecordJson.isBackUp = true;
+
         int v_frame = -1;
         if (offsetIndex == 74)
         {
@@ -1643,6 +1557,7 @@ public partial class GameDemo : MonoBehaviour
             }
 
             SetRotation(offsetIndex - 1, padCurve.rotation);
+
             VerticalToHorizontalSuccess(offsetIndex, offsetFrame, CurveType.VerticalToHorizontal);
 
             g_isPass = true;
@@ -1746,6 +1661,7 @@ public partial class GameDemo : MonoBehaviour
             if (v_frame != -1)
                 RemoveFrameVelocityRecord(v_frame);
 
+
             if (bestPoint.curveType == CurveType.VerticalToVertical)
             {
                 VerticalToVerticalSuccess(offsetIndex, offsetFrame, bestPoint.curveType);
@@ -1843,6 +1759,8 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator HorizontalCurveFail(int offsetIndex, int offsetFrame)
     {
+        currentRecordJson.curveTypeList.Add(curveType);
+
         CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
 
         if(result != CurveType.None)
@@ -1881,6 +1799,8 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator VerticalCurveFail(int offsetIndex, int offsetFrame)
     {
+        currentRecordJson.curveTypeList.Add(curveType);
+
         CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
 
         if (result != CurveType.None)

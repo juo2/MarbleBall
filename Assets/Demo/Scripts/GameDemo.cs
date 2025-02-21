@@ -41,6 +41,8 @@ public class BarPrefabs
 }
 
 
+
+
 [System.Serializable]
 public class BarPrefabsData
 {
@@ -100,6 +102,18 @@ public class Config
 
 public partial class GameDemo : MonoBehaviour
 {
+    [System.Serializable]
+    public class RecordJson
+    {
+        public List<CurveType> curveTypeList = new List<CurveType>();
+        public int offsetIndex;
+        public int offsetFrame;
+        public int continuousCount;
+        public TryingType tryingType;
+        public bool isBackUp = false;
+        public CurveType successCurveType;
+    }
+
     public class BestPoint
     {
         public List<PhysicsState> physicsStates;
@@ -334,6 +348,17 @@ public partial class GameDemo : MonoBehaviour
     Pad currentPad = null;
 
     private string logPath = string.Empty;
+    private string logJsonPath = string.Empty;
+    bool isRecordJson = true;
+    List<RecordJson> recordJsons = new List<RecordJson>();
+    Stack<RecordJson> recordJsonPool = new Stack<RecordJson>();
+    RecordJson currentRecordJson;
+
+    [System.Serializable]
+    class RecordJsonData
+    {
+        public List<RecordJson> recordJsons;
+    }
 
     Vector2 horizontalCenter1 = new Vector2(0.15f, -0.05f);
     Vector2 horizontalCenter2 = new Vector2(-0.15f, -0.05f);
@@ -571,7 +596,7 @@ public partial class GameDemo : MonoBehaviour
     BarsConfig barsConfig;
 
     int spBarsCount = 2;
-    float midiFacter = 1f;
+    float midiFacter = 1.2f;
 
     private int currentFrame
     {
@@ -1129,7 +1154,22 @@ public partial class GameDemo : MonoBehaviour
 
     void initLogger(string midi)
     {
-        logPath = Path.Combine(Application.dataPath, $"../{midi}_log.txt");
+        string folderPath = Path.Combine(Application.dataPath, "../1_logs");
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+
+        logPath = Path.Combine(folderPath, $"{midi}_log.txt");
+
+        string folderPath2 = Path.Combine(Application.dataPath, "../1_jsons");
+        if (!Directory.Exists(folderPath2))
+        {
+            Directory.CreateDirectory(folderPath2);
+        }
+
+        logJsonPath = Path.Combine(folderPath2, $"{midi}_log.json");
+
         File.WriteAllText(logPath,"");
     }
 
@@ -1140,6 +1180,42 @@ public partial class GameDemo : MonoBehaviour
             return;
         }
         File.AppendAllText(logPath, logStr + "\n");
+    }
+
+    RecordJson getRecordJson()
+    {
+        RecordJson rj = null;
+        if (recordJsonPool.Count > 0)
+        {
+            rj = recordJsonPool.Pop();
+            rj.isBackUp = false;
+            rj.curveTypeList = new List<CurveType>();
+        }
+        else
+        {
+            rj = new RecordJson();
+        }
+
+        return rj;
+    }
+
+    void saveJsonLog()
+    {
+        if(isRecordJson)
+        {
+            RecordJsonData recordJsonData = new RecordJsonData();
+            recordJsonData.recordJsons = recordJsons;
+
+            string json_str = JsonUtility.ToJson(recordJsonData);
+            File.WriteAllText(logJsonPath, json_str);
+
+            foreach (var rj in recordJsons)
+            {
+                recordJsonPool.Push(rj);
+            }
+
+            recordJsons.Clear();
+        }
     }
 
     void padStatusUpdate(int _frame)
@@ -1549,6 +1625,15 @@ public partial class GameDemo : MonoBehaviour
                 }
             }
 
+            if(isRecordJson)
+            {
+                currentRecordJson = getRecordJson();
+                currentRecordJson.continuousCount = ContinuousCount;
+                currentRecordJson.offsetIndex = offsetIndex;
+                currentRecordJson.offsetFrame = offsetFrame;
+                currentRecordJson.tryingType = tryingType;
+            }
+
             yield return TryCurve(offsetIndex, offsetFrame);
             
             if(!g_isPass)
@@ -1561,6 +1646,10 @@ public partial class GameDemo : MonoBehaviour
             logger($"第 {offsetIndex} 个结束 ------------");
             //Debug.Log($"第 {offsetIndex} 个结束 ------------");
 
+            if (isRecordJson)
+            {
+                recordJsons.Add(currentRecordJson);
+            }
 
             currentOffsetIndex++;
         }
@@ -1751,6 +1840,8 @@ public partial class GameDemo : MonoBehaviour
         stopwatch.Stop();
 
         logger($"运行时间:{stopwatch.ElapsedMilliseconds / 1000f}");
+
+        saveJsonLog();
 
         isGening = false;
     }

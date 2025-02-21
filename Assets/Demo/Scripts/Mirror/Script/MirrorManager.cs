@@ -147,6 +147,9 @@ namespace AkilliMum.Standard.Mirror
         public UnityEngine.UI.RawImage UIImage;
         public UnityEngine.UI.RawImage UIImageDepth;
 
+        public Shader SeparableGlassBlurShader;
+
+
         //private float _deltaTime;
 
         [NonSerialized]
@@ -162,7 +165,6 @@ namespace AkilliMum.Standard.Mirror
         public RendererManager _rendererManager;
         public RenderTextureManager _renderTextureManager;
         public OptionManager _optionManager;
-
 
         // ReSharper disable once UnusedMember.Global
         protected virtual void OnEnable()
@@ -417,7 +419,7 @@ namespace AkilliMum.Standard.Mirror
                 _cameraManager.SetReferenceCamera(cameraToUse);
 
                 //create mirror cam and set options etc.
-                _cameraManager.CreateMirrorCamera();
+                _cameraManager.CreateMirrorCamera(SeparableGlassBlurShader);
 
                 //create textures if necessary
                 _renderTextureManager.CreateRenderTextures(_cameraManager);
@@ -1177,7 +1179,7 @@ namespace AkilliMum.Standard.Mirror
         /// Creates the reflection camera and returns it, recreation is done only if <see cref="CameraManager.IsDirty"/> is true
         /// </summary>
         /// <returns></returns>
-        public void CreateMirrorCamera()
+        public void CreateMirrorCamera(Shader separableGlassBlurShader)
         {
             //re-run if only class is dirty :)
             if (!IsDirty)
@@ -1194,6 +1196,8 @@ namespace AkilliMum.Standard.Mirror
             _mirrorCamera.name = CameraNameStart + _mainCamera.GetInstanceID();
             _mirrorCamera.enabled = false;
             _mirrorCamera.gameObject.AddComponent<FlareLayer>();
+            CommandBufferBlur cbb = _mirrorCamera.gameObject.AddComponent<CommandBufferBlur>();
+            cbb._Shader = separableGlassBlurShader;
             _mirrorCameraContainer.hideFlags = HideFlags.HideAndDontSave;
 
 

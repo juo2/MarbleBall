@@ -477,7 +477,7 @@ float2 Index_float(in float isMultiPass, float2 screenUV, out float Eye) {
 
 inline float4 CalculateReflection(float3 eyeVec, float4 screenPos, float texdistance, float eyeIndex,
     /*float4 eyePos,*/inout half smoothness, inout half3 specColor,
-    float2 texuv, inout float3 normal, inout half3 diffColor,
+    float2 texuv,  float3 normal, inout half3 diffColor,
     bool isForward, inout half3 emissiveColor, inout half texAlpha)
 {
     half4 maskAlpha = half4(1, 1, 1, 1);
@@ -1109,10 +1109,18 @@ half4 fragForwardBaseInternal(VertexOutputForwardBase i)
     //     -s.eyeVec, gi.light, gi.indirect);
 #endif
 
-    c.rgb += Emission(i.tex.xy) + emissiveColor;
+    half4 ref00 = tex2Dproj(_GrabBlurTexture_0, i.screenPos);
+    half4 ref01 = tex2Dproj(_GrabBlurTexture_1, i.screenPos);
+    half4 ref02 = tex2Dproj(_GrabBlurTexture_2, i.screenPos);
+    half4 ref03 = tex2Dproj(_GrabBlurTexture_3, i.screenPos);
+
+
+    c.rgb += Emission(i.tex.xy) + ref02 * _ReflectionIntensity;//+ emissiveColor;
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG(_unity_fogCoord, c.rgb);
+
+   
     return OutputForward(c, s.alpha);
 }
 

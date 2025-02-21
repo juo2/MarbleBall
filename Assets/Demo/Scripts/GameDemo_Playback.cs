@@ -42,8 +42,6 @@ public partial class GameDemo : MonoBehaviour
         public int frame;
         public int offsetFrame;
         public float bounciness;
-        //public Vector2 miniBorder;
-        //public Vector2 maxBorder;
         public Color debugColor;
         public Vector3 debugCenter;
         public Vector3 debugSize;
