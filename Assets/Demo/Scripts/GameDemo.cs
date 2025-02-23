@@ -2669,6 +2669,8 @@ public partial class GameDemo : MonoBehaviour
             bars_instance.inverse = true;
         }
 
+        bars_instance.refreshBarDir();
+
         if (bars_instance.followRotation)
         {
             float angle = Vector3.Angle(frameDir, Vector3.down);

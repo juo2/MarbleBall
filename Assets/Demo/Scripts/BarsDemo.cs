@@ -22,7 +22,10 @@ public class BarsDemo : MonoBehaviour
 
     public bool inverse_vec = false;
 
-    private void Start()
+    List<SplineMesh.Channel> channelList = new List<SplineMesh.Channel>();
+    List<Vector3> originRotation = new List<Vector3>();
+
+    private void Awake()
     {
         //int n = 0;
         //SampleCollection sampleCollection = new SampleCollection();
@@ -52,6 +55,43 @@ public class BarsDemo : MonoBehaviour
         //SplineMesh.Channel.MeshDefinition mesh = channel.GetMesh(0);
         //mesh.offset = new Vector3(0.03f, 0, 0);
         //mesh.rotation = new Vector3(0, -90, 90);
+
+        SplineMesh[] splineMeshes = GetComponentsInChildren<SplineMesh>();
+
+        foreach(var sm in splineMeshes)
+        {
+            for(int i = 0;i < sm.GetChannelCount();i++)
+            {
+                Dreamteck.Splines.SplineMesh.Channel channel = sm.GetChannel(i);
+                if(channel.name == "Channel 3")
+                {
+                    channelList.Add(channel);
+                    originRotation.Add(channel.maxRotation);
+                }
+            }
+        }
+    }
+
+    public void refreshBarDir()
+    {
+        if (inverse)
+        {
+            for(int i = 0;i < channelList.Count;i++)
+            {
+                Vector3 rotation = originRotation[i];
+                channelList[i].maxRotation = new Vector3(rotation.x + 180f, rotation.y, rotation.z);
+                channelList[i].minRotation = new Vector3(rotation.x + 180f, rotation.y, rotation.z);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < channelList.Count; i++)
+            {
+                Vector3 rotation = originRotation[i];
+                channelList[i].maxRotation = new Vector3(rotation.x, rotation.y, rotation.z);
+                channelList[i].minRotation = new Vector3(rotation.x, rotation.y, rotation.z);
+            }
+        }
     }
 
     public void RefreshMesh(bool res)
