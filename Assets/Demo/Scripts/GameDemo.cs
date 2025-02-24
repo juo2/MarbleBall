@@ -2525,11 +2525,15 @@ public partial class GameDemo : MonoBehaviour
         if (frameDir.x > 0)
         {
             barCombine_instance.transform.eulerAngles = Vector3.zero;
+            barCombine_instance.inverse = true;
         }
         else
         {
             barCombine_instance.transform.eulerAngles = new Vector3(0, 180f, 0);
+            barCombine_instance.inverse = false;
         }
+
+        barCombine_instance.refreshBarDir();
 
         float angle = Vector3.Angle(frameDir, Vector3.down);
         barCombine_instance.transform.eulerAngles = new Vector3(barCombine_instance.transform.eulerAngles.x, barCombine_instance.transform.eulerAngles.y, angle);

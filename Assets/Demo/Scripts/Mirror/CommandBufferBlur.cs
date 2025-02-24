@@ -47,6 +47,10 @@ public class CommandBufferBlur : MonoBehaviour
         if (Initialized)
             return;
 
+        if(!_Shader)
+        {
+            return;
+        }
         //if (!_Shader)
         //{
         //    _Shader = Shader.Find("Hidden/SeparableGlassBlur");
