@@ -23212,7 +23212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Path: {fileID: 523672108}
-  m_PathPosition: 615
+  m_PathPosition: 680
   m_PositionUnits: 0
   m_PathOffset: {x: 0, y: 0, z: 0}
   m_XDamping: 5
@@ -117880,6 +117880,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 872143558}
+  - component: {fileID: 872143559}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -117905,6 +117906,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &872143559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872143557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07132c8e7c104d34dad65b3079551942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wall: {fileID: 274425958}
+  wallEditor: {fileID: 1416012826}
 --- !u!1 &885835646
 GameObject:
   m_ObjectHideFlags: 0

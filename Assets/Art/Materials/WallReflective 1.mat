@@ -137,7 +137,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Platform: 0
-    - _ReflectionIntensity: 0.1
+    - _ReflectionIntensity: 0.15
     - _ReflectionLight: 1
     - _ReflectionRefraction: 10
     - _RippleDensity: 1

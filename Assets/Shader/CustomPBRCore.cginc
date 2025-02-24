@@ -1,5 +1,10 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
+half4       _DiffuseScatteringColor;
+float       _DiffuseScatteringExponent;
+half        _DiffuseScatteringOffset;
+half3       _DiffuseScatteringDir;
+
 
 #ifndef UNITY_STANDARD_CORE_FORWARD_INCLUDED
 #define UNITY_STANDARD_CORE_FORWARD_INCLUDED
@@ -9,11 +14,8 @@
 #endif
 
 #include "UnityStandardConfig.cginc"
-#include "UnityStandardCore.cginc"
-VertexOutputForwardBase vertBase(VertexInput v) { return vertForwardBase(v); }
-VertexOutputForwardAdd vertAdd(VertexInput v) { return vertForwardAdd(v); }
-half4 fragBase(VertexOutputForwardBase i) : SV_Target{ return fragForwardBaseInternal(i); }
-half4 fragAdd(VertexOutputForwardAdd i) : SV_Target{ return fragForwardAddInternal(i); }
+//#include "UnityStandardCore.cginc"
+
 
 #endif // UNITY_STANDARD_CORE_FORWARD_INCLUDED
 
@@ -278,6 +280,12 @@ inline FragmentCommonData FragmentSetup(inout float4 i_tex, float3 i_eyeVec, hal
 
     // NOTE: shader relies on pre-multiply alpha-blend (_SrcBlend = One, _DstBlend = OneMinusSrcAlpha)
     o.diffColor = PreMultiplyAlpha(o.diffColor, alpha, o.oneMinusReflectivity, /*out*/ o.alpha);
+
+    half scatterNdotV = (dot(o.normalWorld, o.eyeVec + _DiffuseScatteringDir) + _DiffuseScatteringOffset);
+    half scatter = exp2(-scatterNdotV * scatterNdotV * _DiffuseScatteringExponent);
+    scatter *= scatter;
+    o.diffColor += lerp(o.diffColor * _DiffuseScatteringColor.rgb, _DiffuseScatteringColor.rgb, _DiffuseScatteringColor.a) * scatter * 4;
+
     return o;
 }
 
@@ -463,6 +471,9 @@ half4 fragForwardBaseInternal(VertexOutputForwardBase i)
 
     UNITY_EXTRACT_FOG_FROM_EYE_VEC(i);
     UNITY_APPLY_FOG(_unity_fogCoord, c.rgb);
+
+    
+
     return OutputForward(c, s.alpha);
 }
 
@@ -735,3 +746,10 @@ inline UnityGI FragmentGI(
 }
 
 #endif // UNITY_STANDARD_CORE_INCLUDED
+
+
+
+VertexOutputForwardBase vertBase(VertexInput v) { return vertForwardBase(v); }
+VertexOutputForwardAdd vertAdd(VertexInput v) { return vertForwardAdd(v); }
+half4 fragBase(VertexOutputForwardBase i) : SV_Target{ return fragForwardBaseInternal(i); }
+half4 fragAdd(VertexOutputForwardAdd i) : SV_Target{ return fragForwardAddInternal(i); }

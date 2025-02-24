@@ -1,11 +1,18 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "CustomShader/Standard"
+Shader "Custom/Standard"
 {
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
         _MainTex("Albedo", 2D) = "white" {}
+        
+
+        _DiffuseScatteringColor("Diffuse scattering", Color) = (0,0,0,0)
+        _DiffuseScatteringExponent("Diffuse scattering exponent", Range(2,20)) = 8
+        _DiffuseScatteringOffset("Diffuse scattering offset", Range(-0.5,0.5)) = 0
+        _DiffuseScatteringDir("DiffuseScattering dirction",Vector) = (0,0,0,0)
+
 
         _Cutoff("Alpha Cutoff", Range(0.0, 1.0)) = 0.5
 
@@ -40,11 +47,11 @@ Shader "CustomShader/Standard"
         [Enum(UV0,0,UV1,1)] _UVSec("UV Set for secondary textures", Float) = 0
 
 
-            // Blending state
-            [HideInInspector] _Mode("__mode", Float) = 0.0
-            [HideInInspector] _SrcBlend("__src", Float) = 1.0
-            [HideInInspector] _DstBlend("__dst", Float) = 0.0
-            [HideInInspector] _ZWrite("__zw", Float) = 1.0
+        // Blending state
+        [HideInInspector] _Mode("__mode", Float) = 0.0
+        [HideInInspector] _SrcBlend("__src", Float) = 1.0
+        [HideInInspector] _DstBlend("__dst", Float) = 0.0
+        [HideInInspector] _ZWrite("__zw", Float) = 1.0
     }
 
         CGINCLUDE
@@ -70,30 +77,30 @@ Shader "CustomShader/Standard"
                 CGPROGRAM
                 #pragma target 3.0
 
-            // -------------------------------------
+                // -------------------------------------
 
-            #pragma shader_feature_local _NORMALMAP
-            #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
-            #pragma shader_feature_fragment _EMISSION
-            #pragma shader_feature_local _METALLICGLOSSMAP
-            #pragma shader_feature_local_fragment _DETAIL_MULX2
-            #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-            #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
-            #pragma shader_feature_local_fragment _GLOSSYREFLECTIONS_OFF
-            #pragma shader_feature_local _PARALLAXMAP
+                #pragma shader_feature_local _NORMALMAP
+                #pragma shader_feature_local _ _ALPHATEST_ON _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON
+                #pragma shader_feature_fragment _EMISSION
+                #pragma shader_feature_local _METALLICGLOSSMAP
+                #pragma shader_feature_local_fragment _DETAIL_MULX2
+                #pragma shader_feature_local_fragment _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+                #pragma shader_feature_local_fragment _SPECULARHIGHLIGHTS_OFF
+                #pragma shader_feature_local_fragment _GLOSSYREFLECTIONS_OFF
+                #pragma shader_feature_local _PARALLAXMAP
 
-            #pragma multi_compile_fwdbase
-            #pragma multi_compile_fog
-            #pragma multi_compile_instancing
-            // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
-            //#pragma multi_compile _ LOD_FADE_CROSSFADE
+                #pragma multi_compile_fwdbase
+                #pragma multi_compile_fog
+                #pragma multi_compile_instancing
+                // Uncomment the following line to enable dithering LOD crossfade. Note: there are more in the file to uncomment for other passes.
+                //#pragma multi_compile _ LOD_FADE_CROSSFADE
 
-            #pragma vertex vertBase
-            #pragma fragment fragBase
-            #include "CustomPBRCore.cginc"
+                #pragma vertex vertBase
+                #pragma fragment fragBase
+                #include "CustomPBRCore.cginc"
 
-            ENDCG
-        }
+                ENDCG
+            }
             // ------------------------------------------------------------------
             //  Additive forward pass (one light per pass)
             Pass
@@ -344,5 +351,5 @@ Shader "CustomShader/Standard"
 
 
             FallBack "VertexLit"
-            CustomEditor "StandardShaderGUI"
+            CustomEditor "CustomStandardShaderGUI"
 }
