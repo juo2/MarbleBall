@@ -176,7 +176,7 @@ public class Pad : MonoBehaviour
             foreach(var padColor in padAfterColorList)
             {
                 padAfterMat = Instantiate<Material>(Resources.Load<Material>("_PadAfter"));
-                padAfterMat.SetColor("_EmissionColor", padColor * intensity);
+                //padAfterMat.SetColor("_EmissionColor", padColor * intensity);
                 padAfterMats.Add(padAfterMat);
             }
         }

@@ -596,7 +596,7 @@ public partial class GameDemo : MonoBehaviour
     BarsConfig barsConfig;
 
     int spBarsCount = 2;
-    float midiFacter = 1.2f;
+    float midiFacter = 1f;
 
     private int currentFrame
     {
@@ -1473,7 +1473,7 @@ public partial class GameDemo : MonoBehaviour
 
             int offsetFrame = _frame - _lastFrame;
 
-            if (offsetFrame > 100)
+            if (offsetFrame >= 80)
             {
                 offsetFrame = 100;
             }
