@@ -2752,6 +2752,8 @@ MonoBehaviour:
   followRotation: 0
   prefabIndex: -1
   inverse_vec: 1
+  splineComputerList:
+  - {fileID: 2858522023537420868}
 --- !u!1 &3495422898929864278
 GameObject:
   m_ObjectHideFlags: 0

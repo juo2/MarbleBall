@@ -1566,6 +1566,30 @@ public partial class GameDemo : MonoBehaviour
         {
             List<BestPoint> bestPointList = BestPointDic[backFrame];
             BestPoint bestPoint = bestPointList[0];
+
+            if(tryingType == TryingType.Try_Vertical && !isVertical)
+            {
+                foreach(var bp in bestPointList)
+                {
+                    if(bp.curveType == CurveType.HorizontalToVertical)
+                    {
+                        bestPoint = bp;
+                        break;
+                    }
+                }
+            }
+            else if (tryingType == TryingType.Try_Horizontal && isVertical)
+            {
+                foreach (var bp in bestPointList)
+                {
+                    if (bp.curveType == CurveType.VerticalToHorizontal)
+                    {
+                        bestPoint = bp;
+                        break;
+                    }
+                }
+            }
+
             SetBounds(offsetIndex - 1, bestPoint.center, bestPoint.size, bestPoint.bestPos);
             SetPhysicMaterialBounciness(offsetIndex - 1, bestPoint.bounciness);
             SetRotation(offsetIndex - 1, bestPoint.rotation);

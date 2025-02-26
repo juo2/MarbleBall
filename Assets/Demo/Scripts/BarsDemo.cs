@@ -25,6 +25,8 @@ public class BarsDemo : MonoBehaviour
     List<SplineMesh.Channel> channelList = new List<SplineMesh.Channel>();
     List<Vector3> originRotation = new List<Vector3>();
 
+    public List<SplineComputer> splineComputerList = new List<SplineComputer>();
+
     private void Awake()
     {
         //int n = 0;
@@ -56,17 +58,38 @@ public class BarsDemo : MonoBehaviour
         //mesh.offset = new Vector3(0.03f, 0, 0);
         //mesh.rotation = new Vector3(0, -90, 90);
 
-        SplineMesh[] splineMeshes = GetComponentsInChildren<SplineMesh>();
-
-        foreach(var sm in splineMeshes)
+        if(splineComputerList.Count == 0)
         {
-            for(int i = 0;i < sm.GetChannelCount();i++)
+            SplineMesh[] splineMeshes = GetComponentsInChildren<SplineMesh>();
+            foreach (var sm in splineMeshes)
             {
-                Dreamteck.Splines.SplineMesh.Channel channel = sm.GetChannel(i);
-                if(channel.name == "Channel 3")
+                for (int i = 0; i < sm.GetChannelCount(); i++)
                 {
-                    channelList.Add(channel);
-                    originRotation.Add(channel.maxRotation);
+                    Dreamteck.Splines.SplineMesh.Channel channel = sm.GetChannel(i);
+                    if (channel.name == "Channel 3")
+                    {
+                        channelList.Add(channel);
+                        originRotation.Add(channel.minRotation);
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (var sc in splineComputerList)
+            {
+                SplineMesh[] splineMeshes = sc.transform.GetComponentsInChildren<SplineMesh>();
+                foreach (var sm in splineMeshes)
+                {
+                    for (int i = 0; i < sm.GetChannelCount(); i++)
+                    {
+                        Dreamteck.Splines.SplineMesh.Channel channel = sm.GetChannel(i);
+                        if (channel.name == "Channel 3")
+                        {
+                            channelList.Add(channel);
+                            originRotation.Add(channel.minRotation);
+                        }
+                    }
                 }
             }
         }

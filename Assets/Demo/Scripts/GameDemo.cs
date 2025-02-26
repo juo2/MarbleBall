@@ -1409,7 +1409,7 @@ public partial class GameDemo : MonoBehaviour
             ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x - inverseIncrement, ball.angularVelocity.y - inverseIncrement, ball.angularVelocity.z - inverseIncrement));
             physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
 
-            if (!isVertical)
+            //if (!isVertical)
             {
                 float LowBorder = 0.4f;
                 float LowFix = 0.5f;
@@ -1488,6 +1488,7 @@ public partial class GameDemo : MonoBehaviour
                 }
 
                 frameOffsetList.Add(offsetFrame);
+
                 _lastFrame = _frame;
             }
         }
@@ -1591,6 +1592,11 @@ public partial class GameDemo : MonoBehaviour
                             CurveTypePriority.Add(CurveType.VerticalLine2);
                         }
 
+                        if(tryingType == TryingType.Try_Horizontal)
+                        {
+                            CurveTypePriority.Add(CurveType.VerticalToHorizontal);
+                        }
+
                     }
                     else
                     {
@@ -1609,6 +1615,11 @@ public partial class GameDemo : MonoBehaviour
                         {
                             curveType = CurveType.HorizontalPipline2;
                             CurveTypePriority.Add(CurveType.HorizontalLine2);
+                        }
+
+                        if (tryingType == TryingType.Try_Vertical)
+                        {
+                            CurveTypePriority.Add(CurveType.HorizontalToVertical);
                         }
                     }
                 }
@@ -2524,13 +2535,13 @@ public partial class GameDemo : MonoBehaviour
 
         if (frameDir.x > 0)
         {
+            barCombine_instance.inverse = false;
             barCombine_instance.transform.eulerAngles = Vector3.zero;
-            barCombine_instance.inverse = true;
         }
         else
         {
             barCombine_instance.transform.eulerAngles = new Vector3(0, 180f, 0);
-            barCombine_instance.inverse = false;
+            barCombine_instance.inverse = true;
         }
 
         barCombine_instance.refreshBarDir();
@@ -2644,6 +2655,10 @@ public partial class GameDemo : MonoBehaviour
 
     BarsDemo InstantBarsLine(Vector3 framePos, Vector3 frameDir, int prefabIndex, int beiginFrame = -1, int endFrame = -1)
     {
+        if(prefabIndex == 5)
+        {
+            int i = 0;
+        }
         BarsDemo bars_instance = null;
         if (barsLineDemoPool.ContainsKey(prefabIndex) && barsLineDemoPool[prefabIndex].Count > 0)
         {
