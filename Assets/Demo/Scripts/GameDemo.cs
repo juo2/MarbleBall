@@ -364,13 +364,22 @@ public partial class GameDemo : MonoBehaviour
     Vector2 horizontalCenter2 = new Vector2(-0.15f, -0.05f);
     Vector2 horizontalBestPos1 = new Vector2(0.15f, 0f);
     Vector2 horizontalBestPos2 = new Vector2(-0.15f, 0f);
-
-    Vector2 horizontalCenter3 = new Vector2(0.15f,-0.13f);
-    Vector2 horizontalCenter4 = new Vector2(-0.15f, -0.13f);
-    Vector2 horizontalBestPos3 = new Vector2(0.15f,-0.08f);
-    Vector2 horizontalBestPos4 = new Vector2(-0.15f, -0.08f);
-
     Vector2 horizontalSize = new Vector2(0.1f, 0.1f);
+
+    Vector2 horizontalCenter3 = new Vector2(0.16f,-0.14f);
+    Vector2 horizontalCenter4 = new Vector2(-0.16f, -0.14f);
+    Vector2 horizontalBestPos3 = new Vector2(0.16f,-0.08f);
+    Vector2 horizontalBestPos4 = new Vector2(-0.16f, -0.08f);
+    Vector2 horizontalSize2 = new Vector2(0.12f, 0.12f);
+
+
+    Vector2 horizontalToVerticalCenter1 = new Vector2(0.15f, -0.12f);
+    Vector2 horizontalToVerticalCenter2 = new Vector2(-0.15f, -0.12f);
+    Vector2 horizontalToVerticalBestPos1 = new Vector2(0.12f, 0.1f);
+    Vector2 horizontalToVerticalBestPos2 = new Vector2(-0.12f, 0.1f);
+    Vector2 horizontalToVerticalSize = new Vector2(0.15f, 0.15f);
+
+
 
     Vector2 verticalCenter1 = new Vector2(0.2f, -0.16f);
     Vector2 verticalCenter2 = new Vector2(-0.2f, -0.16f);
@@ -382,7 +391,7 @@ public partial class GameDemo : MonoBehaviour
     //Vector2 verticalBestPos3 = new Vector2(0.13f, -0.1f);
     //Vector2 verticalBestPos4 = new Vector2(-0.13f, -0.1f);
 
-    Vector2 verticalSize = new Vector2(0.1f, 0.1f);
+    Vector2 verticalSize = new Vector2(0.15f, 0.15f);
 
     CameraMovement currentCameraMovement = new CameraMovement();
     Cinemachine.CinemachineTrackedDolly cinemachineTrackedDolly;
@@ -441,6 +450,9 @@ public partial class GameDemo : MonoBehaviour
         0.6f,
         0.7f,
         0.5f,
+        0.8f,
+        0.9f,
+        1.0f,
         //0.4f,
         //0.8f,
     };
@@ -460,10 +472,11 @@ public partial class GameDemo : MonoBehaviour
         0.4f,
         0.5f,
         0.6f,
-        //0.7f,
-        //0.8f,
-        //0.9f,
-        //1.0f,
+
+        0.7f,
+        0.8f,
+        0.9f,
+        1.0f,
         //0.2f,
         //0.1f,
         //0.0f,
@@ -1556,7 +1569,7 @@ public partial class GameDemo : MonoBehaviour
 
             CurveTypeRecord.Clear();
 
-            if(offsetFrame >= 20)
+            if(offsetFrame >= 30)
             {
                 if (offsetFrame == 100)
                 {
@@ -1575,18 +1588,18 @@ public partial class GameDemo : MonoBehaviour
 
                     if (isVertical)
                     {
-                        if (preCurveType == CurveType.VerticalLine)
-                        {
-                            curveType = CurveType.VerticalPipline2;
-                            CurveTypePriority.Add(CurveType.VerticalLine2);
-                        }
-                        else if (preCurveType == CurveType.VerticalPipline2)
-                        {
-                            curveType = CurveType.VerticalLine;
-                            CurveTypePriority.Add(CurveType.VerticalLine2);
-                            CurveTypePriority.Add(CurveType.VerticalPipline2);
-                        }
-                        else
+                        //if (preCurveType == CurveType.VerticalLine)
+                        //{
+                        //    curveType = CurveType.VerticalPipline2;
+                        //    CurveTypePriority.Add(CurveType.VerticalLine2);
+                        //}
+                        //else if (preCurveType == CurveType.VerticalPipline2)
+                        //{
+                        //    curveType = CurveType.VerticalLine;
+                        //    CurveTypePriority.Add(CurveType.VerticalLine2);
+                        //    CurveTypePriority.Add(CurveType.VerticalPipline2);
+                        //}
+                        //else
                         {
                             curveType = CurveType.VerticalPipline2;
                             CurveTypePriority.Add(CurveType.VerticalLine2);
@@ -1600,18 +1613,18 @@ public partial class GameDemo : MonoBehaviour
                     }
                     else
                     {
-                        if (preCurveType == CurveType.HorizontalLine)
-                        {
-                            curveType = CurveType.HorizontalPipline2;
-                            CurveTypePriority.Add(CurveType.HorizontalLine2);
-                        }
-                        else if (preCurveType == CurveType.HorizontalPipline2)
-                        {
-                            curveType = CurveType.HorizontalLine;
-                            CurveTypePriority.Add(CurveType.HorizontalLine2);
-                            CurveTypePriority.Add(CurveType.HorizontalPipline2);
-                        }
-                        else
+                        //if (preCurveType == CurveType.HorizontalLine)
+                        //{
+                        //    curveType = CurveType.HorizontalPipline2;
+                        //    CurveTypePriority.Add(CurveType.HorizontalLine2);
+                        //}
+                        //else if (preCurveType == CurveType.HorizontalPipline2)
+                        //{
+                        //    curveType = CurveType.HorizontalLine;
+                        //    CurveTypePriority.Add(CurveType.HorizontalLine2);
+                        //    CurveTypePriority.Add(CurveType.HorizontalPipline2);
+                        //}
+                        //else
                         {
                             curveType = CurveType.HorizontalPipline2;
                             CurveTypePriority.Add(CurveType.HorizontalLine2);

@@ -295,7 +295,7 @@ public partial class GameDemo : MonoBehaviour
             center = horizontalCenter4;
             bestPos = horizontalBestPos4;
         }
-        size = horizontalSize;
+        size = horizontalSize2;
 
         SetBounds(offsetIndex - 1, center, size, bestPos);
 
@@ -486,21 +486,21 @@ public partial class GameDemo : MonoBehaviour
 
             if (ball.velocity.x > 0)
             {
-                center = horizontalCenter4;
-                bestPos = horizontalBestPos4;
+                center = horizontalToVerticalCenter2;
+                bestPos = horizontalToVerticalBestPos2;
             }
             else
             {
-                center = horizontalCenter3;
-                bestPos = horizontalBestPos3;
+                center = horizontalToVerticalCenter1;
+                bestPos = horizontalToVerticalBestPos1;
             }
 
-            size = horizontalSize;
+            size = horizontalToVerticalSize;
 
             SetPhysicMaterialBounciness(offsetIndex - 1, verticalBounciness);
             SetBounds(offsetIndex - 1, center, size, bestPos);
 
-            distanceType = DistanceType.Far;
+            distanceType = DistanceType.Near;
 
             VerticalToVertical_Internal(offsetIndex, offsetFrame);
         }
@@ -1083,17 +1083,21 @@ public partial class GameDemo : MonoBehaviour
                 }
                 else
                 {
-                    if (tryingType == TryingType.Try_Vertical)
-                    {
-                        nextCurveType = CurveType.VerticalToVertical;
-                        isVertical = true;
-                        ContinuousCount++;
-                    }
-                    else if (tryingType == TryingType.Try_Horizontal)
-                    {
-                        nextCurveType = CurveType.HorizontalToHorizontal;
-                        isVertical = false;
-                    }
+                    //if (tryingType == TryingType.Try_Vertical)
+                    //{
+                    //    nextCurveType = CurveType.VerticalToVertical;
+                    //    isVertical = true;
+                    //    ContinuousCount++;
+                    //}
+                    //else if (tryingType == TryingType.Try_Horizontal)
+                    //{
+                    //    nextCurveType = CurveType.HorizontalToHorizontal;
+                    //    isVertical = false;
+                    //}
+                    //强制指定水平
+                    tryingType = TryingType.Try_Horizontal;
+                    nextCurveType = CurveType.HorizontalToHorizontal;
+                    isVertical = false;
                 }
             }
             else if(tryingType == TryingType.Try_Vertical && _curveType == CurveType.HorizontalToHorizontal)
