@@ -23,6 +23,8 @@ public class MidiHelper : MonoBehaviour
     private HashSet<float> timeSet = new HashSet<float>();
     string currentMidi = string.Empty;
 
+    public float suitMidiFacter = 1.0f;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -95,6 +97,66 @@ public class MidiHelper : MonoBehaviour
                             _lastFrame = _frame;
                         }
                     }
+                }
+            }
+
+            Dictionary<float, int> tempDic = new Dictionary<float, int>();
+
+            List<float> tempFrameOffsetList = new List<float>();
+            float midiFacter = 0.8f;
+            float originMidiFacter = 0.8f;
+            for (int i = 0;i < 10;i++)
+            {
+                midiFacter = originMidiFacter + i * 0.05f;
+                bool isFirst = true;
+
+                tempFrameOffsetList.Clear();
+
+                foreach (var mptkEvent in AllMidiEventsSet)
+                {
+                    int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f * midiFacter);
+                    //Debug.Log($"_frame:{_frame}");
+
+                    int offsetFrame = _frame - _lastFrame;
+
+                    if (offsetFrame >= 80)
+                    {
+                        offsetFrame = 100;
+                    }
+
+                    //if(offsetFrame > 5)
+                    {
+                        if (isFirst)
+                        {
+                            //playMusicOffsetFrame = _frame;
+                            isFirst = false;
+                            offsetFrame = 0;
+                        }
+
+                        tempFrameOffsetList.Add(offsetFrame);
+                        _lastFrame = _frame;
+                    }
+                }
+
+                int suitFrameCount = 0;
+                foreach(var offsetFrame in tempFrameOffsetList)
+                {
+                    if(offsetFrame >= 10 && offsetFrame <= 22)
+                    {
+                        suitFrameCount++;
+                    }
+                }
+
+                tempDic.Add(midiFacter, suitFrameCount);
+            }
+
+            int maxSuitFrameCount = int.MinValue;
+            foreach (var key in tempDic.Keys)
+            {
+                if(tempDic[key] > maxSuitFrameCount)
+                {
+                    maxSuitFrameCount = tempDic[key];
+                    suitMidiFacter = key;
                 }
             }
 

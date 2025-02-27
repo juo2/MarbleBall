@@ -667,11 +667,11 @@ public partial class GameDemo : MonoBehaviour
 
                 bool mistakeCollision = DetectMistakeCollisionTimes();
 
-                List<PhysicsState> _list = GetCurrentPhysicsState(backFrame);
-                RecordPadInfo_Simluate(backFrame, currentPad.debugCenter, currentPad.debugSize, currentPad.debugBestPos, rotation, bounciness, _list);
-
                 if (!mistakeCollision)
                 {
+                    List<PhysicsState> _list = GetCurrentPhysicsState(backFrame);
+                    RecordPadInfo_Simluate(backFrame, currentPad.debugCenter, currentPad.debugSize, currentPad.debugBestPos, rotation, bounciness, _list);
+
                     if (!g_isPass)
                     {
                         float distance = Vector3.Distance(ball.transform.position, currentPad.bestPos);
@@ -796,11 +796,12 @@ public partial class GameDemo : MonoBehaviour
                 }
 
                 bool mistakeCollision = DetectMistakeCollisionTimes();
-                List<PhysicsState> _list = GetCurrentPhysicsState(backFrame);
-                RecordPadInfo_Simluate(backFrame, currentPad.debugCenter, currentPad.debugSize, currentPad.debugBestPos, rotation, bounciness, _list);
-
+                
                 if (!mistakeCollision)
                 {
+                    List<PhysicsState> _list = GetCurrentPhysicsState(backFrame);
+                    RecordPadInfo_Simluate(backFrame, currentPad.debugCenter, currentPad.debugSize, currentPad.debugBestPos, rotation, bounciness, _list);
+
                     if (!g_isPass)
                     {
                         float distance = Vector3.Distance(ball.transform.position, currentPad.bestPos);

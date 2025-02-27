@@ -450,9 +450,10 @@ public partial class GameDemo : MonoBehaviour
         0.6f,
         0.7f,
         0.5f,
-        0.8f,
-        0.9f,
-        1.0f,
+
+        //0.8f,
+        //0.9f,
+        //1.0f,
         //0.4f,
         //0.8f,
     };
@@ -473,10 +474,10 @@ public partial class GameDemo : MonoBehaviour
         0.5f,
         0.6f,
 
-        0.7f,
-        0.8f,
-        0.9f,
-        1.0f,
+        //0.7f,
+        //0.8f,
+        //0.9f,
+        //1.0f,
         //0.2f,
         //0.1f,
         //0.0f,
@@ -664,6 +665,7 @@ public partial class GameDemo : MonoBehaviour
         {
             if(padDataList.Count > 0)
             {
+                Time.timeScale = midiHelper.suitMidiFacter;
                 Physics.autoSimulation = false;
                 isPlay = true;
                 currentFrame = 0;
@@ -1468,6 +1470,8 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator GameInit()
     {
+        Time.timeScale = 1.0f;
+
         logger("GameInit");
 
         System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
@@ -1479,6 +1483,9 @@ public partial class GameDemo : MonoBehaviour
         isGening = true;
         int _lastFrame = 0;
         bool isFirst = true;
+
+        midiFacter = midiHelper.suitMidiFacter;
+
         foreach (var mptkEvent in midiHelper.AllMidiEventsSet)
         {
             int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f * midiFacter);
@@ -2483,11 +2490,14 @@ public partial class GameDemo : MonoBehaviour
 
         pad_instance.padCollider.collisionAction = () =>
         {
-            if (pad_instance.frame != currentFrame)
             {
-                pad_instance.mistakeCollisionTimes++;
-                //Debug.Log($"pad_instance:{pad_instance.name}    currentFrame:{currentFrame}");
+                if (pad_instance.frame != currentFrame)
+                {
+                    pad_instance.mistakeCollisionTimes++;
+                    //Debug.Log($"pad_instance:{pad_instance.name}    currentFrame:{currentFrame}");
+                }
             }
+            
         };
         
         pad_instance.debugCenter = padData.debugCenter;
