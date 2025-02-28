@@ -10,6 +10,7 @@ Material:
   m_Name: WallReflective 2
   m_Shader: {fileID: 4800000, guid: 6a68178033096ca41869358e8b127377, type: 3}
   m_ValidKeywords:
+  - _DETAIL_MULX2
   - _GLOSSYREFLECTIONS_OFF
   - _NORMALMAP
   - _SPECULARHIGHLIGHTS_OFF
@@ -25,19 +26,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: b19fb7f3926e4e44093d8057bee7cce1, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 400, y: 400}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b19fb7f3926e4e44093d8057bee7cce1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -49,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: cacf92d0eb38c9945ad66bfb6092a0d8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 42afad20b2258b0419d5390f2f3a89ff, type: 3}
         m_Scale: {x: 300, y: 300}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -102,14 +103,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BumpScale: 3
+    - _BumpScale: 2
     - _ClipEye: 0
     - _ClipPercentage: 20
     - _ClipUV: 99
     - _Cutoff: 0.5
     - _DepthBlur: 1
     - _DepthCutoff: 0.8
-    - _DetailNormalMapScale: 1
+    - _DetailNormalMapScale: 2
     - _DeviceType: 0
     - _DisableGI: -1
     - _DisableRP: 0

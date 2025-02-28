@@ -1001,6 +1001,62 @@ public partial class GameDemo : MonoBehaviour
         File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "barCurve/temp.json"), json_str);
     }
 
+    IEnumerator Bars_Simulate4()
+    {
+        Physics.gravity = new Vector3(0, -5f, 0);
+
+        int prefabIndex = 2;
+        bool inverse = false;
+        Vector3 v = new Vector3(0.5f, -1.0f, 0);
+        int inv = 1;
+        if (inverse)
+            inv = -1;
+
+        v = new Vector3(v.x * inv, v.y, 0);
+
+        int simlateFrame = 0;
+        BarsDemo barsDemo = InstantBars_Simulate(ball.transform.position, ball.velocity, simulateBarsDemo, inverse);
+
+        ball.SetVelocity(v);
+        physicsStateList[0].velocity = v;
+
+        yield return new WaitForSeconds(0.3f);
+
+        ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 5f, ball.angularVelocity.z));
+        physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
+
+        for (int i = 2; i < 5; i++)
+        {
+            ModifyFrameVelocity(i, 0.4f, 0.4f);
+        }
+
+        for (int i = 5; i < 15; i++)
+        {
+            ModifyFrameVelocity(i, -0.2f, 0);
+        }
+
+        for (int i = 0; i < 15; i++)
+        {
+            simulateNextFrame(true,false);
+            simlateFrame++;
+
+            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 5f, ball.angularVelocity.z));
+            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
+        }
+
+        BarsCurve barsCurve = new BarsCurve();
+        barsCurve.prefabIndex = prefabIndex;
+        barsCurve.inverse = inverse;
+        barsCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
+        barsCurve.frame = physicsStateList.Count - 1;
+
+        string json_str = JsonUtility.ToJson(barsCurve);
+        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "barCurve/temp.json"), json_str);
+
+        logger($"simlateFrame:{simlateFrame}");
+        Debug.Log($"simlateFrame:{simlateFrame}");
+    }
+
     private List<PhysicsState> TransformPhysicsState_Simulate(List<PhysicsState> psList)
     {
         List<PhysicsState> physicsStates = new List<PhysicsState>();

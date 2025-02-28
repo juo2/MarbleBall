@@ -4,57 +4,41 @@
             "prefabIndex": 0,
             "beiginOffset": 0.18,
             "endOffset": 0.2,
-            "modifyVelocityX": -1.1,
-            "modifyVelocityY": -0.48,
-            "remainFrame" : 2
+            "remainFrame": 2,
+            "targetMinFrame": 100,
+            "targetMaxFrame": 100
         },
         {
             "prefabIndex": 1,
             "beiginOffset": 0.15,
             "endOffset": 0.1,
-            "modifyVelocityX": -1.1,
-            "modifyVelocityY": -0.48,
-            "remainFrame" : 2
+            "remainFrame" : 2,
+            "targetMinFrame": 100,
+            "targetMaxFrame": 100
         },
         {
             "prefabIndex": 2,
-            "beiginOffset": 0.1,
-            "endOffset": 0.1,
-            "modifyVelocityX": -1.1,
-            "modifyVelocityY": -0.48,
-            "remainFrame" : 2
+            "beiginOffset": 0.08,
+            "endOffset": 0.08,
+            "remainFrame": 2,
+            "targetMinFrame": 21,
+            "targetMaxFrame": 30
         },
         {
             "prefabIndex": 3,
             "beiginOffset": 0.1,
             "endOffset": 0.1,
-            "modifyVelocityX": -1.1,
-            "modifyVelocityY": -0.48,
-            "remainFrame" : 2
+            "remainFrame" : 4,
+            "targetMinFrame": 999,
+            "targetMaxFrame": 999
         },
         {
             "prefabIndex": 4,
             "beiginOffset": 0.1,
             "endOffset": 0.1,
-            "modifyVelocityX": -1.1,
-            "modifyVelocityY": -0.48,
-            "remainFrame" : 2
-        },
-        {
-            "prefabIndex": 5,
-            "beiginOffset": 0.1,
-            "endOffset": 0.1,
-            "modifyVelocityX": -1.1,
-            "modifyVelocityY": -0.48,
-            "remainFrame" : 4
-        },
-        {
-            "prefabIndex": 6,
-            "beiginOffset": 0.1,
-            "endOffset": 0.1,
-            "modifyVelocityX": -1.1,
-            "modifyVelocityY": -0.48,
-            "remainFrame" : 4
+            "remainFrame" : 4,
+            "targetMinFrame": 999,
+            "targetMaxFrame": 999
         }
     ]
 }

@@ -64,9 +64,9 @@ public class BarConfig
     public int prefabIndex;
     public float beiginOffset;
     public float endOffset;
-    public float modifyVelocityX;
-    public float modifyVelocityY;
     public int remainFrame;
+    public int targetMinFrame;
+    public int targetMaxFrame;
 }
 
 [System.Serializable]
@@ -354,6 +354,8 @@ public partial class GameDemo : MonoBehaviour
     Stack<RecordJson> recordJsonPool = new Stack<RecordJson>();
     RecordJson currentRecordJson;
 
+    int lightIndex = 0;
+
     [System.Serializable]
     class RecordJsonData
     {
@@ -609,7 +611,7 @@ public partial class GameDemo : MonoBehaviour
     string currentMidi = string.Empty;
     BarsConfig barsConfig;
 
-    int spBarsCount = 2;
+    int spBarsCount = 3;
     float midiFacter = 1f;
 
     private int currentFrame
@@ -909,11 +911,12 @@ public partial class GameDemo : MonoBehaviour
         {
             //Pad_Simulate2();
             //Pad_Simulate();
-            Bars_Simulate();
+            //Bars_Simulate();
             //StartCoroutine(Bars_Curve(0,40,25));
             //VirtualBarsScale_Simulate();
             //StartCoroutine(Bars_Simulate2());
             //Bars_Simulate3();
+            StartCoroutine(Bars_Simulate4());
         });
 
         LoadBarsConfig();
@@ -1097,7 +1100,7 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    void simulateNextFrame(bool record = true)
+    void simulateNextFrame(bool record = true, bool changeVelocity = true)
     {
         if (currentFrame + 1 < physicsStateList.Count)
         {
@@ -1109,6 +1112,9 @@ public partial class GameDemo : MonoBehaviour
         {
             Physics.Simulate(0.02f);
             currentFrame = currentFrame + 1;
+
+            if(changeVelocity)
+                RefreshSimulateVelocity();
 
             if (record)
             {
@@ -1123,6 +1129,49 @@ public partial class GameDemo : MonoBehaviour
                 ModifyVelocity();
 
                 line.AddLineRenderer(ball.transform.position);
+            }
+        }
+    }
+
+    void RefreshSimulateVelocity()
+    {
+        if (frameList.Count > 0)
+        {
+            for (int i = 0; i < frameList.Count; i++)
+            {
+                if (currentFrame == frameList[i] + 1)
+                {
+                    float LowBorder = 0.4f;
+                    float LowFix = 0.5f;
+                    float HighBorder = 0.6f;
+                    float HightFix = 0.5f;
+
+                    if (Mathf.Abs(ball.velocity.x) < LowBorder)
+                    {
+                        if (ball.velocity.x > 0)
+                        {
+                            ball.velocity = new Vector3(LowFix, ball.velocity.y, ball.velocity.z);
+                        }
+                        else
+                        {
+                            ball.velocity = new Vector3(-LowFix, ball.velocity.y, ball.velocity.z);
+                        }
+                    }
+
+                    if (Mathf.Abs(ball.velocity.x) > HighBorder)
+                    {
+                        if (ball.velocity.x > 0)
+                        {
+                            ball.velocity = new Vector3(HightFix, ball.velocity.y, ball.velocity.z);
+                        }
+                        else
+                        {
+                            ball.velocity = new Vector3(-HightFix, ball.velocity.y, ball.velocity.z);
+                        }
+                    }
+
+                    break;
+                }
             }
         }
     }
@@ -1387,26 +1436,19 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    int CalculateLightIndex(int _index)
+    int CalculateLightIndex()
     {
-        int _FrameIndex = _index % 10;
-        if (_FrameIndex < 6)
+        lightIndex++;
+
+        if (lightIndex > 3)
         {
-            return 0;
-        }
-        else if (_FrameIndex == 6 || _FrameIndex == 7)
-        {
-            return 1;
-        }
-        else if (_FrameIndex == 8 || _FrameIndex == 9)
-        {
-            return 2;
+            lightIndex = 1;
         }
 
-        return 0;
+        return lightIndex;
     }
 
-    float angularFactor = 2f;  // 反比强度系数
+    float angularFactor = 1.5f;  // 反比强度系数
     float minSpeed = 0.1f;      // 防止除以零的最小速度值
 
     void RefreshBallVelocity(int _index, bool isVertical)
@@ -1421,7 +1463,7 @@ public partial class GameDemo : MonoBehaviour
             // 计算反比增量（速度越大增量越小） u
             float inverseIncrement = angularFactor / Mathf.Max(ball.speed, minSpeed);
             //Debug.Log($"inverseIncrement:{inverseIncrement} ball.speed:{ball.speed}");
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x - inverseIncrement, ball.angularVelocity.y - inverseIncrement, ball.angularVelocity.z - inverseIncrement));
+            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x - inverseIncrement, ball.angularVelocity.y - inverseIncrement, ball.angularVelocity.z));
             physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
 
             //if (!isVertical)
@@ -1464,6 +1506,87 @@ public partial class GameDemo : MonoBehaviour
             {
                 ball.velocity = new Vector3(ball.velocity.x, -0.8f, ball.velocity.z);
                 physicsStateList[physicsStateList.Count - 1].velocity = ball.velocity;
+            }
+        }
+    }
+    
+    void RefreshCurveType(int offsetFrame)
+    {
+        if(offsetFrame < 25)
+        {
+            if(isVertical)
+            {
+                CurveTypeRecord.Add(CurveType.VerticalPipline);
+                CurveTypeRecord.Add(CurveType.VerticalPipline2);
+            }
+            else
+            {
+                CurveTypeRecord.Add(CurveType.HorizontalPipline);
+                CurveTypeRecord.Add(CurveType.HorizontalPipline2);
+            }
+            
+        }
+        if (offsetFrame >= 25 && offsetFrame <= 30)
+        {
+            if (isVertical)
+            {
+                curveType = CurveType.VerticalPipline;
+            }
+            else
+            {
+                curveType = CurveType.HorizontalPipline;
+            }
+        }
+        else if (offsetFrame > 30)
+        {
+            if (offsetFrame == 100)
+            {
+                if (isVertical)
+                {
+                    curveType = CurveType.VerticalPipline;
+                }
+                else
+                {
+                    curveType = CurveType.HorizontalPipline;
+                }
+            }
+            else if (offsetFrame < 40)
+            {
+                CurveType preCurveType = LastCurveType();
+
+                if (isVertical)
+                {
+                    {
+                        curveType = CurveType.VerticalPipline2;
+                        //CurveTypePriority.Add(CurveType.VerticalLine2);
+                    }
+
+                    if (tryingType == TryingType.Try_Horizontal)
+                    {
+                        CurveTypePriority.Add(CurveType.VerticalToHorizontal);
+                    }
+
+                }
+                else
+                {
+                    curveType = CurveType.HorizontalPipline2;
+
+                    if (tryingType == TryingType.Try_Vertical)
+                    {
+                        CurveTypePriority.Add(CurveType.HorizontalToVertical);
+                    }
+                }
+            }
+            else
+            {
+                if (isVertical)
+                {
+                    curveType = CurveType.VerticalPipline2;
+                }
+                else
+                {
+                    curveType = CurveType.HorizontalPipline2;
+                }
             }
         }
     }
@@ -1571,90 +1694,11 @@ public partial class GameDemo : MonoBehaviour
                 rotation = 30f;
 
             currentPad = InstantPad(ball.transform.position, ball.velocity, currentFrame, rotation);
-            int lightIndex = CalculateLightIndex(offsetIndex);
-            currentPad.lightIndex = lightIndex;
+          
 
             CurveTypeRecord.Clear();
 
-            if(offsetFrame >= 30)
-            {
-                if (offsetFrame == 100)
-                {
-                    if (isVertical)
-                    {
-                        curveType = CurveType.VerticalPipline;
-                    }
-                    else
-                    {
-                        curveType = CurveType.HorizontalPipline;
-                    }
-                }
-                else if (offsetFrame < 40)
-                {
-                    CurveType preCurveType = LastCurveType();
-
-                    if (isVertical)
-                    {
-                        //if (preCurveType == CurveType.VerticalLine)
-                        //{
-                        //    curveType = CurveType.VerticalPipline2;
-                        //    CurveTypePriority.Add(CurveType.VerticalLine2);
-                        //}
-                        //else if (preCurveType == CurveType.VerticalPipline2)
-                        //{
-                        //    curveType = CurveType.VerticalLine;
-                        //    CurveTypePriority.Add(CurveType.VerticalLine2);
-                        //    CurveTypePriority.Add(CurveType.VerticalPipline2);
-                        //}
-                        //else
-                        {
-                            curveType = CurveType.VerticalPipline2;
-                            CurveTypePriority.Add(CurveType.VerticalLine2);
-                        }
-
-                        if(tryingType == TryingType.Try_Horizontal)
-                        {
-                            CurveTypePriority.Add(CurveType.VerticalToHorizontal);
-                        }
-
-                    }
-                    else
-                    {
-                        //if (preCurveType == CurveType.HorizontalLine)
-                        //{
-                        //    curveType = CurveType.HorizontalPipline2;
-                        //    CurveTypePriority.Add(CurveType.HorizontalLine2);
-                        //}
-                        //else if (preCurveType == CurveType.HorizontalPipline2)
-                        //{
-                        //    curveType = CurveType.HorizontalLine;
-                        //    CurveTypePriority.Add(CurveType.HorizontalLine2);
-                        //    CurveTypePriority.Add(CurveType.HorizontalPipline2);
-                        //}
-                        //else
-                        {
-                            curveType = CurveType.HorizontalPipline2;
-                            CurveTypePriority.Add(CurveType.HorizontalLine2);
-                        }
-
-                        if (tryingType == TryingType.Try_Vertical)
-                        {
-                            CurveTypePriority.Add(CurveType.HorizontalToVertical);
-                        }
-                    }
-                }
-                else
-                {
-                    if (isVertical)
-                    {
-                        curveType = CurveType.VerticalPipline2;
-                    }
-                    else
-                    {
-                        curveType = CurveType.HorizontalPipline2;
-                    }
-                }
-            }
+            RefreshCurveType(offsetFrame);
 
             if(isRecordJson)
             {
@@ -1700,7 +1744,6 @@ public partial class GameDemo : MonoBehaviour
         }
 
         Pad _pad = InstantPad(ball.transform.position, ball.velocity, currentFrame, r);
-        _pad.lightIndex = CalculateLightIndex(currentOffsetIndex);
 
         //计算镜头参数
         currentCameraMovement.endFrame = frameList[currentOffsetIndex-1];
@@ -2454,6 +2497,8 @@ public partial class GameDemo : MonoBehaviour
             padData.debugSize = verticalSize;
         }
 
+        padData.lightIndex = CalculateLightIndex();
+
         Pad pad_instance = InstantByPadData(padData,debug);
 
         if(!debug)
@@ -2478,6 +2523,7 @@ public partial class GameDemo : MonoBehaviour
             pad_instance.gameObject.SetActive(true);
         }
 
+        pad_instance.lightIndex = lightIndex;
         pad_instance.inverse = padData.inverse;
         pad_instance.transform.SetParent(obstaclesParent.transform);
         pad_instance.transform.position = padData.pos;

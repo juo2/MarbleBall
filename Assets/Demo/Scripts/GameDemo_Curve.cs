@@ -103,7 +103,7 @@ public partial class GameDemo : MonoBehaviour
         {
             stopwatch.Restart();
 
-            VerticalLine(offsetIndex, offsetFrame, barsDemoPrefabList.Count - 2, barsDemoPrefabList.Count);
+            VerticalLine(offsetIndex, offsetFrame, spBarsCount, barsDemoPrefabList.Count);
 
             stopwatch.Stop();
 
@@ -225,7 +225,7 @@ public partial class GameDemo : MonoBehaviour
         {
             stopwatch.Restart();
 
-            HorizontalLine(offsetIndex, offsetFrame, barsDemoPrefabList.Count - 2, barsDemoPrefabList.Count);
+            HorizontalLine(offsetIndex, offsetFrame, spBarsCount, barsDemoPrefabList.Count);
 
             stopwatch.Stop();
 
@@ -1332,12 +1332,14 @@ public partial class GameDemo : MonoBehaviour
         return null;
     }
 
-
     int prefabIndex_Curve = 0;
 
     void BarsLine_Curve(int _offsetIndex, int offsetFrame, int prefabIndex)
     {
-        Debug.Log($"prefabIndex:{prefabIndex}");
+        if(prefabIndex == 2)
+        {
+            Debug.Log($"prefabIndex:{prefabIndex}");
+        }
         BarConfig barConfig = barsConfig.BarConfigList[prefabIndex];
 
         distanceType = DistanceType.None;
@@ -1393,7 +1395,7 @@ public partial class GameDemo : MonoBehaviour
                 BarsCurve barsCurve = FindBarsCurve(prefabIndex, currentLineBars.inverse);
                 if (barsCurve != null)
                 {
-                    if (offsetFrame == 100 && prefabIndex == prefabIndex_Curve)
+                    if (offsetFrame >= barConfig.targetMinFrame && offsetFrame <= barConfig.targetMaxFrame && prefabIndex == prefabIndex_Curve)
                     {
                         g_isPass = true;
                         List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
@@ -1422,6 +1424,20 @@ public partial class GameDemo : MonoBehaviour
                         {
                             prefabIndex_Curve = 1;
                         }
+                    }
+                    else if(simlateFrame + barsCurve.frame == offsetFrame)
+                    {
+                        g_isPass = true;
+                        List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
+                        AddPhysicsState(physicsStates);
+                        simulateToFrame(backFrame + simlateFrame + physicsStates.Count, true, true);
+                        int totalFrame = simlateFrame + physicsStates.Count;
+                        UpdateFrameList(currentOffsetIndex, totalFrame);
+                    }
+
+                    if(prefabIndex == 2)
+                    {
+                        Debug.Log($"offsetIndex:{_offsetIndex} simlateFrame:{simlateFrame}");
                     }
                 }
                 else
@@ -1814,11 +1830,11 @@ public partial class GameDemo : MonoBehaviour
                 curveType = CurveType.HorizontalPipline2;
                 yield return TryCurve(offsetIndex, offsetFrame);
             }
-            else if (!CurveTypeRecord.Contains(CurveType.HorizontalLine2))
-            {
-                curveType = CurveType.HorizontalLine2;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
+            //else if (!CurveTypeRecord.Contains(CurveType.HorizontalLine2))
+            //{
+            //    curveType = CurveType.HorizontalLine2;
+            //    yield return TryCurve(offsetIndex, offsetFrame);
+            //}
             else
             {
                 BackupPlan(currentFrame, offsetIndex, offsetFrame);
@@ -1854,11 +1870,11 @@ public partial class GameDemo : MonoBehaviour
                 curveType = CurveType.VerticalPipline2;
                 yield return TryCurve(offsetIndex, offsetFrame);
             }
-            else if (!CurveTypeRecord.Contains(CurveType.VerticalLine2))
-            {
-                curveType = CurveType.VerticalLine2;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
+            //else if (!CurveTypeRecord.Contains(CurveType.VerticalLine2))
+            //{
+            //    curveType = CurveType.VerticalLine2;
+            //    yield return TryCurve(offsetIndex, offsetFrame);
+            //}
             else
             {
                 BackupPlan(currentFrame, offsetIndex, offsetFrame);

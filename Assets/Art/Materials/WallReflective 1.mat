@@ -11,6 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 0686a56254f6fbb45acaf46b98ccee1a, type: 3}
   m_ValidKeywords:
   - _GLOSSYREFLECTIONS_OFF
+  - _METALLICGLOSSMAP
   - _NORMALMAP
   - _SPECULARHIGHLIGHTS_OFF
   m_InvalidKeywords:
@@ -25,7 +26,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: b19fb7f3926e4e44093d8057bee7cce1, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8ff26b7e745ca0140ac7d1dedb7a5741, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -42,22 +43,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 300, y: 300}
+        m_Scale: {x: 200, y: 200}
         m_Offset: {x: 0, y: 0}
     - _LeftOrCenterDepthTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: cacf92d0eb38c9945ad66bfb6092a0d8, type: 3}
-        m_Scale: {x: 300, y: 300}
+        m_Texture: {fileID: 2800000, guid: 42afad20b2258b0419d5390f2f3a89ff, type: 3}
+        m_Scale: {x: 200, y: 200}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 2fb5476ea1f1c7344b325495a682118c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -102,7 +103,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BumpScale: 3
+    - _BumpScale: 1
     - _ClipEye: 0
     - _ClipPercentage: 20
     - _ClipUV: 99
@@ -123,7 +124,7 @@ Material:
     - _EnableSimpleDepth: -1
     - _EnableWave: -1
     - _FarClip: 1000
-    - _GlossMapScale: 1
+    - _GlossMapScale: 0.512
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _IsMultiPass: 1

@@ -169,13 +169,13 @@ public class Pad : MonoBehaviour
         //centerRendererDemo.SetColor(color);
     }
 
-    static Material GetMaterial(bool after,int index = 0)
+    static Material GetMaterial(bool after,int index = 1)
     {
         if(padAfterMat == null)
         {
-            foreach(var padColor in padAfterColorList)
+            for(int i = 0;i < 3;i++)
             {
-                padAfterMat = Instantiate<Material>(Resources.Load<Material>("_PadAfter"));
+                padAfterMat = Instantiate<Material>(Resources.Load<Material>("_PadAfter" + (i+1)) );
                 //padAfterMat.SetColor("_EmissionColor", padColor * intensity);
                 padAfterMats.Add(padAfterMat);
             }
@@ -186,7 +186,9 @@ public class Pad : MonoBehaviour
             padBeforeMat = Instantiate<Material>(Resources.Load<Material>("_PadBefore"));
         }
 
-        return after ? padAfterMats[index] : padBeforeMat;
+        Debug.Log($"index:{index}");
+
+        return after ? padAfterMats[index-1] : padBeforeMat;
     }
 
     static PhysicMaterial GetPhysicMaterial(float bounciness)
