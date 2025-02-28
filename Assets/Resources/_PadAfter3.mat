@@ -85,5 +85,5 @@ Material:
     - _Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 0.85882354}
     - _DiffuseScatteringColor: {r: 0, g: 0, b: 0, a: 0}
     - _DiffuseScatteringDir: {r: 0, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 0.3105724, g: 0.43812892, b: 1.0592737, a: 1}
+    - _EmissionColor: {r: 0.38235947, g: 0.5394, b: 1.3041189, a: 1}
   m_BuildTextureStacks: []
