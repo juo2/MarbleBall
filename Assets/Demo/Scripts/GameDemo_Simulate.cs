@@ -724,10 +724,10 @@ public partial class GameDemo : MonoBehaviour
 
     void Pad_Simulate()
     {
-        bool inverse = false;
-        float rota = 60f;
+        bool inverse = true;
+        float rota = 80f;
 
-        Vector3 v = new Vector3(1f, -1f, 0);
+        Vector3 v = new Vector3(1.5f, -1f, 0);
 
         int inv = 1;
         if (inverse)

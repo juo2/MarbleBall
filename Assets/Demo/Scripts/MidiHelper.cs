@@ -119,7 +119,7 @@ public class MidiHelper : MonoBehaviour
 
                     int offsetFrame = _frame - _lastFrame;
 
-                    if (offsetFrame >= 80)
+                    if (offsetFrame >= 100)
                     {
                         offsetFrame = 100;
                     }
@@ -139,12 +139,22 @@ public class MidiHelper : MonoBehaviour
                 }
 
                 int suitFrameCount = 0;
-                foreach(var offsetFrame in tempFrameOffsetList)
+                isFirst = true;
+                foreach (var offsetFrame in tempFrameOffsetList)
                 {
-                    if(offsetFrame >= 10 && offsetFrame <= 22)
+                    if(offsetFrame >= 10 && offsetFrame <= 24)
                     {
                         suitFrameCount++;
                     }
+
+                    if(!isFirst && offsetFrame <= 5)
+                    {
+                        suitFrameCount = 0;
+                        break;
+                    }
+
+                    if (isFirst)
+                        isFirst = false;
                 }
 
                 tempDic.Add(midiFacter, suitFrameCount);

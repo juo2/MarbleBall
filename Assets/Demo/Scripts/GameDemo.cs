@@ -564,6 +564,7 @@ public partial class GameDemo : MonoBehaviour
         None,
         HorizontalToHorizontal,
         VerticalToVertical,
+        VerticalToVertical_Simulate,
         HorizontalToVertical,
         VerticalToHorizontal,
         HorizontalLine,
@@ -910,13 +911,13 @@ public partial class GameDemo : MonoBehaviour
         simulateBarsDemoBtn.onClick.AddListener(() => 
         {
             //Pad_Simulate2();
-            //Pad_Simulate();
+            Pad_Simulate();
             //Bars_Simulate();
             //StartCoroutine(Bars_Curve(0,40,25));
             //VirtualBarsScale_Simulate();
             //StartCoroutine(Bars_Simulate2());
             //Bars_Simulate3();
-            StartCoroutine(Bars_Simulate4());
+            //StartCoroutine(Bars_Simulate4());
         });
 
         LoadBarsConfig();
@@ -1510,23 +1511,25 @@ public partial class GameDemo : MonoBehaviour
         }
     }
     
-    void RefreshCurveType(int offsetFrame)
+    void RefreshCurveType(int offsetIndex,int offsetFrame)
     {
-        if(offsetFrame < 25)
+        if(offsetFrame < 8)
         {
-            if(isVertical)
-            {
-                CurveTypeRecord.Add(CurveType.VerticalPipline);
-                CurveTypeRecord.Add(CurveType.VerticalPipline2);
-            }
-            else
-            {
-                CurveTypeRecord.Add(CurveType.HorizontalPipline);
-                CurveTypeRecord.Add(CurveType.HorizontalPipline2);
-            }
-            
+            isVertical = true;
+            curveType = CurveType.VerticalToVertical_Simulate;
         }
-        if (offsetFrame >= 25 && offsetFrame <= 30)
+        else if(offsetFrame < 13)
+        {
+            isVertical = true;
+            curveType = CurveType.VerticalToVertical;
+        }
+        else if(offsetFrame >= 13 && offsetFrame < 25)
+        {
+            isVertical = false;
+            curveType = CurveType.HorizontalToHorizontal;
+
+        }
+        else if (offsetFrame >= 25 && offsetFrame <= 30)
         {
             if (isVertical)
             {
@@ -1550,33 +1553,6 @@ public partial class GameDemo : MonoBehaviour
                     curveType = CurveType.HorizontalPipline;
                 }
             }
-            else if (offsetFrame < 40)
-            {
-                CurveType preCurveType = LastCurveType();
-
-                if (isVertical)
-                {
-                    {
-                        curveType = CurveType.VerticalPipline2;
-                        //CurveTypePriority.Add(CurveType.VerticalLine2);
-                    }
-
-                    if (tryingType == TryingType.Try_Horizontal)
-                    {
-                        CurveTypePriority.Add(CurveType.VerticalToHorizontal);
-                    }
-
-                }
-                else
-                {
-                    curveType = CurveType.HorizontalPipline2;
-
-                    if (tryingType == TryingType.Try_Vertical)
-                    {
-                        CurveTypePriority.Add(CurveType.HorizontalToVertical);
-                    }
-                }
-            }
             else
             {
                 if (isVertical)
@@ -1590,6 +1566,8 @@ public partial class GameDemo : MonoBehaviour
             }
         }
     }
+
+
 
     IEnumerator GameInit()
     {
@@ -1616,7 +1594,7 @@ public partial class GameDemo : MonoBehaviour
 
             int offsetFrame = _frame - _lastFrame;
 
-            if (offsetFrame >= 80)
+            if (offsetFrame >= 100)
             {
                 offsetFrame = 100;
             }
@@ -1654,8 +1632,9 @@ public partial class GameDemo : MonoBehaviour
 
         _lastFrame = playMusicFrame;
 
-        foreach (var offsetFrame in frameOffsetList)
+        for(int offsetIndex = 0; offsetIndex < frameOffsetList.Count; offsetIndex++)
         {
+            int offsetFrame = frameOffsetList[offsetIndex];
             frameList.Add(_lastFrame + offsetFrame);
             _lastFrame = _lastFrame + offsetFrame;
         }
@@ -1687,6 +1666,9 @@ public partial class GameDemo : MonoBehaviour
             logger($"第 {offsetIndex} 个开始 ++++++++++++");
 
             int offsetFrame = frameOffsetList[offsetIndex];
+
+            RefreshCurveType(offsetIndex, offsetFrame);
+
             RefreshBallVelocity(offsetIndex, isVertical);
 
             float rotation = 0f;
@@ -1694,11 +1676,9 @@ public partial class GameDemo : MonoBehaviour
                 rotation = 30f;
 
             currentPad = InstantPad(ball.transform.position, ball.velocity, currentFrame, rotation);
-          
 
             CurveTypeRecord.Clear();
 
-            RefreshCurveType(offsetFrame);
 
             if(isRecordJson)
             {

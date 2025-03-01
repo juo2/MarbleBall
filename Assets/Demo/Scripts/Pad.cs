@@ -186,7 +186,7 @@ public class Pad : MonoBehaviour
             padBeforeMat = Instantiate<Material>(Resources.Load<Material>("_PadBefore"));
         }
 
-        Debug.Log($"index:{index}");
+        //Debug.Log($"index:{index}");
 
         return after ? padAfterMats[index-1] : padBeforeMat;
     }

@@ -33,7 +33,19 @@ public partial class GameDemo : MonoBehaviour
         }
         CurveTypeRecord.Add(curveType);
 
-        if (curveType == CurveType.VerticalToVertical)
+        if(curveType == CurveType.VerticalToVertical_Simulate)
+        {
+            stopwatch.Restart();
+
+            VerticalToVertical_Simulate(offsetIndex, offsetFrame);
+
+            stopwatch.Stop();
+
+            logger($"    运行 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount} ---运行时间:{stopwatch.ElapsedMilliseconds / 1000f}");
+
+            VerticalToVertical_SimulateSuccess(offsetIndex, offsetFrame, curveType);
+        }
+        else if (curveType == CurveType.VerticalToVertical)
         {
 
             stopwatch.Restart();
@@ -866,6 +878,12 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
+    void VerticalToVertical_SimulateSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
+    {
+        logger($"    尝试 curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
+
+        UpdateCurveType(_curveType);
+    }
 
     void VerticalToVerticalSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
     {
@@ -983,6 +1001,8 @@ public partial class GameDemo : MonoBehaviour
 
     void UpdateCurveType(CurveType _curveType)
     {
+        return;
+
         currentRecordJson.successCurveType = _curveType;
         curveTypeList.Add(_curveType);
 
@@ -1543,6 +1563,33 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
+    void VerticalToVertical_Simulate(int offsetIndex,int offsetFrame)
+    {
+        PadCurve padCurve = null;
+        foreach (var pc in padCurveList)
+        {
+            if (pc.inverse == currentPad.inverse)
+            {
+                padCurve = pc;
+                break;
+            }
+        }
+
+        List<PhysicsState> physicsStates = TransformPhysicsState(padCurve.physicsStates);
+        AddPhysicsState(physicsStates);
+        simulateToFrame(currentFrame + physicsStates.Count, true, true);
+        int remainFrame = offsetFrame - physicsStates.Count;
+
+        for (int i = 0; i < remainFrame; i++)
+        {
+            simulateNextFrame();
+        }
+
+        SetRotation(offsetIndex - 1, padCurve.rotation);
+
+        g_isPass = true;
+    }
+
     void BackupPlan(int backFrame, int offsetIndex, int offsetFrame)
     {
         currentRecordJson.isBackUp = true;
@@ -1557,31 +1604,7 @@ public partial class GameDemo : MonoBehaviour
         {
             logger($"    启动 BackupPlan padCurve");
 
-            PadCurve padCurve = null;
-            foreach(var pc in padCurveList)
-            {
-                if(pc.inverse == currentPad.inverse)
-                {
-                    padCurve = pc;
-                    break;
-                }
-            }
-
-            List<PhysicsState> physicsStates = TransformPhysicsState(padCurve.physicsStates);
-            AddPhysicsState(physicsStates);
-            simulateToFrame(currentFrame + physicsStates.Count, true, true);
-            int remainFrame = offsetFrame - physicsStates.Count;
-
-            for(int i = 0;i < remainFrame;i++)
-            {
-                simulateNextFrame();
-            }
-
-            SetRotation(offsetIndex - 1, padCurve.rotation);
-
-            VerticalToHorizontalSuccess(offsetIndex, offsetFrame, CurveType.VerticalToHorizontal);
-
-            g_isPass = true;
+            
         }
         else if (BestPointDic.ContainsKey(backFrame))
         {
@@ -1804,82 +1827,78 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator HorizontalCurveFail(int offsetIndex, int offsetFrame)
     {
-        currentRecordJson.curveTypeList.Add(curveType);
+        yield return null;
 
-        CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
+        //currentRecordJson.curveTypeList.Add(curveType);
 
-        if(result != CurveType.None)
-        {
-            curveType = result;
-            yield return TryCurve(offsetIndex, offsetFrame);
-        }
-        else
-        {
-            if (!CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal))
-            {
-                curveType = CurveType.HorizontalToHorizontal;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-            else if (!CurveTypeRecord.Contains(CurveType.HorizontalToVertical))
-            {
-                curveType = CurveType.HorizontalToVertical;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-            else if (!CurveTypeRecord.Contains(CurveType.HorizontalPipline2))
-            {
-                curveType = CurveType.HorizontalPipline2;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-            //else if (!CurveTypeRecord.Contains(CurveType.HorizontalLine2))
-            //{
-            //    curveType = CurveType.HorizontalLine2;
-            //    yield return TryCurve(offsetIndex, offsetFrame);
-            //}
-            else
-            {
-                BackupPlan(currentFrame, offsetIndex, offsetFrame);
-            }
-        }
+        //CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
+
+        //if(result != CurveType.None)
+        //{
+        //    curveType = result;
+        //    yield return TryCurve(offsetIndex, offsetFrame);
+        //}
+        //else
+        //{
+        //    if (!CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal))
+        //    {
+        //        curveType = CurveType.HorizontalToHorizontal;
+        //        yield return TryCurve(offsetIndex, offsetFrame);
+        //    }
+        //    else if (!CurveTypeRecord.Contains(CurveType.HorizontalToVertical))
+        //    {
+        //        curveType = CurveType.HorizontalToVertical;
+        //        yield return TryCurve(offsetIndex, offsetFrame);
+        //    }
+        //    else if (!CurveTypeRecord.Contains(CurveType.HorizontalPipline2))
+        //    {
+        //        curveType = CurveType.HorizontalPipline2;
+        //        yield return TryCurve(offsetIndex, offsetFrame);
+        //    }
+        //    else
+        //    {
+        //        BackupPlan(currentFrame, offsetIndex, offsetFrame);
+        //    }
+        //}
+
+        BackupPlan(currentFrame, offsetIndex, offsetFrame);
     }
 
     IEnumerator VerticalCurveFail(int offsetIndex, int offsetFrame)
     {
-        currentRecordJson.curveTypeList.Add(curveType);
+        yield return null;
+        //currentRecordJson.curveTypeList.Add(curveType);
 
-        CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
+        //CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
 
-        if (result != CurveType.None)
-        {
-            curveType = result;
-            yield return TryCurve(offsetIndex, offsetFrame);
-        }
-        else
-        {
-            if (!CurveTypeRecord.Contains(CurveType.VerticalToVertical))
-            {
-                curveType = CurveType.VerticalToVertical;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-            else if (!CurveTypeRecord.Contains(CurveType.VerticalToHorizontal))
-            {
-                curveType = CurveType.VerticalToHorizontal;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-            else if (!CurveTypeRecord.Contains(CurveType.VerticalPipline2))
-            {
-                curveType = CurveType.VerticalPipline2;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-            //else if (!CurveTypeRecord.Contains(CurveType.VerticalLine2))
-            //{
-            //    curveType = CurveType.VerticalLine2;
-            //    yield return TryCurve(offsetIndex, offsetFrame);
-            //}
-            else
-            {
-                BackupPlan(currentFrame, offsetIndex, offsetFrame);
-            }
-        }
-            
+        //if (result != CurveType.None)
+        //{
+        //    curveType = result;
+        //    yield return TryCurve(offsetIndex, offsetFrame);
+        //}
+        //else
+        //{
+        //    if (!CurveTypeRecord.Contains(CurveType.VerticalToVertical))
+        //    {
+        //        curveType = CurveType.VerticalToVertical;
+        //        yield return TryCurve(offsetIndex, offsetFrame);
+        //    }
+        //    else if (!CurveTypeRecord.Contains(CurveType.VerticalToHorizontal))
+        //    {
+        //        curveType = CurveType.VerticalToHorizontal;
+        //        yield return TryCurve(offsetIndex, offsetFrame);
+        //    }
+        //    else if (!CurveTypeRecord.Contains(CurveType.VerticalPipline2))
+        //    {
+        //        curveType = CurveType.VerticalPipline2;
+        //        yield return TryCurve(offsetIndex, offsetFrame);
+        //    }
+        //    else
+        //    {
+        //        BackupPlan(currentFrame, offsetIndex, offsetFrame);
+        //    }
+        //}
+
+        BackupPlan(currentFrame, offsetIndex, offsetFrame);
     }
 }
