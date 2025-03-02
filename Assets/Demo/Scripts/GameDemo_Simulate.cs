@@ -48,6 +48,8 @@ public partial class GameDemo : MonoBehaviour
         public int frame;
         public bool inverse;
         public List<PhysicsState> physicsStates;
+        public int minFrame;
+        public int maxFrame; 
     }
 
     bool isPass_Simulate = false;
@@ -399,7 +401,7 @@ public partial class GameDemo : MonoBehaviour
         int backFrame = currentFrame;
         Vector3 prePos = ball.transform.position;
 
-        //Ô¤²âÕâÒ»Ö¡
+        //Ô¤ï¿½ï¿½ï¿½ï¿½Ò»Ö¡
         for (int i = 0; i < offsetFrame; i++)
         {
             _simulate();
@@ -409,14 +411,14 @@ public partial class GameDemo : MonoBehaviour
         if (afterPos.y < prePos.y - barCombine.beiginOffset)
         {
             int simlateFrame = 0;
-            //»Øµ½Ö®Ç°
+            //ï¿½Øµï¿½Ö®Ç°
             _simulateToFrame(backFrame);
 
             while (true)
             {
                 _simulate();
                 simlateFrame++;
-                //ÕÒµ½ÔÚbeginOffsetÏÂ·½µÄµã
+                //ï¿½Òµï¿½ï¿½ï¿½beginOffsetï¿½Â·ï¿½ï¿½Äµï¿½
                 if (ball.transform.position.y < prePos.y - barCombine.beiginOffset)
                 {
                     break;
@@ -430,10 +432,10 @@ public partial class GameDemo : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
 
-            //½×¶Î1
+            //ï¿½×¶ï¿½1
             for (int _f = 0; _f < lastFrame; _f++)
             {
-                //Ä£Äâ
+                //Ä£ï¿½ï¿½
                 _simulate();
                 simlateFrame++;
                 if (currentBarsCombine.isPass1(ball.transform.position, ball.velocity))
@@ -443,7 +445,7 @@ public partial class GameDemo : MonoBehaviour
                 }
             }
 
-            //½×¶Î2
+            //ï¿½×¶ï¿½2
             if (isPass_Simulate)
             {
                 isPass_Simulate = false;
@@ -618,11 +620,11 @@ public partial class GameDemo : MonoBehaviour
             }
 
             if(!res)
-                Debug.LogError($"Ã»ÕÒµ½ 11111 frame:{frame} curveType:{curveType}  distanceType:{distanceType} rotation:{rotation} bounciness:{bounciness}");
+                Debug.LogError($"Ã»ï¿½Òµï¿½ 11111 frame:{frame} curveType:{curveType}  distanceType:{distanceType} rotation:{rotation} bounciness:{bounciness}");
         }
         else
         {
-            Debug.LogError($"Ã»ÕÒµ½ 22222 frame:{frame} curveType:{curveType}  distanceType:{distanceType} rotation:{rotation} bounciness:{bounciness}");
+            Debug.LogError($"Ã»ï¿½Òµï¿½ 22222 frame:{frame} curveType:{curveType}  distanceType:{distanceType} rotation:{rotation} bounciness:{bounciness}");
         }
     }
 
@@ -722,340 +724,6 @@ public partial class GameDemo : MonoBehaviour
     }
 
 
-    void Pad_Simulate()
-    {
-        bool inverse = true;
-        float rota = 80f;
-
-        Vector3 v = new Vector3(1.5f, -1f, 0);
-
-        int inv = 1;
-        if (inverse)
-            inv = -1;
-
-        v = new Vector3(v.x * inv, v.y, v.z);
-
-        ball.SetVelocity(v);
-        physicsStateList[0].velocity = v;
-
-        Pad _pad = InstantPad(ball.transform.position, ball.velocity, currentFrame, rota * inv, true);
-
-        int simlateFrame = 0;
-        for (int i = 0; i < 6; i++)
-        {
-            simulateNextFrame();
-            simlateFrame++;
-        }
-
-        PadCurve padCurve = new PadCurve();
-        padCurve.rotation = rota * inv;
-        padCurve.frame = physicsStateList.Count - 1;
-        padCurve.inverse = inverse;
-        padCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
-
-        string json_str = JsonUtility.ToJson(padCurve);
-        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "padCurve/temp.json"), json_str);
-    }
-
-    void Pad_Simulate2()
-    {
-        bool inverse = false;
-        float rota = -10f;
-
-        Vector3 v = new Vector3(-0.8f, -1.2f, 0);
-
-        int inv = 1;
-        if (inverse)
-            inv = -1;
-
-        v = new Vector3(v.x * inv, v.y, v.z);
-
-        ball.SetVelocity(v);
-        physicsStateList[0].velocity = v;
-
-        Pad _pad = InstantPad(ball.transform.position, ball.velocity, currentFrame, rota * inv, true);
-        _pad.SetPhysicMaterialBounciness(0.6f);
-
-        int simlateFrame = 0;
-        for (int i = 0; i < 32; i++)
-        {
-            simulateNextFrame();
-            simlateFrame++;
-        }
-
-        //PadCurve padCurve = new PadCurve();
-        //padCurve.rotation = rota * inv;
-        //padCurve.frame = physicsStateList.Count - 1;
-        //padCurve.inverse = inverse;
-        //padCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
-
-        //string json_str = JsonUtility.ToJson(padCurve);
-        //File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "padCurve/temp.json"), json_str);
-    }
-
-    void Bars_Simulate()
-    {
-        int backFrame = currentFrame;
-        
-        foreach (var rotation in h_rotationList1)
-        {
-            for (int j = 0; j < h_bouncinessPriorityList.Count; j++)
-            {
-                float bounciness = h_bouncinessPriorityList[j];
-                simulateToFrame(backFrame, true, true);
-                SetRotation(1, rotation);
-                SetPhysicMaterialBounciness(1, bounciness);
-
-                Vector3 prePos = ball.transform.position;
-
-                int simlateFrame = 0;
-
-                for (int i = 0; i < 999; i++)
-                {
-                    simulateNextFrame();
-                    simlateFrame++;
-
-                    Vector3 afterPos = ball.transform.position;
-
-                    if (afterPos.y < prePos.y - 0.1f)
-                    {
-                        break;
-                    }
-                }
-
-                BarsDemo barsDemo = InstantBars_Simulate(ball.transform.position, ball.velocity, simulateBarsDemo, false);
-
-                for (int i = 0; i < 999; i++)
-                {
-                    simulateNextFrame();
-                    simlateFrame++;
-
-                    if (barsDemo.isPassXY(ball.transform.position, 0.1f))
-                    {
-                        break;
-                    }
-                }
-                DestroyImmediate(barsDemo.gameObject);
-                Debug.Log($"simlateFrame:{simlateFrame}");
-            }
-        }
-    }
-
-
-    IEnumerator Bars_Simulate2()
-    {
-        Physics.gravity = new Vector3(0, -5f, 0);
-
-        int prefabIndex = 1;
-        bool inverse = true;
-        //Vector3 v = new Vector3(0.829f, -1.29f, 0);
-        Vector3 v = new Vector3(0.35f, -0.5f, 0);
-        //Vector3 v = new Vector3(-1f, -1f, 0);
-        int inv = 1;
-        if (inverse)
-            inv = -1;
-
-        v = new Vector3(v.x * inv, v.y, 0);
-        //Vector3 v = new Vector3(2f, 0f, 0);
-
-        int simlateFrame = 0;
-        BarsDemo barsDemo = InstantBars_Simulate(ball.transform.position, ball.velocity, barsDemoPrefabList[prefabIndex], inverse);
-
-        ball.SetVelocity(v);
-        physicsStateList[0].velocity = v;
-
-        yield return new WaitForSeconds(0.3f);
-
-        ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x , ball.angularVelocity.y  -5f, ball.angularVelocity.z));
-        physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
-
-         
-        for (int i = 1; i < 20; i++)
-        {
-            ModifyFrameVelocity(i, 0.15f, 0f);
-        }
-
-        for (int i = 40; i < 55; i++)
-        {
-            ModifyFrameVelocity(i, 0.11f, 0f);
-        }
-
-        //for (int i = 30; i < 35; i++)
-        //{
-        //    ModifyFrameVelocity(i, 0.105f, 0f);
-        //}
-
-        //for (int i = 34; i < 40; i++)
-        //{
-        //    ModifyFrameVelocity(i, 0.1f, 0f);
-        //}
-
-        //for (int i = 0; i < 84; i++)
-        for (int i = 0; i < 80; i++)
-        {
-            simulateNextFrame();
-            simlateFrame++;
-
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x , ball.angularVelocity.y -5f , ball.angularVelocity.z));
-            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
-        }
-
-        Debug.Log($"physicsStateList.Count:{physicsStateList.Count}");
-
-        BarsCurve barsCurve = new BarsCurve();
-        barsCurve.prefabIndex = prefabIndex;
-        barsCurve.inverse = inverse;
-        barsCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
-        barsCurve.frame = physicsStateList.Count - 1;
-
-        string json_str = JsonUtility.ToJson(barsCurve);
-        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "barCurve/temp.json"), json_str);
-
-        logger($"simlateFrame:{simlateFrame}");
-        Debug.Log($"simlateFrame:{simlateFrame}");
-    }
-
-    IEnumerator Bars_Simulate2_2()
-    {
-        Physics.gravity = new Vector3(0, -5f, 0);
-
-        int prefabIndex = 1;
-        bool inverse = true;
-        //Vector3 v = new Vector3(0.829f, -1.29f, 0);
-        Vector3 v = new Vector3(-0.35f, -0.5f, 0);
-        //Vector3 v = new Vector3(-1f, -1f, 0);
-        int inv = 1;
-        if (inverse)
-            inv = -1;
-
-        v = new Vector3(v.x * inv, v.y, 0);
-        //Vector3 v = new Vector3(2f, 0f, 0);
-
-        int simlateFrame = 0;
-        BarsDemo barsDemo = InstantBars_Simulate(ball.transform.position, ball.velocity, barsDemoPrefabList[prefabIndex], inverse);
-
-        ball.SetVelocity(v);
-        physicsStateList[0].velocity = v;
-
-        yield return new WaitForSeconds(0.3f);
-
-        for (int i = 0; i < 9; i++)
-        {
-            simulateNextFrame();
-            simlateFrame++;
-
-            if(barsDemo.isPassX(ball.transform.position))
-            {
-                break;
-            }
-        }
-
-        for(int i = 10;i < 40;i++)
-        {
-            ModifyFrameVelocity(i, 0.2f, 0f);
-        }
-
-        for (int i = 9; i < 70; i++)
-        {
-            simulateNextFrame();
-            simlateFrame++;
-
-            if (barsDemo.isPassX(ball.transform.position))
-            {
-                break;
-            }
-        }
-
-
-        Debug.Log($"physicsStateList.Count:{physicsStateList.Count}");
-
-        BarsCurve barsCurve = new BarsCurve();
-        barsCurve.prefabIndex = prefabIndex;
-        barsCurve.inverse = inverse;
-        barsCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count-1);
-        barsCurve.frame = physicsStateList.Count-1;
-
-        string json_str = JsonUtility.ToJson(barsCurve);
-        File.WriteAllText(Path.Combine(Application.streamingAssetsPath,"barCurve/temp.json"), json_str);
-
-        logger($"simlateFrame:{simlateFrame}");
-        Debug.Log($"simlateFrame:{simlateFrame}");
-    }
-
-    void Bars_Simulate3()
-    {
-        int prefabIndex = 1;
-        bool inverse = false;
-
-        InstantBars_Simulate(ball.transform.position, ball.velocity, barsDemoPrefabList[prefabIndex], inverse);
-        BarsCurve barsCurve = FindBarsCurve(prefabIndex, inverse);
-        //List<PhysicsState> physicsStates = TransformPhysicsState_Simulate(barsCurve.physicsStates);
-        List<PhysicsState> physicsStates = TransformPhysicsState_Simulate(barsCurve.physicsStates);
-        AddPhysicsState(physicsStates);
-        simulateToFrame(physicsStates.Count, true, true);
-
-        barsCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
-        barsCurve.frame = physicsStateList.Count - 1;
-
-        string json_str = JsonUtility.ToJson(barsCurve);
-        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "barCurve/temp.json"), json_str);
-    }
-
-    IEnumerator Bars_Simulate4()
-    {
-        Physics.gravity = new Vector3(0, -5f, 0);
-
-        int prefabIndex = 2;
-        bool inverse = false;
-        Vector3 v = new Vector3(0.5f, -1.0f, 0);
-        int inv = 1;
-        if (inverse)
-            inv = -1;
-
-        v = new Vector3(v.x * inv, v.y, 0);
-
-        int simlateFrame = 0;
-        BarsDemo barsDemo = InstantBars_Simulate(ball.transform.position, ball.velocity, simulateBarsDemo, inverse);
-
-        ball.SetVelocity(v);
-        physicsStateList[0].velocity = v;
-
-        yield return new WaitForSeconds(0.3f);
-
-        ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 5f, ball.angularVelocity.z));
-        physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
-
-        for (int i = 2; i < 5; i++)
-        {
-            ModifyFrameVelocity(i, 0.4f, 0.4f);
-        }
-
-        for (int i = 5; i < 15; i++)
-        {
-            ModifyFrameVelocity(i, -0.2f, 0);
-        }
-
-        for (int i = 0; i < 15; i++)
-        {
-            simulateNextFrame(true,false);
-            simlateFrame++;
-
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 5f, ball.angularVelocity.z));
-            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
-        }
-
-        BarsCurve barsCurve = new BarsCurve();
-        barsCurve.prefabIndex = prefabIndex;
-        barsCurve.inverse = inverse;
-        barsCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
-        barsCurve.frame = physicsStateList.Count - 1;
-
-        string json_str = JsonUtility.ToJson(barsCurve);
-        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "barCurve/temp.json"), json_str);
-
-        logger($"simlateFrame:{simlateFrame}");
-        Debug.Log($"simlateFrame:{simlateFrame}");
-    }
 
     private List<PhysicsState> TransformPhysicsState_Simulate(List<PhysicsState> psList)
     {

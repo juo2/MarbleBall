@@ -26,16 +26,24 @@
         },
         {
             "prefabIndex": 3,
-            "beiginOffset": 0.1,
-            "endOffset": 0.1,
+            "beiginOffset": 0.08,
+            "endOffset": 0.08,
             "remainFrame" : 4,
             "targetMinFrame": 999,
             "targetMaxFrame": 999
         },
         {
             "prefabIndex": 4,
-            "beiginOffset": 0.1,
-            "endOffset": 0.1,
+            "beiginOffset": 0.08,
+            "endOffset": 0.08,
+            "remainFrame" : 4,
+            "targetMinFrame": 999,
+            "targetMaxFrame": 999
+        },
+        {
+            "prefabIndex": 5,
+            "beiginOffset": 0.08,
+            "endOffset": 0.08,
             "remainFrame" : 4,
             "targetMinFrame": 999,
             "targetMaxFrame": 999

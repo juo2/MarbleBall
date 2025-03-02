@@ -160,7 +160,7 @@ public partial class GameDemo : MonoBehaviour
 
     void SpaceKeyDown()
     {
-        Time.timeScale = midiHelper.suitMidiFacter;
+        //Time.timeScale = midiHelper.suitMidiFacter;
 
         spacePlay = true;
         

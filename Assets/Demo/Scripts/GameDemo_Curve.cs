@@ -416,7 +416,7 @@ public partial class GameDemo : MonoBehaviour
 
     void HorizontalPipline(int offsetIndex, int offsetFrame)
     {
-        HorizontalLine(offsetIndex, offsetFrame, 0, spBarsCount);
+        HorizontalLine(offsetIndex, offsetFrame, 0, barsDemoPrefabList.Count);
     }
 
     void HorizontalPipline2(int offsetIndex, int offsetFrame)
@@ -587,7 +587,7 @@ public partial class GameDemo : MonoBehaviour
 
     void VerticalPipline(int offsetIndex, int offsetFrame)
     {
-        VerticalLine(offsetIndex, offsetFrame, 0, spBarsCount);
+        VerticalLine(offsetIndex, offsetFrame, 0, barsDemoPrefabList.Count);
     }
 
     void VerticalPipline2(int offsetIndex, int offsetFrame)
@@ -1356,10 +1356,6 @@ public partial class GameDemo : MonoBehaviour
 
     void BarsLine_Curve(int _offsetIndex, int offsetFrame, int prefabIndex)
     {
-        if(prefabIndex == 2)
-        {
-            Debug.Log($"prefabIndex:{prefabIndex}");
-        }
         BarConfig barConfig = barsConfig.BarConfigList[prefabIndex];
 
         distanceType = DistanceType.None;
@@ -1455,10 +1451,7 @@ public partial class GameDemo : MonoBehaviour
                         UpdateFrameList(currentOffsetIndex, totalFrame);
                     }
 
-                    if(prefabIndex == 2)
-                    {
-                        Debug.Log($"offsetIndex:{_offsetIndex} simlateFrame:{simlateFrame}");
-                    }
+                    Debug.Log($"offsetIndex:{_offsetIndex}   barsCurve.frame:{barsCurve.frame}   prefabIndex:{prefabIndex}  simlateFrame:{simlateFrame}");
                 }
                 else
                 {
@@ -1568,7 +1561,7 @@ public partial class GameDemo : MonoBehaviour
         PadCurve padCurve = null;
         foreach (var pc in padCurveList)
         {
-            if (pc.inverse == currentPad.inverse)
+            if (pc.inverse == currentPad.inverse && offsetFrame >= pc.minFrame && offsetFrame <= pc.maxFrame)
             {
                 padCurve = pc;
                 break;
@@ -1579,7 +1572,7 @@ public partial class GameDemo : MonoBehaviour
         AddPhysicsState(physicsStates);
         simulateToFrame(currentFrame + physicsStates.Count, true, true);
         int remainFrame = offsetFrame - physicsStates.Count;
-
+        
         for (int i = 0; i < remainFrame; i++)
         {
             simulateNextFrame();

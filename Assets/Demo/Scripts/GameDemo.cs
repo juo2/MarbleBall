@@ -612,7 +612,7 @@ public partial class GameDemo : MonoBehaviour
     string currentMidi = string.Empty;
     BarsConfig barsConfig;
 
-    int spBarsCount = 3;
+    int spBarsCount = 4;
     float midiFacter = 1f;
 
     private int currentFrame
@@ -668,7 +668,7 @@ public partial class GameDemo : MonoBehaviour
         {
             if(padDataList.Count > 0)
             {
-                Time.timeScale = midiHelper.suitMidiFacter;
+                //Time.timeScale = midiHelper.suitMidiFacter;
                 Physics.autoSimulation = false;
                 isPlay = true;
                 currentFrame = 0;
@@ -911,13 +911,16 @@ public partial class GameDemo : MonoBehaviour
         simulateBarsDemoBtn.onClick.AddListener(() => 
         {
             //Pad_Simulate2();
-            Pad_Simulate();
             //Bars_Simulate();
             //StartCoroutine(Bars_Curve(0,40,25));
             //VirtualBarsScale_Simulate();
             //StartCoroutine(Bars_Simulate2());
             //Bars_Simulate3();
             //StartCoroutine(Bars_Simulate4());
+            //StartCoroutine(Bars_Simulate5());
+            //StartCoroutine(Bars_Simulate6());
+            StartCoroutine(Bars_Simulate7());
+
         });
 
         LoadBarsConfig();
@@ -1513,23 +1516,23 @@ public partial class GameDemo : MonoBehaviour
     
     void RefreshCurveType(int offsetIndex,int offsetFrame)
     {
-        if(offsetFrame < 8)
+        if(offsetFrame < 13)
         {
             isVertical = true;
             curveType = CurveType.VerticalToVertical_Simulate;
         }
-        else if(offsetFrame < 13)
+        else if(offsetFrame < 16)
         {
             isVertical = true;
             curveType = CurveType.VerticalToVertical;
         }
-        else if(offsetFrame >= 13 && offsetFrame < 25)
+        else if(offsetFrame >= 16 && offsetFrame < 25)
         {
             isVertical = false;
             curveType = CurveType.HorizontalToHorizontal;
 
         }
-        else if (offsetFrame >= 25 && offsetFrame <= 30)
+        else if (offsetFrame >= 25 && offsetFrame <= 40)
         {
             if (isVertical)
             {
@@ -1540,7 +1543,7 @@ public partial class GameDemo : MonoBehaviour
                 curveType = CurveType.HorizontalPipline;
             }
         }
-        else if (offsetFrame > 30)
+        else if (offsetFrame > 40)
         {
             if (offsetFrame == 100)
             {
