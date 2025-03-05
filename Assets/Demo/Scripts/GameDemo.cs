@@ -452,7 +452,8 @@ public partial class GameDemo : MonoBehaviour
         0.6f,
         0.7f,
         0.5f,
-
+        0.3f,
+        0.4f,
         //0.8f,
         //0.9f,
         //1.0f,
@@ -634,6 +635,7 @@ public partial class GameDemo : MonoBehaviour
 
     HashSet<CurveType> CurveTypeRecord = new HashSet<CurveType>();
     List<CurveType> CurveTypePriority = new List<CurveType>();
+    List<CurveType> HostoryType = new List<CurveType>();
 
     List<BarsCurve> barsCurveList = new List<BarsCurve>();
     List<PadCurve> padCurveList = new List<PadCurve>();
@@ -919,7 +921,12 @@ public partial class GameDemo : MonoBehaviour
             //StartCoroutine(Bars_Simulate4());
             //StartCoroutine(Bars_Simulate5());
             //StartCoroutine(Bars_Simulate6());
-            StartCoroutine(Bars_Simulate7());
+            //StartCoroutine(Bars_Simulate7());
+            //StartCoroutine(Bars_Simulate8());
+            //StartCoroutine(Bars_Simulate9());
+            StartCoroutine(Bars_Simulate10());
+
+            
 
         });
 
@@ -1444,7 +1451,7 @@ public partial class GameDemo : MonoBehaviour
     {
         lightIndex++;
 
-        if (lightIndex > 3)
+        if (lightIndex > 5)
         {
             lightIndex = 1;
         }

@@ -166,7 +166,7 @@ public class MidiHelper : MonoBehaviour
                 if(tempDic[key] > maxSuitFrameCount)
                 {
                     maxSuitFrameCount = tempDic[key];
-                    //suitMidiFacter = key;
+                    suitMidiFacter = key;
                 }
             }
             //File.WriteAllText(Path.Combine(Application.dataPath, "test.txt"), contents);

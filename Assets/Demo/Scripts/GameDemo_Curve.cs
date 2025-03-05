@@ -315,29 +315,29 @@ public partial class GameDemo : MonoBehaviour
 
         HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList2, h_bouncinessPriorityList2);
 
-        if (!g_isPass)
-        {
-            logger($"    ≥¢ ‘ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
+        //if (!g_isPass)
+        //{
+        //    logger($"    ≥¢ ‘ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
 
-            if (ball.velocity.x > 0)
-            {
-                center = horizontalCenter1;
-                bestPos = horizontalBestPos1;
-            }
-            else
-            {
-                center = horizontalCenter2;
-                bestPos = horizontalBestPos2;
-            }
+        //    if (ball.velocity.x > 0)
+        //    {
+        //        center = horizontalCenter1;
+        //        bestPos = horizontalBestPos1;
+        //    }
+        //    else
+        //    {
+        //        center = horizontalCenter2;
+        //        bestPos = horizontalBestPos2;
+        //    }
 
-            size = horizontalSize;
+        //    size = horizontalSize;
 
-            SetBounds(offsetIndex - 1, center, size, bestPos);
+        //    SetBounds(offsetIndex - 1, center, size, bestPos);
 
-            distanceType = DistanceType.Near;
+        //    distanceType = DistanceType.Near;
 
-            HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList1, h_bouncinessPriorityList1);
-        }
+        //    HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList1, h_bouncinessPriorityList1);
+        //}
     }
 
     void HorizontalToVertical(int offsetIndex, int offsetFrame)
@@ -880,6 +880,7 @@ public partial class GameDemo : MonoBehaviour
 
     void VerticalToVertical_SimulateSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
     {
+        
         logger($"    ≥¢ ‘ curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
 
         UpdateCurveType(_curveType);
@@ -1001,12 +1002,25 @@ public partial class GameDemo : MonoBehaviour
 
     void UpdateCurveType(CurveType _curveType)
     {
-        return;
-
         currentRecordJson.successCurveType = _curveType;
-        curveTypeList.Add(_curveType);
 
         CurveType preCurveType = LastCurveType();
+
+        if(preCurveType == CurveType.HorizontalToHorizontal &&  ( _curveType == CurveType.VerticalToVertical || _curveType==CurveType.VerticalToVertical_Simulate  ))
+        {
+            EndCameraMovement();
+        }
+        else if((preCurveType == CurveType.VerticalToVertical || preCurveType == CurveType.VerticalToVertical_Simulate) && _curveType == CurveType.HorizontalToHorizontal)
+        {
+            EndCameraMovement();
+        }
+
+        curveTypeList.Add(_curveType);
+
+        return;
+
+
+        //CurveType preCurveType = LastCurveType();
         CurveType nextCurveType = CurveType.None;
 
         UpdatePadsBounds();

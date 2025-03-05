@@ -22,6 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Reflection Only
   m_Shader: {fileID: -6465566751694194690, guid: cc19f4939e70c2246b756f5cdc72bb04, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - BOOLEAN_0C2A674DA9D34BE1AD7687411707E924_ON
   m_InvalidKeywords: []
@@ -31,6 +33,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:

@@ -47,6 +47,30 @@
             "remainFrame" : 4,
             "targetMinFrame": 999,
             "targetMaxFrame": 999
+        },
+        {
+            "prefabIndex": 6,
+            "beiginOffset": 0.08,
+            "endOffset": 0.08,
+            "remainFrame" : 4,
+            "targetMinFrame": 999,
+            "targetMaxFrame": 999
+        },
+        {
+            "prefabIndex": 7,
+            "beiginOffset": 0.08,
+            "endOffset": 0.08,
+            "remainFrame" : 4,
+            "targetMinFrame": 999,
+            "targetMaxFrame": 999
+        },
+        {
+            "prefabIndex": 8,
+            "beiginOffset": 0.08,
+            "endOffset": 0.08,
+            "remainFrame" : 4,
+            "targetMinFrame": 999,
+            "targetMaxFrame": 999
         }
     ]
 }

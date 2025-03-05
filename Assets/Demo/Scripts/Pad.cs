@@ -173,7 +173,7 @@ public class Pad : MonoBehaviour
     {
         if(padAfterMat == null)
         {
-            for(int i = 0;i < 3;i++)
+            for(int i = 0;i < 5;i++)
             {
                 padAfterMat = Instantiate<Material>(Resources.Load<Material>("_PadAfter" + (i+1)) );
                 //padAfterMat.SetColor("_EmissionColor", padColor * intensity);
