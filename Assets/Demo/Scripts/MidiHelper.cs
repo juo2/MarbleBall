@@ -21,9 +21,11 @@ public class MidiHelper : MonoBehaviour
     public int playChannel = 1;
 
     private HashSet<float> timeSet = new HashSet<float>();
-    string currentMidi = string.Empty;
+    public string currentMidi = string.Empty;
 
     public float suitMidiFacter = 1.0f;
+
+    public float beginTime = 0;
 
     // Start is called before the first frame update
     void Awake()
@@ -50,6 +52,7 @@ public class MidiHelper : MonoBehaviour
     {
         if(currentMidi != _name)
         {
+            beginTime = 0;
             timeSet.Clear();
             AllMidiEventsSet.Clear();
 
@@ -73,6 +76,11 @@ public class MidiHelper : MonoBehaviour
             {
                 if (mptkEvent.Command == MPTKCommand.NoteOn)
                 {
+                    if(beginTime == 0)
+                    {
+                        beginTime = mptkEvent.RealTime / 1000f;
+                    }
+
                     ind = ind + 1;
                     //contents += mptkEvent.RealTime + "\n";
 
@@ -103,11 +111,11 @@ public class MidiHelper : MonoBehaviour
             Dictionary<float, int> tempDic = new Dictionary<float, int>();
 
             List<float> tempFrameOffsetList = new List<float>();
-            float midiFacter = 0.8f;
-            float originMidiFacter = 0.8f;
+            float midiFacter = 1f;
+            float originMidiFacter = 1f;
             for (int i = 0;i < 10;i++)
             {
-                midiFacter = originMidiFacter + i * 0.05f;
+                midiFacter = originMidiFacter + i * 0.1f;
                 bool isFirst = true;
 
                 tempFrameOffsetList.Clear();
@@ -119,10 +127,10 @@ public class MidiHelper : MonoBehaviour
 
                     int offsetFrame = _frame - _lastFrame;
 
-                    if (offsetFrame >= 100)
-                    {
-                        offsetFrame = 100;
-                    }
+                    //if (offsetFrame >= 100)
+                    //{
+                    //    offsetFrame = 100;
+                    //}
 
                     //if(offsetFrame > 5)
                     {
@@ -169,6 +177,7 @@ public class MidiHelper : MonoBehaviour
                     suitMidiFacter = key;
                 }
             }
+
             //File.WriteAllText(Path.Combine(Application.dataPath, "test.txt"), contents);
             Debug.Log($"AllMidiEvents.Count:{AllMidiEvents.Count}");
             //Debug.Log($"ind:{ind}");

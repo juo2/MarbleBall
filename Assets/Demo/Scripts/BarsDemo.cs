@@ -27,6 +27,8 @@ public class BarsDemo : MonoBehaviour
 
     public List<SplineComputer> splineComputerList = new List<SplineComputer>();
 
+    public List<GameObject> skinList = new List<GameObject>();
+
     private void Awake()
     {
         //int n = 0;
@@ -93,6 +95,20 @@ public class BarsDemo : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void refreshSkin(int skin)
+    {
+        foreach(var skinObj in skinList)
+        {
+            skinObj.SetActive(false);
+        }
+
+
+        if (skin < skinList.Count)
+            skinList[skin].SetActive(true);
+        else
+            Debug.LogError($"{this.gameObject.name} ²»´æÔÚ skin:{skin}");
     }
 
     public void refreshBarDir()

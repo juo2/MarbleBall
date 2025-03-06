@@ -71,7 +71,7 @@ public class Test : EditorWindow
         foreach (string prefabPath in prefabFiles)
         {
             // 只处理名称包含 "Bar3" 的 Prefab
-            if (!prefabPath.Contains("Bar5"))
+            if (!prefabPath.Contains("Bar7") && !prefabPath.Contains("Bar6") && !prefabPath.Contains("Bar5") && !prefabPath.Contains("Bar4") && !prefabPath.Contains("Bar3") && !prefabPath.Contains("Bar2"))
             {
                 continue;
             }
@@ -111,55 +111,86 @@ public class Test : EditorWindow
                     channel.count = 30;
 
                     SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh1);
-                    meshDefinition.rotation = new Vector3(90, 0, 0);
+                    meshDefinition.offset = new Vector3(0.015f, 0, 0);
+                    meshDefinition.rotation = new Vector3(90, 90, 0);
                     meshDefinition.scale = new Vector3(15, 15, 15);
                     channel.AddMesh(meshDefinition);
-                    channel.minOffset = new Vector3(0.04f, 0.05f);
+                    channel.minOffset = new Vector3(-0.01f, -0.005f);
                 }
-
-                {
-                    SplineMesh.Channel channel = sm.AddChannel("Channel 2");
-                    channel.type = SplineMesh.Channel.Type.Extrude;
-                    channel.count = 30;
-
-                    SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh1);
-                    meshDefinition.rotation = new Vector3(90, 0, 0);
-                    meshDefinition.scale = new Vector3(15, 15, 15);
-                    channel.AddMesh(meshDefinition);
-                    channel.minOffset = new Vector3(0.025f, -0.05f);
-                }
-
 
                 {
                     SplineMesh.Channel channel = sm.AddChannel("Channel 3");
                     channel.type = SplineMesh.Channel.Type.Extrude;
                     channel.count = 1;
-                    channel.clipFrom = 0.48f;
-                    channel.clipTo = 0.8f;
+                    channel.clipFrom = 0.43f;
+                    channel.clipTo = 0.65f;
                     SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh2);
-                    meshDefinition.offset = new Vector3(0, 0.1f, 0);
-                    meshDefinition.rotation = new Vector3(90, 90, 0);
+                    meshDefinition.offset = new Vector3(0, -0.04f, -0.15f);
+                    meshDefinition.rotation = new Vector3(90, 0, 0);
                     meshDefinition.scale = new Vector3(20, 20, 20);
                     channel.AddMesh(meshDefinition);
-                    channel.minOffset = new Vector3(0.018f, 0);
+                    channel.minOffset = new Vector3(0f, 0);
+                    channel.minRotation = new Vector3(180, 0, 0);
 
                     channel.overrideMaterialID = true;
                     channel.targetMaterialID = 1;
                 }
 
+                //{
+                //    SplineMesh.Channel channel = sm.GetChannel(0);
+                //    channel.type = SplineMesh.Channel.Type.Extrude;
+                //    channel.count = 30;
 
-                {
-                    SplineMesh.Channel channel = sm.AddChannel("Channel 4");
-                    channel.type = SplineMesh.Channel.Type.Extrude;
-                    channel.count = 30;
+                //    SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh1);
+                //    meshDefinition.rotation = new Vector3(90, 0, 0);
+                //    meshDefinition.scale = new Vector3(15, 15, 15);
+                //    channel.AddMesh(meshDefinition);
+                //    channel.minOffset = new Vector3(0.04f, 0.05f);
+                //}
 
-                    SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh1);
-                    meshDefinition.rotation = new Vector3(90, 0, 0);
-                    meshDefinition.scale = new Vector3(15, 15, 15);
-                    channel.AddMesh(meshDefinition);
-                    channel.minOffset = new Vector3(-0.01f, 0);
+                //{
+                //    SplineMesh.Channel channel = sm.AddChannel("Channel 2");
+                //    channel.type = SplineMesh.Channel.Type.Extrude;
+                //    channel.count = 30;
 
-                }
+                //    SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh1);
+                //    meshDefinition.rotation = new Vector3(90, 0, 0);
+                //    meshDefinition.scale = new Vector3(15, 15, 15);
+                //    channel.AddMesh(meshDefinition);
+                //    channel.minOffset = new Vector3(0.025f, -0.05f);
+                //}
+
+
+                //{
+                //    SplineMesh.Channel channel = sm.AddChannel("Channel 3");
+                //    channel.type = SplineMesh.Channel.Type.Extrude;
+                //    channel.count = 1;
+                //    channel.clipFrom = 0.48f;
+                //    channel.clipTo = 0.8f;
+                //    SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh2);
+                //    meshDefinition.offset = new Vector3(0, 0.1f, 0);
+                //    meshDefinition.rotation = new Vector3(90, 90, 0);
+                //    meshDefinition.scale = new Vector3(20, 20, 20);
+                //    channel.AddMesh(meshDefinition);
+                //    channel.minOffset = new Vector3(0.018f, 0);
+
+                //    channel.overrideMaterialID = true;
+                //    channel.targetMaterialID = 1;
+                //}
+
+
+                //{
+                //    SplineMesh.Channel channel = sm.AddChannel("Channel 4");
+                //    channel.type = SplineMesh.Channel.Type.Extrude;
+                //    channel.count = 30;
+
+                //    SplineMesh.Channel.MeshDefinition meshDefinition = new SplineMesh.Channel.MeshDefinition(fbxMesh1);
+                //    meshDefinition.rotation = new Vector3(90, 0, 0);
+                //    meshDefinition.scale = new Vector3(15, 15, 15);
+                //    channel.AddMesh(meshDefinition);
+                //    channel.minOffset = new Vector3(-0.01f, 0);
+
+                //}
 
 
                 modified = true;

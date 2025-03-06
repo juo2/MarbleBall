@@ -416,7 +416,7 @@ public partial class GameDemo : MonoBehaviour
 
     void HorizontalPipline(int offsetIndex, int offsetFrame)
     {
-        HorizontalLine(offsetIndex, offsetFrame, 0, barsDemoPrefabList.Count);
+        HorizontalLine(offsetIndex, offsetFrame, 2, barsDemoPrefabList.Count);
     }
 
     void HorizontalPipline2(int offsetIndex, int offsetFrame)
@@ -587,7 +587,7 @@ public partial class GameDemo : MonoBehaviour
 
     void VerticalPipline(int offsetIndex, int offsetFrame)
     {
-        VerticalLine(offsetIndex, offsetFrame, 0, barsDemoPrefabList.Count);
+        VerticalLine(offsetIndex, offsetFrame, 2, barsDemoPrefabList.Count);
     }
 
     void VerticalPipline2(int offsetIndex, int offsetFrame)

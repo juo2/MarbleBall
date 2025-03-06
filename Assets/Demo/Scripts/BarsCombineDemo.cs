@@ -10,6 +10,25 @@ public class BarsCombineDemo : BarsDemo
     public PadCollider padCollider2;
     public PadCollider padCollider3;
 
+    public List<GameObject> piplineList = new List<GameObject>();
+
+    public new void refreshSkin(int skin)
+    {
+        foreach (var skinObj in skinList)
+        {
+            skinObj.SetActive(false);
+        }
+
+        skinList[skin].SetActive(true);
+
+        foreach(var pipline in piplineList)
+        {
+            pipline.SetActive(false);
+        }
+
+        piplineList[skin].SetActive(true);
+    }
+
     public bool isPass1(Vector3 framePos,Vector3 frameDir)
     {
         if(frameDir.x > 0)

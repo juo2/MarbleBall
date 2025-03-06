@@ -54,11 +54,13 @@ public class Pad : MonoBehaviour
         new Color(191f/255f,0f,2f/255f),   //ºì
     };
 
-    List<Color> padLightColorList = new List<Color>()
+    List<string> padLightColorList = new List<string>()
     {
-        new Color(5f/255f,155f/255f,197f/255f,127f/255f), //À¶
-        new Color(140f/255f,121f/255f,0f,127f/255f),  //»Æ
-        new Color(166f/255f,20f/255f,0f,127f/255f),  //ºì
+        "#FED0FE",
+        "#C7FEE3",
+        "#FEEEB8",
+        "#FEF1FE",
+        "#AEFEFE",
     };
 
     // Start is called before the first frame update
@@ -77,16 +79,21 @@ public class Pad : MonoBehaviour
         //padRenderer.material = padBeforeMat;
         if(padRenderer)
         {
-            padRenderer.material = GetMaterial(false);
-            //lightRenderer.gameObject.SetActive(false);
+            padRenderer.sharedMaterial = SkinManager.Instance.GetMaterial(false, lightIndex);
+            lightRenderer.gameObject.SetActive(false);
+
         }
     }
 
     public void padAfter()
     {
-        padRenderer.material = GetMaterial(true, lightIndex);
-        //lightRenderer.gameObject.SetActive(true);
-        //lightRenderer.color = padLightColorList[lightIndex];
+        padRenderer.sharedMaterial = SkinManager.Instance.GetMaterial(true, lightIndex);
+        lightRenderer.gameObject.SetActive(true);
+        if(ColorUtility.TryParseHtmlString(padLightColorList[lightIndex], out Color color))
+        {
+            color.a = 60f/255f;
+            lightRenderer.color = color;
+        }
     }
 
     public void padTrigger()

@@ -178,6 +178,8 @@ public partial class GameDemo : MonoBehaviour
 
         isEditorCamera = false;
         UpdateCamera();
+
+        bGMPlayer.StopBgm();
     }
 
     void ClearAllBars()

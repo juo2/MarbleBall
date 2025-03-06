@@ -246,9 +246,6 @@ public partial class GameDemo : MonoBehaviour
     private Button boundsBtn;
 
     [SerializeField]
-    private Pad padPrefab;
-
-    [SerializeField]
     private Pad padSimulate;
 
     [SerializeField]
@@ -286,6 +283,9 @@ public partial class GameDemo : MonoBehaviour
 
     [SerializeField]
     private Dropdown dropdown;
+
+    [SerializeField]
+    private BGMPlayer bGMPlayer;
 
     //List<BarsDemo> barsDemoPrefabList = new List<BarsDemo>();
     List<BarsDemo> barsDemoList = new List<BarsDemo>();
@@ -635,7 +635,6 @@ public partial class GameDemo : MonoBehaviour
 
     HashSet<CurveType> CurveTypeRecord = new HashSet<CurveType>();
     List<CurveType> CurveTypePriority = new List<CurveType>();
-    List<CurveType> HostoryType = new List<CurveType>();
 
     List<BarsCurve> barsCurveList = new List<BarsCurve>();
     List<PadCurve> padCurveList = new List<PadCurve>();
@@ -684,6 +683,8 @@ public partial class GameDemo : MonoBehaviour
 
                 isEditorCamera = false;
                 UpdateCamera();
+
+                bGMPlayer.StopBgm();
             }
             else
             {
@@ -833,6 +834,8 @@ public partial class GameDemo : MonoBehaviour
         {
             if(showPadList.Count == 0)
             {
+                Pad padPrefab = SkinManager.Instance.GetPadPrefab();
+
                 Pad pad1 = Instantiate<Pad>(padPrefab);
                 pad1.childTransforms[1].gameObject.SetActive(true);
                 pad1.SetBounds(horizontalCenter1, horizontalSize, horizontalBestPos1);
@@ -1451,9 +1454,9 @@ public partial class GameDemo : MonoBehaviour
     {
         lightIndex++;
 
-        if (lightIndex > 5)
+        if (lightIndex >= SkinManager.Instance.GetMaterialCount())
         {
-            lightIndex = 1;
+            lightIndex = 0;
         }
 
         return lightIndex;
@@ -1552,18 +1555,18 @@ public partial class GameDemo : MonoBehaviour
         }
         else if (offsetFrame > 40)
         {
-            if (offsetFrame == 100)
-            {
-                if (isVertical)
-                {
-                    curveType = CurveType.VerticalPipline;
-                }
-                else
-                {
-                    curveType = CurveType.HorizontalPipline;
-                }
-            }
-            else
+            //if (offsetFrame == 100)
+            //{
+            //    if (isVertical)  
+            //    {
+            //        curveType = CurveType.VerticalPipline;
+            //    }
+            //    else
+            //    {
+            //        curveType = CurveType.HorizontalPipline;
+            //    }
+            //}
+            //else
             {
                 if (isVertical)
                 {
@@ -1604,10 +1607,10 @@ public partial class GameDemo : MonoBehaviour
 
             int offsetFrame = _frame - _lastFrame;
 
-            if (offsetFrame >= 100)
-            {
-                offsetFrame = 100;
-            }
+            //if (offsetFrame >= 100)
+            //{
+            //    offsetFrame = 100;
+            //}
 
             //if(offsetFrame > 5)
             {
@@ -2509,11 +2512,12 @@ public partial class GameDemo : MonoBehaviour
         }
         else
         {
+            Pad padPrefab = SkinManager.Instance.GetPadPrefab();
             pad_instance = Instantiate<Pad>(padPrefab);
             pad_instance.gameObject.SetActive(true);
         }
 
-        pad_instance.lightIndex = lightIndex;
+        pad_instance.lightIndex = padData.lightIndex;
         pad_instance.inverse = padData.inverse;
         pad_instance.transform.SetParent(obstaclesParent.transform);
         pad_instance.transform.position = padData.pos;
@@ -2889,6 +2893,10 @@ public partial class GameDemo : MonoBehaviour
                 
                 if(m_preObjCount != m_currentObjCount)
                 {
+                    if(m_currentObjCount - 1 == 0)
+                    {
+                        bGMPlayer.PlayBgm(midiHelper.currentMidi, midiHelper.beginTime);
+                    }
                     midiHelper.Play(m_currentObjCount-1);
                 }
                 m_preObjCount = m_currentObjCount;
