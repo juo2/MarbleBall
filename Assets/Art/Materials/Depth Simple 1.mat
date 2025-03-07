@@ -194,7 +194,7 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _UseFresnel: 1
-    - _UseFresnelPower: 0.531
+    - _UseFresnelPower: 0.5
     - _WaveDistortion: 0.02
     - _WaveSize: 12
     - _WaveSpeed: 3
