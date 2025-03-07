@@ -34154,9 +34154,9 @@ GameObject:
   - component: {fileID: 1290303234}
   - component: {fileID: 1290303233}
   - component: {fileID: 1290303232}
-  - component: {fileID: 1290303229}
   - component: {fileID: 1290303235}
   - component: {fileID: 1290303237}
+  - component: {fileID: 1290303238}
   m_Layer: 0
   m_Name: CameraEditor
   m_TagString: Untagged
@@ -34164,71 +34164,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1290303229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1290303228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cce0e5fd1c939643a7f6a375e361775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsDebug: 0
-  IsEnabled: 1
-  Name: 
-  IsMirrorInMirror: 0
-  MirrorInMirrorId: 
-  TurnOffOcclusion: 0
-  Platform: 0
-  ForceMultiPass: 0
-  WorkingType: 1
-  ClearBackGround: 2
-  ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  UpVector: 2
-  CameraLODLevel: 0
-  UseClipping: 0
-  ClippingPercentage: 20
-  ClipUV: 99
-  ClipEye: 0
-  HDR: 0
-  FOV: 0
-  MSAALevel: 0
-  RenderPostProcessing: 0
-  RequiresDepthTexture: 0
-  RequiresOpaqueTexture: 0
-  FilterMode: 1
-  MipMapping: 0
-  DisablePixelLights: 0
-  Shadow: 0
-  Cull: 0
-  CullDistance: 0
-  RenderTextureSize: 1
-  ManualSize: 256
-  ClipPlaneOffset: 0.02
-  ReflectLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  ReflectiveObjects:
-  - {fileID: 0}
-  DrawAlways: 0
-  FakeCamera: {fileID: 0}
-  EnableDepth: 0
-  EnableDepthBlur: 0
-  DepthBlurShader: {fileID: 0}
-  DepthBlurMaterial: {fileID: 0}
-  DepthBlurCutoff: 0.8
-  DepthBlurIterations: 3
-  DepthBlurSurfacePower: 1
-  DepthBlurHorizontalMultiplier: 1
-  DepthBlurVerticalMultiplier: 1
-  CustomShaders: []
-  UIImage: {fileID: 0}
-  UIImageDepth: {fileID: 0}
-  SeparableGlassBlurShader: {fileID: 4800000, guid: 0cc4e5bfca01ddd4fa6a566bf7560615, type: 3}
-  _cameraAttached: {fileID: 1290303233}
 --- !u!81 &1290303232
 AudioListener:
   m_ObjectHideFlags: 0
@@ -34382,6 +34317,72 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1290303238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1290303228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a56bad702cea3047ad620f20a58ec5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsDebug: 0
+  IsEnabled: 1
+  Name: 
+  IsMirrorInMirror: 0
+  MirrorInMirrorId: 
+  TurnOffOcclusion: 0
+  Platform: 0
+  ForceMultiPass: 0
+  WorkingType: 1
+  ClearBackGround: 1
+  ClearColor: {r: 0, g: 0, b: 0, a: 0}
+  UpVector: 2
+  CameraLODLevel: 0
+  UseClipping: 0
+  ClippingPercentage: 20
+  ClipUV: 99
+  ClipEye: 0
+  HDR: 1
+  FOV: 0
+  MSAALevel: 0
+  AntialiasingMode: 0
+  AntialiasingQuality: 0
+  RenderPostProcessing: 0
+  RequiresDepthTexture: 0
+  RequiresOpaqueTexture: 0
+  FilterMode: 1
+  MipMapping: 0
+  DisablePixelLights: 0
+  Shadow: 0
+  Cull: 0
+  CullDistance: 0
+  RenderTextureSize: 1
+  ManualSize: 256
+  ClipPlaneOffset: 0.02
+  ReflectLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  ReflectiveObjects:
+  - {fileID: 1840434367}
+  - {fileID: 1416012826}
+  DrawAlways: 0
+  FakeCamera: {fileID: 0}
+  EnableDepth: 1
+  EnableDepthBlur: 0
+  DepthBlurShader: {fileID: 0}
+  DepthBlurMaterial: {fileID: 0}
+  DepthBlurCutoff: 0.8
+  DepthBlurIterations: 3
+  DepthBlurSurfacePower: 1
+  DepthBlurHorizontalMultiplier: 1
+  DepthBlurVerticalMultiplier: 1
+  CustomShaders: []
+  UIImage: {fileID: 0}
+  UIImageDepth: {fileID: 0}
 --- !u!43 &1293473136
 Mesh:
   m_ObjectHideFlags: 0
@@ -37587,7 +37588,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6d7a166fe8629e04c9b001dba9435c5c, type: 2}
+  - {fileID: 2100000, guid: 2263482640e391e46b48b71554388606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -41484,7 +41485,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bd69adfd4baccba4c9b54160857e7c6f, type: 2}
+  - {fileID: 2100000, guid: 3b1f0d9c6ebcd284795ad71d0a37419b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
