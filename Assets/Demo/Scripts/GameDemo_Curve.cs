@@ -1455,14 +1455,18 @@ public partial class GameDemo : MonoBehaviour
                             prefabIndex_Curve = 1;
                         }
                     }
-                    else if(simlateFrame + barsCurve.frame == offsetFrame)
+                    else if(offsetFrame -  simlateFrame - barsCurve.frame <= barConfig.remainFrame && offsetFrame - simlateFrame - barsCurve.frame >= 0)
                     {
+                        if(_offsetIndex == 88)
+                        {
+                            g_isPass = true;
+                        }
                         g_isPass = true;
                         List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
                         AddPhysicsState(physicsStates);
                         simulateToFrame(backFrame + simlateFrame + physicsStates.Count, true, true);
-                        int totalFrame = simlateFrame + physicsStates.Count;
-                        UpdateFrameList(currentOffsetIndex, totalFrame);
+                        remainFrame = offsetFrame - simlateFrame - barsCurve.frame;
+                        //UpdateFrameList(currentOffsetIndex, totalFrame);
                     }
 
                     Debug.Log($"offsetIndex:{_offsetIndex}   barsCurve.frame:{barsCurve.frame}   prefabIndex:{prefabIndex}  simlateFrame:{simlateFrame}");
@@ -1834,7 +1838,18 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator HorizontalCurveFail(int offsetIndex, int offsetFrame)
     {
-        yield return null;
+        if (offsetFrame >= 25)
+        {
+            if(offsetFrame > 50)
+            {
+                curveType = CurveType.HorizontalPipline2;
+                yield return TryCurve(offsetIndex, offsetFrame);
+            }
+        }
+        else
+        {
+            BackupPlan(currentFrame, offsetIndex, offsetFrame);
+        }
 
         //currentRecordJson.curveTypeList.Add(curveType);
 
@@ -1868,12 +1883,25 @@ public partial class GameDemo : MonoBehaviour
         //    }
         //}
 
-        BackupPlan(currentFrame, offsetIndex, offsetFrame);
+        //BackupPlan(currentFrame, offsetIndex, offsetFrame);
     }
 
     IEnumerator VerticalCurveFail(int offsetIndex, int offsetFrame)
     {
-        yield return null;
+
+        if (offsetFrame >= 25)
+        {
+            if (offsetFrame > 50)
+            {
+                curveType = CurveType.VerticalPipline2;
+                yield return TryCurve(offsetIndex, offsetFrame);
+            }
+        }
+        else
+        {
+            BackupPlan(currentFrame, offsetIndex, offsetFrame);
+        }
+        
         //currentRecordJson.curveTypeList.Add(curveType);
 
         //CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
@@ -1906,6 +1934,6 @@ public partial class GameDemo : MonoBehaviour
         //    }
         //}
 
-        BackupPlan(currentFrame, offsetIndex, offsetFrame);
+        //BackupPlan(currentFrame, offsetIndex, offsetFrame);
     }
 }

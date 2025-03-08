@@ -28,7 +28,7 @@ public class BarsDemo : MonoBehaviour
     public List<SplineComputer> splineComputerList = new List<SplineComputer>();
 
     public List<GameObject> skinList = new List<GameObject>();
-
+    public bool isNeedTurning = true;
     private void Awake()
     {
         //int n = 0;
@@ -59,28 +59,11 @@ public class BarsDemo : MonoBehaviour
         //SplineMesh.Channel.MeshDefinition mesh = channel.GetMesh(0);
         //mesh.offset = new Vector3(0.03f, 0, 0);
         //mesh.rotation = new Vector3(0, -90, 90);
-
-        if(splineComputerList.Count == 0)
+        if(isNeedTurning)
         {
-            SplineMesh[] splineMeshes = GetComponentsInChildren<SplineMesh>();
-            foreach (var sm in splineMeshes)
+            if (splineComputerList.Count == 0)
             {
-                for (int i = 0; i < sm.GetChannelCount(); i++)
-                {
-                    Dreamteck.Splines.SplineMesh.Channel channel = sm.GetChannel(i);
-                    if (channel.name == "Channel 3")
-                    {
-                        channelList.Add(channel);
-                        originRotation.Add(channel.minRotation);
-                    }
-                }
-            }
-        }
-        else
-        {
-            foreach (var sc in splineComputerList)
-            {
-                SplineMesh[] splineMeshes = sc.transform.GetComponentsInChildren<SplineMesh>();
+                SplineMesh[] splineMeshes = GetComponentsInChildren<SplineMesh>();
                 foreach (var sm in splineMeshes)
                 {
                     for (int i = 0; i < sm.GetChannelCount(); i++)
@@ -94,7 +77,27 @@ public class BarsDemo : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                foreach (var sc in splineComputerList)
+                {
+                    SplineMesh[] splineMeshes = sc.transform.GetComponentsInChildren<SplineMesh>();
+                    foreach (var sm in splineMeshes)
+                    {
+                        for (int i = 0; i < sm.GetChannelCount(); i++)
+                        {
+                            Dreamteck.Splines.SplineMesh.Channel channel = sm.GetChannel(i);
+                            if (channel.name == "Channel 3")
+                            {
+                                channelList.Add(channel);
+                                originRotation.Add(channel.minRotation);
+                            }
+                        }
+                    }
+                }
+            }
         }
+        
     }
 
     public void refreshSkin(int skin)

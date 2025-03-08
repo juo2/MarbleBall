@@ -115,14 +115,14 @@ public class MidiHelper : MonoBehaviour
             float originMidiFacter = 1f;
             for (int i = 0;i < 10;i++)
             {
-                midiFacter = originMidiFacter + i * 0.1f;
+                midiFacter = originMidiFacter - i * 0.1f;
                 bool isFirst = true;
 
                 tempFrameOffsetList.Clear();
 
                 foreach (var mptkEvent in AllMidiEventsSet)
                 {
-                    int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f * midiFacter);
+                    int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f / midiFacter);
                     //Debug.Log($"_frame:{_frame}");
 
                     int offsetFrame = _frame - _lastFrame;

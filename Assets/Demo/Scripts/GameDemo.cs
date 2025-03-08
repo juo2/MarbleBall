@@ -488,8 +488,8 @@ public partial class GameDemo : MonoBehaviour
 
     List<float> v_rotationList1 = new List<float>()
     {
-        30f,
-        35f,
+        //30f,
+        //35f,
         40f,
         45f,
         50f,
@@ -505,8 +505,8 @@ public partial class GameDemo : MonoBehaviour
 
     List<float> v_rotationList2 = new List<float>()
     {
-        -30f,
-        -35f,
+        //-30f,
+        //-35f,
         -40f,
         -45f,
         -50f,
@@ -927,9 +927,14 @@ public partial class GameDemo : MonoBehaviour
             //StartCoroutine(Bars_Simulate7());
             //StartCoroutine(Bars_Simulate8());
             //StartCoroutine(Bars_Simulate9());
-            StartCoroutine(Bars_Simulate10());
+            //StartCoroutine(Bars_Simulate10());
+            //StartCoroutine(Bars_Simulate11());
+            //StartCoroutine(Bars_Simulate12());
+            //StartCoroutine(Bars_Simulate13());
+            //StartCoroutine(Bars_Simulate14());
 
-            
+            StartCoroutine(Bars_Simulate16());
+            //StartCoroutine(Bars_Simulate17()); 
 
         });
 
@@ -1545,7 +1550,7 @@ public partial class GameDemo : MonoBehaviour
             curveType = CurveType.HorizontalToHorizontal;
 
         }
-        else if (offsetFrame >= 25 && offsetFrame <= 40)
+        else if (offsetFrame >= 25 && offsetFrame <= 60)
         {
             if (isVertical)
             {
@@ -1556,7 +1561,7 @@ public partial class GameDemo : MonoBehaviour
                 curveType = CurveType.HorizontalPipline;
             }
         }
-        else if (offsetFrame > 40)
+        else if (offsetFrame > 60)
         {
             //if (offsetFrame == 100)
             //{
@@ -1570,16 +1575,25 @@ public partial class GameDemo : MonoBehaviour
             //    }
             //}
             //else
+
+            if (isVertical)
             {
-                if (isVertical)
-                {
-                    curveType = CurveType.VerticalPipline2;
-                }
-                else
-                {
-                    curveType = CurveType.HorizontalPipline2;
-                }
+                curveType = CurveType.VerticalPipline;
             }
+            else
+            {
+                curveType = CurveType.HorizontalPipline;
+            }
+            //{
+            //    if (isVertical)
+            //    {
+            //        curveType = CurveType.VerticalPipline2;
+            //    }
+            //    else
+            //    {
+            //        curveType = CurveType.HorizontalPipline2;
+            //    }
+            //}
         }
     }
 
@@ -1605,7 +1619,7 @@ public partial class GameDemo : MonoBehaviour
 
         foreach (var mptkEvent in midiHelper.AllMidiEventsSet)
         {
-            int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f * midiFacter);
+            int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f / midiFacter);
             //Debug.Log($"_frame:{_frame}");
 
             int offsetFrame = _frame - _lastFrame;

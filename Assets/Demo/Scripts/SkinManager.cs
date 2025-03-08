@@ -179,7 +179,7 @@ public class SkinManager : MonoBehaviour
             skinConfig.volumeSkin = 0;
             skinConfig.skyBoxSkin = 0;
 
-            skinConfig.ballSkin = 3;
+            skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
             skinConfig.wallSkin = 0;
 
@@ -242,7 +242,7 @@ public class SkinManager : MonoBehaviour
             skinConfig.volumeSkin = 0;
             skinConfig.skyBoxSkin = 0;
 
-            skinConfig.ballSkin = 3;
+            skinConfig.ballSkin = 0;
             skinConfig.padSkin = 3;
             skinConfig.wallSkin = 0;
 
