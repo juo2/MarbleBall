@@ -91,7 +91,7 @@ public class Pad : MonoBehaviour
         lightRenderer.gameObject.SetActive(true);
         if(ColorUtility.TryParseHtmlString(padLightColorList[lightIndex], out Color color))
         {
-            color.a = 40f/255f;
+            color.a = 40f / 255f;
             lightRenderer.color = color;
         }
     }

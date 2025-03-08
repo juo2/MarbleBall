@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2149109538371528298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 163d34cee9b7a428d9899ab92abd7e0d, type: 3}
+  m_Name: UmbraRenderFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  m_Shader: {fileID: 0}
+  camerasLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17,7 +34,8 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: 5954015875946940930}
-  m_RendererFeatureMap: 028adab8e4e9a052
+  - {fileID: -2149109538371528298}
+  m_RendererFeatureMap: 028adab8e4e9a0529619f6e542d42ce2
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}

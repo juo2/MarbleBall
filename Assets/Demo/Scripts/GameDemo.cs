@@ -1462,7 +1462,7 @@ public partial class GameDemo : MonoBehaviour
         return lightIndex;
     }
 
-    float angularFactor = 1.5f;  // 反比强度系数
+    float angularFactor = 0.5f;  // 反比强度系数
     float minSpeed = 0.1f;      // 防止除以零的最小速度值
 
     void RefreshBallVelocity(int _index, bool isVertical)
@@ -1474,11 +1474,14 @@ public partial class GameDemo : MonoBehaviour
         }
         else
         {
-            // 计算反比增量（速度越大增量越小） u
-            float inverseIncrement = angularFactor / Mathf.Max(ball.speed, minSpeed);
-            //Debug.Log($"inverseIncrement:{inverseIncrement} ball.speed:{ball.speed}");
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x - inverseIncrement, ball.angularVelocity.y - inverseIncrement, ball.angularVelocity.z));
-            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
+            if(_index % 2 == 0)
+            {
+                //// 计算反比增量（速度越大增量越小） u
+                //float inverseIncrement = angularFactor / Mathf.Max(ball.speed, minSpeed);
+                ////Debug.Log($"inverseIncrement:{inverseIncrement} ball.speed:{ball.speed}");
+                //ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x - inverseIncrement, ball.angularVelocity.y - inverseIncrement, ball.angularVelocity.z));
+                //physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
+            }
 
             //if (!isVertical)
             {

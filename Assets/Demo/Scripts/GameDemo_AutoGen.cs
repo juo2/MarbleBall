@@ -103,6 +103,10 @@ public partial class GameDemo : MonoBehaviour
         }
 
         midiHelper.Load(midi);
+        logger($"midiHelper.suitMidiFacter = {midiHelper.suitMidiFacter}");
+
+        SkinManager.Instance.RefreshSkinByName(midiHelper.currentMidi);
+
         LOOPCOUNT = count;
 
         yield return GameInit();
@@ -115,7 +119,10 @@ public partial class GameDemo : MonoBehaviour
         
         //清空pad
         ClearAllPad();
-        
+
+        //临时清除
+        DestoryAllBars();
+
         currentOffsetIndex = 1;
 
         //清空三条线
@@ -181,6 +188,39 @@ public partial class GameDemo : MonoBehaviour
 
         bGMPlayer.StopBgm();
     }
+
+    void DestoryAllBars()
+    {
+        while(barsDemoPool.Count > 0)
+        {
+            var bars = barsDemoPool.Pop();
+            DestroyImmediate(bars.gameObject);
+        }
+
+        while (barsCombineDemoPool.Count > 0)
+        {
+            var bars = barsCombineDemoPool.Pop();
+            DestroyImmediate(bars.gameObject);
+        }
+
+        foreach(var key in barsLineDemoPool.Keys)
+        {
+            var barPools = barsLineDemoPool[key];
+            while (barPools.Count > 0)
+            {
+                var bars = barPools.Pop();
+                DestroyImmediate(bars.gameObject);
+            }
+        }
+
+        while(padPool.Count > 0)
+        {
+            var pad = padPool.Pop();
+            DestroyImmediate(pad.gameObject);
+        }
+
+    }
+
 
     void ClearAllBars()
     {

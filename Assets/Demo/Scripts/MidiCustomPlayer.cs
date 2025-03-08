@@ -9,69 +9,72 @@ public class MidiCustomPlayer : MonoBehaviour
 
     private Dictionary<int, AudioSource> midiAudioDic = new Dictionary<int, AudioSource>();
 
+    private string font = "musicbox-";
+    //private string font = "musicboxglockenspiel-";
+
     private Dictionary<int, string> midiResourcesDic = new Dictionary<int, string>() 
     {
-        {32,"musicbox-C2"},
-        {33,"musicbox-Dd2"},
-        {34,"musicbox-D2"},
-        {35,"musicbox-Ed2"},
-        {36,"musicbox-E2"},
-        {37,"musicbox-F2"},
-        {38,"musicbox-Gd2"},
-        {39,"musicbox-G2"},
-        {40,"musicbox-Ad2"},
-        {41,"musicbox-A2"},
-        {42,"musicbox-Bd2"},
-        {43,"musicbox-B2"},
-        {44,"musicbox-C3"},
-        {45,"musicbox-Dd3"},
-        {46,"musicbox-D3"},
-        {47,"musicbox-Ed3"},
-        {48,"musicbox-E3"},
-        {49,"musicbox-F3"},
-        {50,"musicbox-Gd3"},
-        {51,"musicbox-G3"},
-        {52,"musicbox-Ad3"},
-        {53,"musicbox-A3"},
-        {54,"musicbox-Bd3"},
-        {55,"musicbox-B3"},
-        {56,"musicbox-C4"},
-        {57,"musicbox-Dd4"},
-        {58,"musicbox-D4"},
-        {59,"musicbox-Ed4"},
-        {60,"musicbox-E4"},
-        {61,"musicbox-F4"},
-        {62,"musicbox-Gd4"},
-        {63,"musicbox-G4"},
-        {64,"musicbox-Ad4"},
-        {65,"musicbox-A4"},
-        {66,"musicbox-Bd4"},
-        {67,"musicbox-B4"},
-        {68,"musicbox-C5"},
-        {69,"musicbox-Dd5"},
-        {70,"musicbox-D5"},
-        {71,"musicbox-Ed5"},
-        {72,"musicbox-E5"},
-        {73,"musicbox-F5"},
-        {74,"musicbox-Gd5"},
-        {75,"musicbox-G5"},
-        {76,"musicbox-Ad5"},
-        {77,"musicbox-A5"},
-        {78,"musicbox-Bd5"},
-        {79,"musicbox-B5"},
-        {80,"musicbox-C6"},
-        {81,"musicbox-Dd6"},
-        {82,"musicbox-D6"},
-        {83,"musicbox-Ed6"},
-        {84,"musicbox-E6"},
-        {85,"musicbox-F6"},
-        {86,"musicbox-Gd6"},
-        {87,"musicbox-G6"},
-        {88,"musicbox-Ad6"},
-        {89,"musicbox-A6"},
-        {90,"musicbox-Bd6"},
-        {91,"musicbox-B6"},
-        {92,"musicbox-C7"} 
+        {32,"C2"},
+        {33,"Dd2"},
+        {34,"D2"},
+        {35,"Ed2"},
+        {36,"E2"},
+        {37,"F2"},
+        {38,"Gd2"},
+        {39,"G2"},
+        {40,"Ad2"},
+        {41,"A2"},
+        {42,"Bd2"},
+        {43,"B2"},
+        {44,"C3"},
+        {45,"Dd3"},
+        {46,"D3"},
+        {47,"Ed3"},
+        {48,"E3"},
+        {49,"F3"},
+        {50,"Gd3"},
+        {51,"G3"},
+        {52,"Ad3"},
+        {53,"A3"},
+        {54,"Bd3"},
+        {55,"B3"},
+        {56,"C4"},
+        {57,"Dd4"},
+        {58,"D4"},
+        {59,"Ed4"},
+        {60,"E4"},
+        {61,"F4"},
+        {62,"Gd4"},
+        {63,"G4"},
+        {64,"Ad4"},
+        {65,"A4"},
+        {66,"Bd4"},
+        {67,"B4"},
+        {68,"C5"},
+        {69,"Dd5"},
+        {70,"D5"},
+        {71,"Ed5"},
+        {72,"E5"},
+        {73,"F5"},
+        {74,"Gd5"},
+        {75,"G5"},
+        {76,"Ad5"},
+        {77,"A5"},
+        {78,"Bd5"},
+        {79,"B5"},
+        {80,"C6"},
+        {81,"Dd6"},
+        {82,"D6"},
+        {83,"Ed6"},
+        {84,"E6"},
+        {85,"F6"},
+        {86,"Gd6"},
+        {87,"G6"},
+        {88,"Ad6"},
+        {89,"A6"},
+        {90,"Bd6"},
+        {91,"B6"},
+        {92,"C7"} 
     }; 
 
     // Start is called before the first frame update
@@ -79,7 +82,7 @@ public class MidiCustomPlayer : MonoBehaviour
     {
         foreach(var key in midiResourcesDic.Keys)
         {
-            AudioClip clip = Resources.Load<AudioClip>($"audio/{midiResourcesDic[key]}");
+            AudioClip clip = Resources.Load<AudioClip>($"audio/{font}{midiResourcesDic[key]}");
             AudioSource source = Instantiate(audioSource);
             source.gameObject.SetActive(true);
             source.transform.SetParent(transform);
@@ -96,7 +99,7 @@ public class MidiCustomPlayer : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"ÕÒ²»µ½Midi:{midi}");
+            Debug.LogError($"ï¿½Ò²ï¿½ï¿½ï¿½Midi:{midi}");
         }
     }
 

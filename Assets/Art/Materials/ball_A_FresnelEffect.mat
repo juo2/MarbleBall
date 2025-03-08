@@ -45,10 +45,12 @@ Material:
     m_Floats:
     - _DstBlend: 10
     - _DstBlendAlpha: 10
+    - _EnvironmentReflections: 1
     - _Glossiness: 0.85
     - _Metallic: 1
     - _Mode: 2
     - _Smoothness: 0.85
+    - _SpecularHighlights: 1
     - _Surface: 1
     - _ZWrite: 0
     m_Colors:
