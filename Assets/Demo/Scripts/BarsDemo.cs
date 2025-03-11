@@ -63,7 +63,7 @@ public class BarsDemo : MonoBehaviour
         {
             if (splineComputerList.Count == 0)
             {
-                SplineMesh[] splineMeshes = GetComponentsInChildren<SplineMesh>();
+                SplineMesh[] splineMeshes = GetComponentsInChildren<SplineMesh>(true);
                 foreach (var sm in splineMeshes)
                 {
                     for (int i = 0; i < sm.GetChannelCount(); i++)
@@ -81,7 +81,7 @@ public class BarsDemo : MonoBehaviour
             {
                 foreach (var sc in splineComputerList)
                 {
-                    SplineMesh[] splineMeshes = sc.transform.GetComponentsInChildren<SplineMesh>();
+                    SplineMesh[] splineMeshes = sc.transform.GetComponentsInChildren<SplineMesh>(true);
                     foreach (var sm in splineMeshes)
                     {
                         for (int i = 0; i < sm.GetChannelCount(); i++)

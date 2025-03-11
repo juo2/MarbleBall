@@ -2101,7 +2101,7 @@ public partial class GameDemo : MonoBehaviour
         {
             PhysicsState physicsState = new PhysicsState();
             physicsState.velocity = psList[i].velocity;
-            physicsState.angularVelocity = psList[i].angularVelocity;
+            //physicsState.angularVelocity = psList[i].angularVelocity;
             physicsState.position = psList[i].position + ball.transform.position;
             physicsState.rotation = psList[i].rotation * ball.transform.rotation;
             physicsStates.Add(physicsState);

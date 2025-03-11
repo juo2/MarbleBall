@@ -1773,7 +1773,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fcd413bb0193ca347af195fbaf834496, type: 2}
+  - {fileID: 2100000, guid: 0b1d197ad7d81094a9566bb91a24e26c, type: 2}
   - {fileID: 2100000, guid: b2799f38fc93bff43bed01e36f767b75, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -7543,7 +7543,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &15581934679357
 Transform:
   m_ObjectHideFlags: 0
@@ -10278,11 +10278,13 @@ MonoBehaviour:
   followRotation: 0
   prefabIndex: -1
   inverse_vec: 1
+  channelList: []
   splineComputerList: []
   skinList:
   - {fileID: 8983455114537597085}
   - {fileID: 4897147005795764286}
   - {fileID: 6918491505416203342}
+  isNeedTurning: 1
 --- !u!1 &8444706569224086601
 GameObject:
   m_ObjectHideFlags: 0

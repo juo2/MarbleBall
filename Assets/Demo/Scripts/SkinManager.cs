@@ -265,169 +265,324 @@ public class SkinManager : MonoBehaviour
 
         }
 
-
         {
-            skinConfig = new SkinConfig();
             skinConfig.skin = 1;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.skyBoxSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
 
-            skinConfig.padMaterialSkin = 2;
-            skinConfig.barSkin = 1;
-            
-            skinConfig.wallSkin = 2;
-            skinConfig.ballSkin = 4;
+            skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
+            skinConfig.wallSkin = 0;
 
             skinConfigData.skinConfigs.Add(skinConfig);
-
-
             skinConfig = new SkinConfig();
+
             skinConfig.skin = 4;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
 
-            skinConfig.padMaterialSkin = 1;
-            skinConfig.barSkin = 1;
-
-            skinConfig.wallSkin = 3;
-            skinConfig.ballSkin = 5;
+            skinConfig.ballSkin = 0;
             skinConfig.padSkin = 1;
+            skinConfig.wallSkin = 0;
 
             skinConfigData.skinConfigs.Add(skinConfig);
-
             skinConfig = new SkinConfig();
+
             skinConfig.skin = 7;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
 
-            skinConfig.padMaterialSkin = 2;
-            skinConfig.barSkin = 2;
-
-            skinConfig.wallSkin = 3;
-            skinConfig.ballSkin = 6;
-            skinConfig.padSkin = 2;
+            skinConfig.ballSkin = 0;
+            skinConfig.padSkin = 0;
+            skinConfig.wallSkin = 1;
 
             skinConfigData.skinConfigs.Add(skinConfig);
-
             skinConfig = new SkinConfig();
+
             skinConfig.skin = 8;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
 
-            skinConfig.padMaterialSkin = 1;
-            skinConfig.barSkin = 1;
-
-            skinConfig.wallSkin = 2;
-            skinConfig.ballSkin = 5;
-            skinConfig.padSkin = 0;
+            skinConfig.ballSkin = 0;
+            skinConfig.padSkin = 1;
+            skinConfig.wallSkin = 0;
 
             skinConfigData.skinConfigs.Add(skinConfig);
-
             skinConfig = new SkinConfig();
+
             skinConfig.skin = 10;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
 
-            skinConfig.padMaterialSkin = 2;
-            skinConfig.barSkin = 1;
+            skinConfig.ballSkin = 0;
+            skinConfig.padSkin = 3;
+            skinConfig.wallSkin = 0;
 
-            skinConfig.wallSkin = 3;
-            skinConfig.ballSkin = 6;
-            skinConfig.padSkin = 1;
 
             skinConfigData.skinConfigs.Add(skinConfig);
-
             skinConfig = new SkinConfig();
+
             skinConfig.skin = 13;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
 
-            skinConfig.padMaterialSkin = 1;
-            skinConfig.barSkin = 2;
-
-            skinConfig.wallSkin = 2;
-            skinConfig.ballSkin = 4;
-            skinConfig.padSkin = 2;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-
-            skinConfig = new SkinConfig();
-            skinConfig.skin = 15;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
-
-            skinConfig.padMaterialSkin = 2;
-            skinConfig.barSkin = 1;
-
-            skinConfig.wallSkin = 3;
-            skinConfig.ballSkin = 5;
-            skinConfig.padSkin = 3;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-
-            skinConfig = new SkinConfig();
-            skinConfig.skin = 16;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
-
-            skinConfig.padMaterialSkin = 1;
-            skinConfig.barSkin = 1;
-
-            skinConfig.wallSkin = 2;
-            skinConfig.ballSkin = 6;
+            skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
+            skinConfig.wallSkin = 1;
 
             skinConfigData.skinConfigs.Add(skinConfig);
-
             skinConfig = new SkinConfig();
-            skinConfig.skin = 17;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
 
-            skinConfig.padMaterialSkin = 2;
-            skinConfig.barSkin = 1;
+            skinConfig.skin = 15;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
 
-            skinConfig.wallSkin = 3;
-            skinConfig.ballSkin = 6;
-            skinConfig.padSkin = 1;
+            skinConfig.ballSkin = 0;
+            skinConfig.padSkin = 0;
+            skinConfig.wallSkin = 0;
+
 
             skinConfigData.skinConfigs.Add(skinConfig);
-
             skinConfig = new SkinConfig();
-            skinConfig.skin = 18;
-            //°×Ìì
-            skinConfig.lightSkin = 1;
-            skinConfig.volumeSkin = 1;
-            skinConfig.skyBoxSkin = 1;
 
-            skinConfig.padMaterialSkin = 1;
-            skinConfig.barSkin = 1;
+            skinConfig.skin = 16;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
 
-            skinConfig.wallSkin = 3;
-            skinConfig.ballSkin = 4;
+            skinConfig.ballSkin = 0;
             skinConfig.padSkin = 3;
+            skinConfig.wallSkin = 1;
+
 
             skinConfigData.skinConfigs.Add(skinConfig);
+            skinConfig = new SkinConfig();
+
+            skinConfig.skin = 17;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
+
+            skinConfig.ballSkin = 0;
+            skinConfig.padSkin = 0;
+            skinConfig.wallSkin = 0;
+
+            skinConfigData.skinConfigs.Add(skinConfig);
+            skinConfig = new SkinConfig();
+
+            skinConfig.skin = 18;
+            //ºÚÒ¹
+            skinConfig.lightSkin = 0;
+            skinConfig.padMaterialSkin = 0;
+            skinConfig.barSkin = 0;
+            skinConfig.volumeSkin = 0;
+            skinConfig.skyBoxSkin = 0;
+
+            skinConfig.ballSkin = 0;
+            skinConfig.padSkin = 1;
+            skinConfig.wallSkin = 1;
+
+            skinConfigData.skinConfigs.Add(skinConfig);
+
         }
+
+
+        //{
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 1;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 2;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 2;
+        //    skinConfig.ballSkin = 4;
+        //    skinConfig.padSkin = 0;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 4;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 1;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 3;
+        //    skinConfig.ballSkin = 5;
+        //    skinConfig.padSkin = 1;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 7;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 2;
+        //    skinConfig.barSkin = 2;
+
+        //    skinConfig.wallSkin = 3;
+        //    skinConfig.ballSkin = 6;
+        //    skinConfig.padSkin = 2;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 8;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 1;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 2;
+        //    skinConfig.ballSkin = 5;
+        //    skinConfig.padSkin = 0;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 10;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 2;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 3;
+        //    skinConfig.ballSkin = 6;
+        //    skinConfig.padSkin = 1;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 13;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 1;
+        //    skinConfig.barSkin = 2;
+
+        //    skinConfig.wallSkin = 2;
+        //    skinConfig.ballSkin = 4;
+        //    skinConfig.padSkin = 2;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 15;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 2;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 3;
+        //    skinConfig.ballSkin = 5;
+        //    skinConfig.padSkin = 3;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 16;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 1;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 2;
+        //    skinConfig.ballSkin = 6;
+        //    skinConfig.padSkin = 0;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 17;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 2;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 3;
+        //    skinConfig.ballSkin = 6;
+        //    skinConfig.padSkin = 1;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+
+        //    skinConfig = new SkinConfig();
+        //    skinConfig.skin = 18;
+        //    //°×Ìì
+        //    skinConfig.lightSkin = 1;
+        //    skinConfig.volumeSkin = 1;
+        //    skinConfig.skyBoxSkin = 1;
+
+        //    skinConfig.padMaterialSkin = 1;
+        //    skinConfig.barSkin = 1;
+
+        //    skinConfig.wallSkin = 3;
+        //    skinConfig.ballSkin = 4;
+        //    skinConfig.padSkin = 3;
+
+        //    skinConfigData.skinConfigs.Add(skinConfig);
+        //}
 
     }
     
