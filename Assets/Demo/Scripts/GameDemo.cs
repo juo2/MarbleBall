@@ -383,17 +383,17 @@ public partial class GameDemo : MonoBehaviour
 
 
 
-    Vector2 verticalCenter1 = new Vector2(0.2f, -0.16f);
-    Vector2 verticalCenter2 = new Vector2(-0.2f, -0.16f);
-    Vector2 verticalBestPos1 = new Vector2(0.17f, -0.13f);
-    Vector2 verticalBestPos2 = new Vector2(-0.17f, -0.13f);
+    Vector2 verticalCenter1 = new Vector2(0.15f, -0.11f);
+    Vector2 verticalCenter2 = new Vector2(-0.15f, -0.11f);
+    Vector2 verticalBestPos1 = new Vector2(0.125f, -0.085f);
+    Vector2 verticalBestPos2 = new Vector2(-0.125f, -0.085f);
 
     //Vector2 verticalCenter3 = new Vector2(0.15f, -0.12f);
     //Vector2 verticalCenter4 = new Vector2(-0.15f, -0.12f);
     //Vector2 verticalBestPos3 = new Vector2(0.13f, -0.1f);
     //Vector2 verticalBestPos4 = new Vector2(-0.13f, -0.1f);
 
-    Vector2 verticalSize = new Vector2(0.15f, 0.15f);
+    Vector2 verticalSize = new Vector2(0.1f, 0.1f);
 
     CameraMovement currentCameraMovement = new CameraMovement();
     Cinemachine.CinemachineTrackedDolly cinemachineTrackedDolly;
@@ -454,9 +454,9 @@ public partial class GameDemo : MonoBehaviour
         0.5f,
         0.3f,
         0.4f,
-        //0.8f,
-        //0.9f,
-        //1.0f,
+        0.8f,
+        0.9f,
+        1.0f,
         //0.4f,
         //0.8f,
     };
@@ -498,9 +498,9 @@ public partial class GameDemo : MonoBehaviour
         65f,
         70f,
         75f,
-        80f,
-        85f,
-        90f,
+        //80f,
+        //85f,
+        //90f,
     };
 
     List<float> v_rotationList2 = new List<float>()
@@ -515,9 +515,9 @@ public partial class GameDemo : MonoBehaviour
         -65f,
         -70f,
         -75f,
-        -80f,
-        -85f,
-        -90f,
+        //-80f,
+        //-85f,
+        //-90f,
     };
 
     List<float> v_bouncinessPriorityList1 = new List<float>()
@@ -576,6 +576,8 @@ public partial class GameDemo : MonoBehaviour
         VerticalPipline,
         HorizontalPipline2,
         VerticalPipline2,
+        HorizontalCombine,
+        VerticalCombine,
     }
 
     [System.Serializable]
@@ -631,7 +633,7 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    float gravityY = -5f;
+    float gravityY = -4.5f;
 
     HashSet<CurveType> CurveTypeRecord = new HashSet<CurveType>();
     List<CurveType> CurveTypePriority = new List<CurveType>();
@@ -1162,7 +1164,7 @@ public partial class GameDemo : MonoBehaviour
                 {
                     float LowBorder = 0.4f;
                     float LowFix = 0.5f;
-                    float HighBorder = 0.6f;
+                    float HighBorder = 0.7f;
                     float HightFix = 0.5f;
 
                     if (Mathf.Abs(ball.velocity.x) < LowBorder)
@@ -1448,7 +1450,7 @@ public partial class GameDemo : MonoBehaviour
         }
 
         //额外simulate
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 12; i++)
         {
             simulateNextFrame();
             playMusicFrame++;
@@ -1550,7 +1552,7 @@ public partial class GameDemo : MonoBehaviour
             curveType = CurveType.HorizontalToHorizontal;
 
         }
-        else if (offsetFrame >= 25 && offsetFrame <= 60)
+        else if (offsetFrame >= 25 && offsetFrame <= 61)
         {
             if (isVertical)
             {
@@ -1561,7 +1563,7 @@ public partial class GameDemo : MonoBehaviour
                 curveType = CurveType.HorizontalPipline;
             }
         }
-        else if (offsetFrame > 60)
+        else if (offsetFrame > 61)
         {
             //if (offsetFrame == 100)
             //{
@@ -1578,12 +1580,22 @@ public partial class GameDemo : MonoBehaviour
 
             if (isVertical)
             {
-                curveType = CurveType.VerticalPipline;
+                curveType = CurveType.VerticalCombine;
             }
             else
             {
-                curveType = CurveType.HorizontalPipline;
+                curveType = CurveType.HorizontalCombine;
             }
+
+            //if (isVertical)
+            //{
+            //    curveType = CurveType.VerticalCombine;
+            //}
+            //else
+            //{
+            //    curveType = CurveType.HorizontalCombine;
+            //}
+
             //{
             //    if (isVertical)
             //    {
@@ -1699,7 +1711,7 @@ public partial class GameDemo : MonoBehaviour
 
             RefreshCurveType(offsetIndex, offsetFrame);
 
-            RefreshBallVelocity(offsetIndex, isVertical);
+            //RefreshBallVelocity(offsetIndex, isVertical);
 
             float rotation = 0f;
             if (isVertical)
@@ -2477,14 +2489,14 @@ public partial class GameDemo : MonoBehaviour
         {
             if(frameDir.x > 0)
             {
-                padData.debugCenter = horizontalCenter1;
-                padData.debugBestPos = horizontalBestPos1;
+                padData.debugCenter = horizontalCenter3;
+                padData.debugBestPos = horizontalBestPos3;
                 padData.inverse = false;
             }
             else
             {
-                padData.debugCenter = horizontalCenter2;
-                padData.debugBestPos = horizontalBestPos2;
+                padData.debugCenter = horizontalCenter4;
+                padData.debugBestPos = horizontalBestPos4;
                 padData.inverse = true;
             }
 
@@ -2913,6 +2925,9 @@ public partial class GameDemo : MonoBehaviour
                     if(m_currentObjCount - 1 == 0)
                     {
                         bGMPlayer.PlayBgm(midiHelper.currentMidi, midiHelper.beginTime);
+                        
+                        logger($"offsetTime:{ Time.time - recordPreTime}");
+                        logger($"beginTime:{midiHelper.beginTime}");
                     }
                     midiHelper.Play(m_currentObjCount-1);
                 }

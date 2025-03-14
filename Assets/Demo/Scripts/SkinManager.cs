@@ -589,7 +589,12 @@ public class SkinManager : MonoBehaviour
     public void RefreshSkinByName(string midiName)
     {
         string nameWithoutExtension = Path.GetFileNameWithoutExtension(midiName);
-        skin = skinMap[nameWithoutExtension];
+
+        if(skinMap.ContainsKey(nameWithoutExtension))
+        {
+            skin = skinMap[nameWithoutExtension];
+        }
+
 
         RefreshSkin(skin);
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,9 @@ public partial class GameDemo : MonoBehaviour
     int ContinuousCount = 0;
     Bounds padsBounds = new Bounds();
     System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+
+    List<BarsCurve> combineFrameBarsList = new List<BarsCurve>(); 
+
     List<CurveType> curveTypeList = new List<CurveType>();
 
     [System.Serializable]
@@ -23,7 +27,7 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator TryCurve(int offsetIndex, int offsetFrame)
     {
-        if(offsetIndex == 219)
+        if (offsetIndex == 219)
         {
             logger($"开始尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical}");
         }
@@ -33,7 +37,7 @@ public partial class GameDemo : MonoBehaviour
         }
         CurveTypeRecord.Add(curveType);
 
-        if(curveType == CurveType.VerticalToVertical_Simulate)
+        if (curveType == CurveType.VerticalToVertical_Simulate)
         {
             stopwatch.Restart();
 
@@ -256,7 +260,14 @@ public partial class GameDemo : MonoBehaviour
         }
         else if (curveType == CurveType.HorizontalPipline)
         {
-            HorizontalPipline(offsetIndex, offsetFrame);
+            if (offsetIndex == 27)
+            {
+                HorizontalPipline(offsetIndex, offsetFrame);
+            }
+            else
+            {
+                HorizontalPipline(offsetIndex, offsetFrame);
+            }
 
             if (g_isPass)
             {
@@ -287,6 +298,48 @@ public partial class GameDemo : MonoBehaviour
             {
                 logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
                 yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+            }
+        }
+        else if (curveType == CurveType.HorizontalCombine)
+        {
+            stopwatch.Restart();
+
+            HorizontalCombine(offsetIndex, offsetFrame);
+
+            stopwatch.Stop();
+
+            logger($"    运行 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount} ---运行时间:{stopwatch.ElapsedMilliseconds / 1000f}");
+
+            if (g_isPass)
+            {
+                HorizontalCombineSuccess(offsetIndex, offsetFrame);
+            }
+            else
+            {
+                logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+            }
+        }
+        else if (curveType == CurveType.VerticalCombine)
+        {
+            stopwatch.Restart();
+
+            VerticalCombine(offsetIndex, offsetFrame);
+
+            stopwatch.Stop();
+
+            logger($"    运行 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount} ---运行时间:{stopwatch.ElapsedMilliseconds / 1000f}");
+
+
+            if (g_isPass)
+            {
+                VerticalCombineSuccess(offsetIndex, offsetFrame);
+            }
+            else
+            {
+                logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
+
+                yield return VerticalCurveFail(offsetIndex, offsetFrame);
             }
         }
     }
@@ -366,7 +419,7 @@ public partial class GameDemo : MonoBehaviour
         HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList1, h_bouncinessPriorityList);
     }
 
-    void HorizontalLine(int offsetIndex, int offsetFrame,int startIndex, int endIndex)
+    void HorizontalLine(int offsetIndex, int offsetFrame, int startIndex, int endIndex)
     {
         currentLineBars = null;
 
@@ -381,9 +434,9 @@ public partial class GameDemo : MonoBehaviour
                 SetRotation(offsetIndex - 1, rotation);
                 SetPhysicMaterialBounciness(offsetIndex - 1, bounciness);
 
-                for(int i = startIndex; i < endIndex; i++)
+                for (int i = startIndex; i < endIndex; i++)
                 {
-                    BarsLine_Curve(offsetIndex, offsetFrame,i);
+                    BarsLine_Curve(offsetIndex, offsetFrame, i);
 
                     if (g_isPass)
                     {
@@ -451,7 +504,7 @@ public partial class GameDemo : MonoBehaviour
                     }
                 }
 
-                
+
             }
 
             if (g_isPass)
@@ -459,7 +512,7 @@ public partial class GameDemo : MonoBehaviour
                 break;
             }
         }
-       
+
     }
 
     void VerticalToVertical(int offsetIndex, int offsetFrame)
@@ -649,6 +702,109 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
+
+    void CalculateCombineFrame(int offsetIndex, int offsetFrame)
+    {
+        int tempOffsetFrame = offsetFrame;
+        for(int c = 0;c < 10;c++)
+        {
+            for (int i = BarsDemoPrefabList.Count-1; i > 2; i--)
+            {
+                BarsCurve tempBarsCurve = FindBarsCurve(i, false);
+                if (tempBarsCurve != null)
+                {
+
+                }
+            }
+
+
+            if(offsetFrame > 40 && offsetFrame < 60)
+            {
+                break;
+            }
+        }
+    }
+
+    void VerticalCombine(int offsetIndex, int offsetFrame)
+    {
+        float rotation = 60f;
+        if (ball.velocity.x < 0)
+        {
+            rotation = -60f;
+        }
+
+        SetRotation(offsetIndex - 1, rotation);
+
+        int simlateFrame = 0;
+        Vector3 prePos = ball.transform.position;
+
+        while (true)
+        {
+            simulateNextFrame();
+            simlateFrame++;
+
+            //找到在beginOffset下方的点
+            if (IsCanBars(prePos, ball.transform.position, 0.1f))
+            {
+                g_isPass = true;
+                break;
+            }
+        }
+
+        Tuple<List<int>, int> tuple = Decompose(offsetFrame - simlateFrame, 35, 47);
+
+        foreach(var prefabIndex in tuple.Item1)
+        {
+            currentLineBars = InstantBarsLine(ball.transform.position, ball.velocity, prefabIndex, -1, -1);
+
+            BarsCurve barsCurve = FindBarsCurve(prefabIndex, currentLineBars.inverse);
+            if (barsCurve != null)
+            {
+                List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
+                AddPhysicsState(physicsStates);
+                simulateToFrame(currentFrame + physicsStates.Count, true, true);
+            }
+        }
+
+        DealWithBarCombine(offsetIndex, tuple.Item2);
+    }
+
+    void HorizontalCombine(int offsetIndex,int offsetFrame)
+    {
+        int simlateFrame = 0;
+        Vector3 prePos = ball.transform.position;
+
+        while (true)
+        {
+            simulateNextFrame();
+            simlateFrame++;
+
+            //找到在beginOffset下方的点
+            if (IsCanBars(prePos, ball.transform.position, 0.1f))
+            {
+                g_isPass = true;
+                break;
+            }
+        }
+
+        Tuple<List<int>, int> tuple = Decompose(offsetFrame - simlateFrame, 40, 52);
+
+        foreach (var prefabIndex in tuple.Item1)
+        {
+            currentLineBars = InstantBarsLine(ball.transform.position, ball.velocity, prefabIndex, -1, -1);
+
+            BarsCurve barsCurve = FindBarsCurve(prefabIndex, currentLineBars.inverse);
+            if (barsCurve != null)
+            {
+                List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
+                AddPhysicsState(physicsStates);
+                simulateToFrame(currentFrame + physicsStates.Count, true, true);
+            }
+        }
+
+        DealWithBarCombine(offsetIndex, tuple.Item2);
+    }
+
     void HorizontalToHorizontal_Internal(int offsetIndex, int offsetFrame, List<float> rotationList, List<float> bouncinessPriorityList)
     {
         passType = PassType.None;
@@ -808,7 +964,7 @@ public partial class GameDemo : MonoBehaviour
                 }
 
                 bool mistakeCollision = DetectMistakeCollisionTimes();
-                
+
                 if (!mistakeCollision)
                 {
                     List<PhysicsState> _list = GetCurrentPhysicsState(backFrame);
@@ -878,306 +1034,7 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    void VerticalToVertical_SimulateSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
-    {
-        
-        logger($"    尝试 curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
-
-        UpdateCurveType(_curveType);
-    }
-
-    void VerticalToVerticalSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
-    {
-        logger($"    尝试 curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
-
-
-        if (tryingType == TryingType.Try_Vertical)
-            ContinuousCount++;
-
-        UpdateCurveType(_curveType);
-
-    }
-
-    void VerticalToHorizontalSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
-    {
-        logger($"    尝试 curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
-
-        if (tryingType == TryingType.Try_Horizontal)
-            ContinuousCount++;
-
-        UpdateCurveType(_curveType);
-
-        EndCameraMovement();
-    }
-
-    void HorizontalToHorizontalSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
-    {
-        logger($"    尝试 curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- success!!!");
-        
-        if (tryingType == TryingType.Try_Horizontal)
-            ContinuousCount++;
-
-        UpdateCurveType(_curveType);
-
-    }
-
-    void HorizontalToVerticalSuccess(int offsetIndex, int offsetFrame, CurveType _curveType)
-    {
-        logger($"    尝试 curveType : {_curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} ---  ContinuousCount:{ContinuousCount}  --- success!!!");
-
-        if (tryingType == TryingType.Try_Vertical)
-            ContinuousCount++;
-
-        EndCameraMovement();
-
-        UpdateCurveType(_curveType);
-
-    }
-
-    void VerticalLineSuccess(int offsetIndex, int offsetFrame)
-    {
-        logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} ---  ContinuousCount:{ContinuousCount}  --- success!!!");
-
-        RecordBarsLine();
-        EndCameraMovement(true);
-
-        UpdateCurveType(curveType);
-
-    }
-
-    void HorizontalLineSuccess(int offsetIndex, int offsetFrame)
-    {
-        logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} ---  ContinuousCount:{ContinuousCount}  --- success!!!");
-
-        RecordBarsLine();
-        EndCameraMovement(true);
-
-        UpdateCurveType(curveType);
-
-    }
-
-    void HorizontalPiplineSuccess(int offsetIndex, int offsetFrame)
-    {
-        logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} ---  ContinuousCount:{ContinuousCount}  --- success!!!");
-
-        RecordBarsLine();
-        EndCameraMovement(true);
-
-        UpdateCurveType(curveType);
-
-    }
-
-    void VerticalPiplineSuccess(int offsetIndex, int offsetFrame)
-    {
-        logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
-
-        RecordBarsLine();
-        EndCameraMovement(true);
-
-        UpdateCurveType(curveType);
-
-    }
-   
-    void HorizontalPipline2Success(int offsetIndex, int offsetFrame)
-    {
-        logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
-
-        RecordBarsCombine();
-        EndCameraMovement(true);
-
-        UpdateCurveType(curveType);
-
-    }
-
-    void VerticalPipline2Success(int offsetIndex, int offsetFrame)
-    {
-        logger($"    尝试 curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
-
-        RecordBarsCombine();
-        EndCameraMovement(true);
-
-        UpdateCurveType(curveType);
-    }
-
-
-    void UpdateCurveType(CurveType _curveType)
-    {
-        currentRecordJson.successCurveType = _curveType;
-
-        CurveType preCurveType = LastCurveType();
-
-        if(preCurveType == CurveType.HorizontalToHorizontal &&  ( _curveType == CurveType.VerticalToVertical || _curveType==CurveType.VerticalToVertical_Simulate  ))
-        {
-            EndCameraMovement();
-        }
-        else if((preCurveType == CurveType.VerticalToVertical || preCurveType == CurveType.VerticalToVertical_Simulate) && _curveType == CurveType.HorizontalToHorizontal)
-        {
-            EndCameraMovement();
-        }
-
-        curveTypeList.Add(_curveType);
-
-        return;
-
-
-        //CurveType preCurveType = LastCurveType();
-        CurveType nextCurveType = CurveType.None;
-
-        UpdatePadsBounds();
-
-        if (_curveType == CurveType.HorizontalToVertical)
-        {
-            if (ContinuousCount >= ContinuousTryCount)
-            {
-                nextCurveType = CurveType.VerticalToVertical;
-                tryingType = TryingType.Try_Vertical;
-
-                ContinuousCount = 0;
-                isVertical = true;
-            }
-            else
-            {
-                isVertical = true;
-                if (tryingType == TryingType.Try_Vertical)
-                {
-                    nextCurveType = CurveType.VerticalToVertical;
-                }
-                else
-                {
-                    if (IsCanTurn())
-                    {
-                        nextCurveType = CurveType.VerticalToHorizontal;
-                    }
-                    else
-                    {
-                        nextCurveType = CurveType.VerticalToVertical;
-                    }
-                }
-            }
-        }
-        else if (_curveType == CurveType.VerticalToHorizontal)
-        {
-            if (ContinuousCount >= ContinuousTryCount)
-            {
-                nextCurveType = CurveType.HorizontalToHorizontal;
-                tryingType = TryingType.Try_Horizontal;
-
-                ContinuousCount = 0;
-                isVertical = false;
-            }
-            else
-            {
-                isVertical = false;
-                if (tryingType == TryingType.Try_Vertical)
-                {
-                    nextCurveType = CurveType.HorizontalToVertical;
-                }
-                else if (tryingType == TryingType.Try_Horizontal)
-                {
-                    nextCurveType = CurveType.HorizontalToHorizontal;
-                }
-            }
-        }
-        else
-        {
-            if (_curveType == CurveType.HorizontalLine || _curveType == CurveType.HorizontalLine2 || _curveType == CurveType.HorizontalPipline || _curveType == CurveType.HorizontalPipline2)
-            {
-
-                if (ContinuousCount >= ContinuousTryCount)
-                {
-                    nextCurveType = CurveType.VerticalToVertical;
-                    tryingType = TryingType.Try_Vertical;
-
-                    ContinuousCount = 0;
-                    isVertical = true;
-                }
-                else
-                {
-                    if (tryingType == TryingType.Try_Vertical)
-                    {
-                        nextCurveType = CurveType.VerticalToVertical;
-                        isVertical = true;
-                    }
-                    else if (tryingType == TryingType.Try_Horizontal)
-                    {
-                        nextCurveType = CurveType.HorizontalToHorizontal;
-                        isVertical = false;
-                        ContinuousCount++;
-                    }
-                }
-            }
-            else if(_curveType == CurveType.VerticalLine || _curveType == CurveType.VerticalLine2 || _curveType == CurveType.VerticalPipline || _curveType == CurveType.VerticalPipline2)
-            {
-                if (ContinuousCount >= ContinuousTryCount)
-                {
-                    nextCurveType = CurveType.HorizontalToHorizontal;
-                    tryingType = TryingType.Try_Horizontal;
-
-                    ContinuousCount = 0;
-                    isVertical = false;
-                }
-                else
-                {
-                    //if (tryingType == TryingType.Try_Vertical)
-                    //{
-                    //    nextCurveType = CurveType.VerticalToVertical;
-                    //    isVertical = true;
-                    //    ContinuousCount++;
-                    //}
-                    //else if (tryingType == TryingType.Try_Horizontal)
-                    //{
-                    //    nextCurveType = CurveType.HorizontalToHorizontal;
-                    //    isVertical = false;
-                    //}
-                    //强制指定水平
-                    tryingType = TryingType.Try_Horizontal;
-                    nextCurveType = CurveType.HorizontalToHorizontal;
-                    isVertical = false;
-                }
-            }
-            else if(tryingType == TryingType.Try_Vertical && _curveType == CurveType.HorizontalToHorizontal)
-            {
-                ContinuousCount = 0;
-                nextCurveType = CurveType.HorizontalToVertical;
-            }
-            else if(tryingType == TryingType.Try_Horizontal && _curveType == CurveType.VerticalToVertical)
-            {
-                ContinuousCount = 0;
-                nextCurveType = CurveType.VerticalToHorizontal;
-            }
-            else
-            {
-                if (ContinuousCount >= ContinuousTryCount)
-                {
-                    if (isVertical)
-                    {
-                        if (IsCanTurn())
-                        {
-                            nextCurveType = CurveType.VerticalToHorizontal;
-                            tryingType = TryingType.Try_Horizontal;
-                            ContinuousCount = 0;
-                        }
-                    }
-                    else
-                    {
-                        nextCurveType = CurveType.HorizontalToVertical;
-                        tryingType = TryingType.Try_Vertical;
-                        ContinuousCount = 0;
-                    }
-                }
-                else
-                {
-                    nextCurveType = _curveType;
-                }
-            }
-        }
-
-        if(nextCurveType != CurveType.None)
-            curveType = nextCurveType;
-    }
-
-
-    bool IsCanBars(Vector3 prePos,Vector3 afterPos,float offset = 0.12f)
+    bool IsCanBars(Vector3 prePos, Vector3 afterPos, float offset = 0.12f)
     {
         bool res = false;
         if (afterPos.y < prePos.y - offset)
@@ -1225,10 +1082,10 @@ public partial class GameDemo : MonoBehaviour
             {
                 simulateNextFrame();
                 simlateFrame++;
-                
-                if (barsDemo.isPassXY(ball.transform.position,0.1f))
+
+                if (barsDemo.isPassXY(ball.transform.position, 0.1f))
                 {
-                    if(offsetFrame - simlateFrame <= 5)
+                    if (offsetFrame - simlateFrame <= 5)
                     {
                         barsIndex = 0;
                     }
@@ -1243,7 +1100,7 @@ public partial class GameDemo : MonoBehaviour
 
         if (barsIndex == -9999)
         {
-            if(barsDemo != null)
+            if (barsDemo != null)
             {
                 barsIndex = barsDemo.SplineSampleIndex(ball.transform.position);
             }
@@ -1266,10 +1123,10 @@ public partial class GameDemo : MonoBehaviour
         return barsIndex;
     }
 
-    IEnumerator Bars_Curve(int _offsetIndex, int offsetFrame,int n)
+    IEnumerator Bars_Curve(int _offsetIndex, int offsetFrame, int n)
     {
         distanceType = DistanceType.None;
-        
+
         int backFrame = currentFrame;
         Vector3 prePos = ball.transform.position;
 
@@ -1283,7 +1140,7 @@ public partial class GameDemo : MonoBehaviour
 
         Vector3 afterPos = ball.transform.position;
 
-        if(IsCanBars(prePos,afterPos,0.1f))
+        if (IsCanBars(prePos, afterPos, 0.1f))
         {
             int simlateFrame = 0;
             //回到之前
@@ -1327,9 +1184,9 @@ public partial class GameDemo : MonoBehaviour
                     //模拟
                     simulateNextFrame();
                     simlateFrame++;
-                    if (currentBars.isPassXY(ball.transform.position,0.1f))
+                    if (currentBars.isPassXY(ball.transform.position, 0.1f))
                     {
-                        if(offsetFrame - simlateFrame <= 2)
+                        if (offsetFrame - simlateFrame <= 2)
                         {
                             g_isPass = true;
                         }
@@ -1353,11 +1210,11 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    BarsCurve FindBarsCurve(int prefabIndex,bool inverse)
+    BarsCurve FindBarsCurve(int prefabIndex, bool inverse)
     {
-        foreach(var barsCurve in barsCurveList)
+        foreach (var barsCurve in barsCurveList)
         {
-            if(barsCurve.prefabIndex == prefabIndex && barsCurve.inverse == inverse)
+            if (barsCurve.prefabIndex == prefabIndex && barsCurve.inverse == inverse)
             {
                 return barsCurve;
             }
@@ -1370,7 +1227,16 @@ public partial class GameDemo : MonoBehaviour
 
     void BarsLine_Curve(int _offsetIndex, int offsetFrame, int prefabIndex)
     {
+        g_isPass = false;
+
         BarConfig barConfig = barsConfig.BarConfigList[prefabIndex];
+
+        BarsCurve tempBarsCurve = FindBarsCurve(prefabIndex, false);
+
+        if (tempBarsCurve == null || offsetFrame > tempBarsCurve.frame + 25 || offsetFrame < tempBarsCurve.frame + 10)
+        {
+            return;
+        }
 
         distanceType = DistanceType.None;
 
@@ -1379,7 +1245,6 @@ public partial class GameDemo : MonoBehaviour
         int backFrame = currentFrame;
         Vector3 prePos = ball.transform.position;
 
-        g_isPass = false;
 
         //预测这一帧
         for (int i = 0; i < offsetFrame; i++)
@@ -1834,106 +1699,5 @@ public partial class GameDemo : MonoBehaviour
         }
         
         return mistakeCollision;
-    }
-
-    IEnumerator HorizontalCurveFail(int offsetIndex, int offsetFrame)
-    {
-        if (offsetFrame >= 25)
-        {
-            if(offsetFrame > 50)
-            {
-                curveType = CurveType.HorizontalPipline2;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-        }
-        else
-        {
-            BackupPlan(currentFrame, offsetIndex, offsetFrame);
-        }
-
-        //currentRecordJson.curveTypeList.Add(curveType);
-
-        //CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
-
-        //if(result != CurveType.None)
-        //{
-        //    curveType = result;
-        //    yield return TryCurve(offsetIndex, offsetFrame);
-        //}
-        //else
-        //{
-        //    if (!CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal))
-        //    {
-        //        curveType = CurveType.HorizontalToHorizontal;
-        //        yield return TryCurve(offsetIndex, offsetFrame);
-        //    }
-        //    else if (!CurveTypeRecord.Contains(CurveType.HorizontalToVertical))
-        //    {
-        //        curveType = CurveType.HorizontalToVertical;
-        //        yield return TryCurve(offsetIndex, offsetFrame);
-        //    }
-        //    else if (!CurveTypeRecord.Contains(CurveType.HorizontalPipline2))
-        //    {
-        //        curveType = CurveType.HorizontalPipline2;
-        //        yield return TryCurve(offsetIndex, offsetFrame);
-        //    }
-        //    else
-        //    {
-        //        BackupPlan(currentFrame, offsetIndex, offsetFrame);
-        //    }
-        //}
-
-        //BackupPlan(currentFrame, offsetIndex, offsetFrame);
-    }
-
-    IEnumerator VerticalCurveFail(int offsetIndex, int offsetFrame)
-    {
-
-        if (offsetFrame >= 25)
-        {
-            if (offsetFrame > 50)
-            {
-                curveType = CurveType.VerticalPipline2;
-                yield return TryCurve(offsetIndex, offsetFrame);
-            }
-        }
-        else
-        {
-            BackupPlan(currentFrame, offsetIndex, offsetFrame);
-        }
-        
-        //currentRecordJson.curveTypeList.Add(curveType);
-
-        //CurveType result = CurveTypePriority.FirstOrDefault(c => !CurveTypeRecord.Contains(c));
-
-        //if (result != CurveType.None)
-        //{
-        //    curveType = result;
-        //    yield return TryCurve(offsetIndex, offsetFrame);
-        //}
-        //else
-        //{
-        //    if (!CurveTypeRecord.Contains(CurveType.VerticalToVertical))
-        //    {
-        //        curveType = CurveType.VerticalToVertical;
-        //        yield return TryCurve(offsetIndex, offsetFrame);
-        //    }
-        //    else if (!CurveTypeRecord.Contains(CurveType.VerticalToHorizontal))
-        //    {
-        //        curveType = CurveType.VerticalToHorizontal;
-        //        yield return TryCurve(offsetIndex, offsetFrame);
-        //    }
-        //    else if (!CurveTypeRecord.Contains(CurveType.VerticalPipline2))
-        //    {
-        //        curveType = CurveType.VerticalPipline2;
-        //        yield return TryCurve(offsetIndex, offsetFrame);
-        //    }
-        //    else
-        //    {
-        //        BackupPlan(currentFrame, offsetIndex, offsetFrame);
-        //    }
-        //}
-
-        //BackupPlan(currentFrame, offsetIndex, offsetFrame);
     }
 }

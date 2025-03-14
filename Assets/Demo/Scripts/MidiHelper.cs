@@ -108,75 +108,75 @@ public class MidiHelper : MonoBehaviour
                 }
             }
 
-            Dictionary<float, int> tempDic = new Dictionary<float, int>();
+            //Dictionary<float, int> tempDic = new Dictionary<float, int>();
 
-            List<float> tempFrameOffsetList = new List<float>();
-            float midiFacter = 1f;
-            float originMidiFacter = 1f;
-            for (int i = 0;i < 10;i++)
-            {
-                midiFacter = originMidiFacter - i * 0.1f;
-                bool isFirst = true;
+            //List<float> tempFrameOffsetList = new List<float>();
+            //float midiFacter = 1f;
+            //float originMidiFacter = 1f;
+            //for (int i = 0;i < 10;i++)
+            //{
+            //    midiFacter = originMidiFacter - i * 0.1f;
+            //    bool isFirst = true;
 
-                tempFrameOffsetList.Clear();
+            //    tempFrameOffsetList.Clear();
 
-                foreach (var mptkEvent in AllMidiEventsSet)
-                {
-                    int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f / midiFacter);
-                    //Debug.Log($"_frame:{_frame}");
+            //    foreach (var mptkEvent in AllMidiEventsSet)
+            //    {
+            //        int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f / midiFacter);
+            //        //Debug.Log($"_frame:{_frame}");
 
-                    int offsetFrame = _frame - _lastFrame;
+            //        int offsetFrame = _frame - _lastFrame;
 
-                    //if (offsetFrame >= 100)
-                    //{
-                    //    offsetFrame = 100;
-                    //}
+            //        //if (offsetFrame >= 100)
+            //        //{
+            //        //    offsetFrame = 100;
+            //        //}
 
-                    //if(offsetFrame > 5)
-                    {
-                        if (isFirst)
-                        {
-                            //playMusicOffsetFrame = _frame;
-                            isFirst = false;
-                            offsetFrame = 0;
-                        }
+            //        //if(offsetFrame > 5)
+            //        {
+            //            if (isFirst)
+            //            {
+            //                //playMusicOffsetFrame = _frame;
+            //                isFirst = false;
+            //                offsetFrame = 0;
+            //            }
 
-                        tempFrameOffsetList.Add(offsetFrame);
-                        _lastFrame = _frame;
-                    }
-                }
+            //            tempFrameOffsetList.Add(offsetFrame);
+            //            _lastFrame = _frame;
+            //        }
+            //    }
 
-                int suitFrameCount = 0;
-                isFirst = true;
-                foreach (var offsetFrame in tempFrameOffsetList)
-                {
-                    if(offsetFrame >= 10 && offsetFrame <= 24)
-                    {
-                        suitFrameCount++;
-                    }
+            //    int suitFrameCount = 0;
+            //    isFirst = true;
+            //    foreach (var offsetFrame in tempFrameOffsetList)
+            //    {
+            //        if(offsetFrame >= 10 && offsetFrame <= 24)
+            //        {
+            //            suitFrameCount++;
+            //        }
 
-                    if(!isFirst && offsetFrame <= 5)
-                    {
-                        suitFrameCount = 0;
-                        break;
-                    }
+            //        if(!isFirst && offsetFrame <= 5)
+            //        {
+            //            suitFrameCount = 0;
+            //            break;
+            //        }
 
-                    if (isFirst)
-                        isFirst = false;
-                }
+            //        if (isFirst)
+            //            isFirst = false;
+            //    }
 
-                tempDic.Add(midiFacter, suitFrameCount);
-            }
+            //    tempDic.Add(midiFacter, suitFrameCount);
+            //}
 
-            int maxSuitFrameCount = int.MinValue;
-            foreach (var key in tempDic.Keys)
-            {
-                if(tempDic[key] > maxSuitFrameCount)
-                {
-                    maxSuitFrameCount = tempDic[key];
-                    suitMidiFacter = key;
-                }
-            }
+            //int maxSuitFrameCount = int.MinValue;
+            //foreach (var key in tempDic.Keys)
+            //{
+            //    if(tempDic[key] > maxSuitFrameCount)
+            //    {
+            //        maxSuitFrameCount = tempDic[key];
+            //        suitMidiFacter = key;
+            //    }
+            //}
 
             //File.WriteAllText(Path.Combine(Application.dataPath, "test.txt"), contents);
             Debug.Log($"AllMidiEvents.Count:{AllMidiEvents.Count}");
@@ -208,7 +208,7 @@ public class MidiHelper : MonoBehaviour
 
         //Debug.Log($"NotePlaying:{NotePlaying}");
 
-        //midiStreamPlayer.MPTK_Channels[playChannel].ForcedPreset = 11;
+        //midiStreamPlayer.MPTK_Channels[playChannel].ForcedPreset = 0;
         //midiStreamPlayer.MPTK_PlayEvent(NotePlaying);
         midiCustomPlayer.Play(NotePlaying.Value);
     }

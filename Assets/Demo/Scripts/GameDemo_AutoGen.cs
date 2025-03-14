@@ -15,6 +15,8 @@ public partial class GameDemo : MonoBehaviour
 
     bool isAutoGen = false;
 
+    float recordPreTime = 0.0f;
+
     IEnumerator GenAll()
     {
         canvasObj.SetActive(false);
@@ -49,6 +51,8 @@ public partial class GameDemo : MonoBehaviour
             Debug.Log("¿ªÊ¼Â¼Ïñ£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡");
 
             captureBase.StartCapture();
+
+            recordPreTime = Time.time;
 
             yield return new WaitForSeconds(2f);
 

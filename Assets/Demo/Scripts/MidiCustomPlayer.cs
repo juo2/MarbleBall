@@ -87,6 +87,7 @@ public class MidiCustomPlayer : MonoBehaviour
             source.gameObject.SetActive(true);
             source.transform.SetParent(transform);
             source.clip = clip;
+            //source.pitch = -12;
             midiAudioDic.Add(key, source);
         }
     }
@@ -99,7 +100,7 @@ public class MidiCustomPlayer : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"�Ҳ���Midi:{midi}");
+            Debug.LogError($"不存在Midi:{midi}");
         }
     }
 
