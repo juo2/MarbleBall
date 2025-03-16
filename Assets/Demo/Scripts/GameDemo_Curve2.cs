@@ -404,16 +404,11 @@ public partial class GameDemo : MonoBehaviour
             curveType = CurveType.HorizontalPipline2;
             yield return TryCurve(offsetIndex, offsetFrame);
         }
-        else
-        {
-            BackupPlan(currentFrame, offsetIndex, offsetFrame);
-        }
 
     }
 
     IEnumerator VerticalCurveFail(int offsetIndex, int offsetFrame)
     {
-
         if (offsetFrame > 50)
         {
             curveType = CurveType.VerticalPipline2;

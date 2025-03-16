@@ -641,6 +641,8 @@ public partial class GameDemo : MonoBehaviour
     List<BarsCurve> barsCurveList = new List<BarsCurve>();
     List<PadCurve> padCurveList = new List<PadCurve>();
 
+    bool isFirstAnim = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -929,13 +931,13 @@ public partial class GameDemo : MonoBehaviour
             //StartCoroutine(Bars_Simulate7());
             //StartCoroutine(Bars_Simulate8());
             //StartCoroutine(Bars_Simulate9());
-            //StartCoroutine(Bars_Simulate10());
+            StartCoroutine(Bars_Simulate10());
             //StartCoroutine(Bars_Simulate11());
             //StartCoroutine(Bars_Simulate12());
             //StartCoroutine(Bars_Simulate13());
             //StartCoroutine(Bars_Simulate14());
 
-            StartCoroutine(Bars_Simulate16());
+            //StartCoroutine(Bars_Simulate16());
             //StartCoroutine(Bars_Simulate17()); 
 
         });
@@ -1658,18 +1660,72 @@ public partial class GameDemo : MonoBehaviour
         
         if(currentOffsetIndex == 1)
         {
-            yield return DealFirstBars();
-            logger("已完成DealFirstBars");
-
-            cameraProjection.positionCount = playMusicFrame;
-            for (int i = 0; i < playMusicFrame; i++)
+            if (isFirstAnim)
             {
-                cameraProjection.SetPosition(i, physicsStateList[i].position);
+                yield return DealFirstBars();
 
-                cameraPathList.Add(physicsStateList[i].position);
-
-                cameraPosMap.Add(i, i);
+                cameraProjection.positionCount = playMusicFrame;
+                for (int i = 0; i < playMusicFrame; i++)
+                {
+                    cameraProjection.SetPosition(i, physicsStateList[i].position);
+                    cameraPathList.Add(physicsStateList[i].position);
+                    cameraPosMap.Add(i, i);
+                }
             }
+            else
+            {
+                playMusicFrame = midiHelper.beiginFrame;
+
+                if (playMusicFrame < 12)
+                {
+                    for (int i = 0; i < playMusicFrame; i++)
+                    {
+                        simulateNextFrame();
+                    }
+                }
+                else if (playMusicFrame >= 12 && playMusicFrame <= 36)
+                {
+                    for (int i = barsDemoPrefabList.Count - 1; i > 2; i--)
+                    {
+                        BarsCurve tempBarsCurve = FindBarsCurve(i, false);
+                        if(tempBarsCurve != null)
+                        {
+                            int remainFrame = playMusicFrame - tempBarsCurve.frame;
+                            if (remainFrame > 0 && remainFrame <= 4)
+                            {
+                                List<PhysicsState> physicsStates = TransformPhysicsState(tempBarsCurve.physicsStates);
+                                AddPhysicsState(physicsStates);
+                                simulateToFrame(currentFrame + physicsStates.Count, true, true);
+
+                                for (int f = 0; f < remainFrame; f++)
+                                {
+                                    simulateNextFrame();
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+                else if (playMusicFrame > 36 && playMusicFrame <= 61)
+                {
+                    DealWithBarCombine_Internal(0, currentFrame, playMusicFrame);
+                }
+                else if (playMusicFrame > 61)
+                {
+                    HorizontalCombine(currentOffsetIndex, playMusicFrame);
+                }
+
+                cameraProjection.positionCount = playMusicFrame;
+                for (int i = 0; i < playMusicFrame; i++)
+                {
+                    cameraProjection.SetPosition(i, physicsStateList[i].position);
+                    cameraPathList.Add(physicsStateList[i].position);
+                    cameraPosMap.Add(i, i);
+                }
+            }
+
+            logger($"已完成DealFirstBars {isFirstAnim}");
         }
 
         _lastFrame = playMusicFrame;
@@ -2166,112 +2222,9 @@ public partial class GameDemo : MonoBehaviour
                 g_isPass = !mistakeCollision;
             }
 
-            if(g_isPass)
+            if (g_isPass)
             {
-                g_isPass = false;
-
-                int frontFrame = simlateFrame;
-                int lastFrame = offsetFrame - frontFrame;
-                Vector3 bornPos = ball.transform.position;
-
-                int backFrame_create = currentFrame;
-
-                currentBarsCombine = InstantBarsCombine(bornPos, ball.velocity, currentFrame,null, backFrame, backFrame + offsetFrame);
-
-                //yield return new WaitForEndOfFrame();
-
-                //阶段1
-                for (int _f = 0; _f < lastFrame; _f++)
-                {
-                    //模拟
-                    simulateNextFrame();
-                    simlateFrame++;
-                    if (currentBarsCombine.isPass1(ball.transform.position, ball.velocity))
-                    {
-                        g_isPass = true;
-                        break;
-                    }
-                }
-
-                //阶段2
-                if (g_isPass)
-                {
-                    g_isPass = false;
-
-                    Vector3 stage1Pos = ball.transform.position;
-
-                    int stage1Frame = simlateFrame;
-                    int stage1BackFrame = currentFrame;
-
-                    int lastFrame2 = offsetFrame - stage1Frame;
-                    for (int i = 0; i < lastFrame2; i++)
-                    {
-                        simulateNextFrame();
-                    }
-                    currentBarsCombine.updateBar(stage1Pos, ball.transform.position);
-                     
-                    float barsCombineScale = currentBarsCombine.getScaleX();
-                    if (barsCombineScale > 5f && currentBarsCombine.transform.eulerAngles.z != 0)
-                    {
-                        currentBarsCombine.transform.eulerAngles = new Vector3(currentBarsCombine.transform.eulerAngles.x, currentBarsCombine.transform.eulerAngles.y, 0);
-
-                        simlateFrame = frontFrame;
-
-                        //重新回到平放
-                        simulateToFrame(backFrame_create, true, true);
-
-                        //阶段1
-                        for (int _f = 0; _f < lastFrame; _f++)
-                        {
-                            //模拟
-                            simulateNextFrame();
-                            simlateFrame++;
-                            if (currentBarsCombine.isPass1(ball.transform.position, ball.velocity))
-                            {
-                                g_isPass = true;
-                                break;
-                            }
-                        }
-
-                        if (g_isPass)
-                        {
-                            g_isPass = false;
-
-                            stage1Pos = ball.transform.position;
-
-                            stage1Frame = simlateFrame;
-                            stage1BackFrame = currentFrame;
-
-                            lastFrame2 = offsetFrame - stage1Frame;
-                            for (int i = 0; i < lastFrame2; i++)
-                            {
-                                simulateNextFrame();
-                            }
-                            currentBarsCombine.updateBar(stage1Pos, ball.transform.position);
-                            barsCombineScale = currentBarsCombine.getScaleX();
-
-                        }
-                    }
-
-                    currentBarsCombine.updateVirtualBars(false);
-                    while (barsCombineScale > 0.5f)
-                    {
-                        barsCombineScale = barsCombineScale - 0.5f;
-                        currentBarsCombine.SetScaleX(barsCombineScale);
-
-                        simulateToFrame(stage1BackFrame, true, true);
-                        for (int i = 0; i < lastFrame2; i++)
-                        {
-                            simulateNextFrame();
-                        }
-
-                        if (currentBarsCombine.isPass2(ball.transform.position))
-                        {
-                            g_isPass = true;
-                            break;
-                        }
-                    }
-                }
+                DealWithBarCombine_Internal(simlateFrame, backFrame, offsetFrame);
             }
         }
 
@@ -2287,7 +2240,114 @@ public partial class GameDemo : MonoBehaviour
             //回到之前
             simulateToFrame(backFrame, true, true);
         }
-        
+    }
+
+    void DealWithBarCombine_Internal(int simlateFrame,int backFrame, int offsetFrame)
+    {
+        g_isPass = false;
+
+        int frontFrame = simlateFrame;
+        int lastFrame = offsetFrame - frontFrame;
+        Vector3 bornPos = ball.transform.position;
+
+        int backFrame_create = currentFrame;
+
+        currentBarsCombine = InstantBarsCombine(bornPos, ball.velocity, currentFrame, null, backFrame, backFrame + offsetFrame);
+
+        //yield return new WaitForEndOfFrame();
+
+        //阶段1
+        for (int _f = 0; _f < lastFrame; _f++)
+        {
+            //模拟
+            simulateNextFrame();
+            simlateFrame++;
+            if (currentBarsCombine.isPass1(ball.transform.position, ball.velocity))
+            {
+                g_isPass = true;
+                break;
+            }
+        }
+
+        //阶段2
+        if (g_isPass)
+        {
+            g_isPass = false;
+
+            Vector3 stage1Pos = ball.transform.position;
+
+            int stage1Frame = simlateFrame;
+            int stage1BackFrame = currentFrame;
+
+            int lastFrame2 = offsetFrame - stage1Frame;
+            for (int i = 0; i < lastFrame2; i++)
+            {
+                simulateNextFrame();
+            }
+            currentBarsCombine.updateBar(stage1Pos, ball.transform.position);
+
+            float barsCombineScale = currentBarsCombine.getScaleX();
+            if (barsCombineScale > 5f && currentBarsCombine.transform.eulerAngles.z != 0)
+            {
+                currentBarsCombine.transform.eulerAngles = new Vector3(currentBarsCombine.transform.eulerAngles.x, currentBarsCombine.transform.eulerAngles.y, 0);
+
+                simlateFrame = frontFrame;
+
+                //重新回到平放
+                simulateToFrame(backFrame_create, true, true);
+
+                //阶段1
+                for (int _f = 0; _f < lastFrame; _f++)
+                {
+                    //模拟
+                    simulateNextFrame();
+                    simlateFrame++;
+                    if (currentBarsCombine.isPass1(ball.transform.position, ball.velocity))
+                    {
+                        g_isPass = true;
+                        break;
+                    }
+                }
+
+                if (g_isPass)
+                {
+                    g_isPass = false;
+
+                    stage1Pos = ball.transform.position;
+
+                    stage1Frame = simlateFrame;
+                    stage1BackFrame = currentFrame;
+
+                    lastFrame2 = offsetFrame - stage1Frame;
+                    for (int i = 0; i < lastFrame2; i++)
+                    {
+                        simulateNextFrame();
+                    }
+                    currentBarsCombine.updateBar(stage1Pos, ball.transform.position);
+                    barsCombineScale = currentBarsCombine.getScaleX();
+
+                }
+            }
+
+            currentBarsCombine.updateVirtualBars(false);
+            while (barsCombineScale > 0.5f)
+            {
+                barsCombineScale = barsCombineScale - 0.5f;
+                currentBarsCombine.SetScaleX(barsCombineScale);
+
+                simulateToFrame(stage1BackFrame, true, true);
+                for (int i = 0; i < lastFrame2; i++)
+                {
+                    simulateNextFrame();
+                }
+
+                if (currentBarsCombine.isPass2(ball.transform.position))
+                {
+                    g_isPass = true;
+                    break;
+                }
+            }
+        }
     }
 
     IEnumerator DealWithBarScale(int offsetIndex, int offsetFrame)
@@ -2638,8 +2698,8 @@ public partial class GameDemo : MonoBehaviour
 
         barCombine_instance.refreshBarDir();
 
-        float angle = Vector3.Angle(frameDir, Vector3.down);
-        barCombine_instance.transform.eulerAngles = new Vector3(barCombine_instance.transform.eulerAngles.x, barCombine_instance.transform.eulerAngles.y, angle);
+        //float angle = Vector3.Angle(frameDir, Vector3.down);
+        //barCombine_instance.transform.eulerAngles = new Vector3(barCombine_instance.transform.eulerAngles.x, barCombine_instance.transform.eulerAngles.y, angle);
 
         //barCombine_instance.updateBar(stage1Pos, framePos);
         barCombine_instance.updateVirtualBars(true);

@@ -662,7 +662,7 @@ public partial class GameDemo : MonoBehaviour
         Physics.gravity = new Vector3(0, -5f, 0);
 
         int prefabIndex = 8;
-        bool inverse = false;
+        bool inverse = true;
         Vector3 v = new Vector3(0.6f, -0.9f, 0);
         //Vector3 v = new Vector3(0.6f, -2f, 0);
         int inv = 1;
@@ -676,9 +676,14 @@ public partial class GameDemo : MonoBehaviour
 
         ball.SetVelocity(v);
         physicsStateList[0].velocity = v;
-        for (int i = 10; i < 11; i++)
+        for (int i = 6; i < 12; i++)
         {
-            ModifyFrameVelocity(i, 0.3f, 0);
+            ModifyFrameVelocity(i, 0.24f, 0);
+        }
+
+        for (int i = 12; i < 15; i++)
+        {
+            //ModifyFrameVelocity(i, 0.18f, 0);
         }
 
         yield return new WaitForSeconds(0.3f);
@@ -696,8 +701,8 @@ public partial class GameDemo : MonoBehaviour
             simulateNextFrame(true, false);
             simlateFrame++;
 
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 1f, ball.angularVelocity.z));
-            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
+            //ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 1f, ball.angularVelocity.z));
+            //physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
         }
 
         BarsCurve barsCurve = new BarsCurve();

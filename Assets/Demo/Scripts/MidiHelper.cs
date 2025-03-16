@@ -26,6 +26,7 @@ public class MidiHelper : MonoBehaviour
     public float suitMidiFacter = 1.0f;
 
     public float beginTime = 0;
+    public int beiginFrame = 0;
 
     // Start is called before the first frame update
     void Awake()
@@ -107,6 +108,8 @@ public class MidiHelper : MonoBehaviour
                     }
                 }
             }
+
+            beiginFrame = Mathf.RoundToInt(beginTime / 0.02f);
 
             //Dictionary<float, int> tempDic = new Dictionary<float, int>();
 

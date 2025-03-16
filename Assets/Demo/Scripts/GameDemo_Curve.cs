@@ -702,29 +702,6 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-
-    void CalculateCombineFrame(int offsetIndex, int offsetFrame)
-    {
-        int tempOffsetFrame = offsetFrame;
-        for(int c = 0;c < 10;c++)
-        {
-            for (int i = BarsDemoPrefabList.Count-1; i > 2; i--)
-            {
-                BarsCurve tempBarsCurve = FindBarsCurve(i, false);
-                if (tempBarsCurve != null)
-                {
-
-                }
-            }
-
-
-            if(offsetFrame > 40 && offsetFrame < 60)
-            {
-                break;
-            }
-        }
-    }
-
     void VerticalCombine(int offsetIndex, int offsetFrame)
     {
         float rotation = 60f;
@@ -766,7 +743,13 @@ public partial class GameDemo : MonoBehaviour
             }
         }
 
-        DealWithBarCombine(offsetIndex, tuple.Item2);
+        for (int i = 0; i < 1; i++)
+        {
+            simulateNextFrame();
+        }
+
+        //DealWithBarCombine(offsetIndex, tuple.Item2);
+        DealWithBarCombine_Internal(0, currentFrame, tuple.Item2 - 1);
     }
 
     void HorizontalCombine(int offsetIndex,int offsetFrame)
@@ -802,7 +785,13 @@ public partial class GameDemo : MonoBehaviour
             }
         }
 
-        DealWithBarCombine(offsetIndex, tuple.Item2);
+        for(int i = 0;i < 1;i++)
+        {
+            simulateNextFrame();
+        }
+
+        //DealWithBarCombine(offsetIndex, tuple.Item2);
+        DealWithBarCombine_Internal(0, currentFrame, tuple.Item2 - 1);
     }
 
     void HorizontalToHorizontal_Internal(int offsetIndex, int offsetFrame, List<float> rotationList, List<float> bouncinessPriorityList)
