@@ -41,10 +41,11 @@ public partial class GameDemo : MonoBehaviour
             return true;
         }
 
-        for (int i = barsDemoPrefabList.Count - 1; i > 2; i--)
+        for (int i = barsDemoPrefabList.Count - 1; i > 1; i--)
         {
             BarsCurve tempBarsCurve = FindBarsCurve(i, false);
             int candidate = tempBarsCurve.frame;
+
             // 只有当剩余数减去 candidate 后不小于 minLeftover 时，才尝试分解
             if (remaining - candidate >= minLeftover)
             {
@@ -382,7 +383,7 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator HorizontalCurveFail(int offsetIndex, int offsetFrame)
     {
-        if (offsetFrame >= 23 && offsetFrame <= 27)
+        if (offsetFrame >= 16 && offsetFrame <= 27)
         {
             if (CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal) && !CurveTypeRecord.Contains(CurveType.HorizontalPipline))
             {

@@ -26,6 +26,7 @@ public class MidiHelper : MonoBehaviour
     public float suitMidiFacter = 1.0f;
 
     public float beginTime = 0;
+    public float endTime = 0;
     public int beiginFrame = 0;
 
     // Start is called before the first frame update
@@ -104,6 +105,8 @@ public class MidiHelper : MonoBehaviour
                             }
 
                             _lastFrame = _frame;
+
+                            endTime = mptkEvent.RealTime;
                         }
                     }
                 }
@@ -214,6 +217,11 @@ public class MidiHelper : MonoBehaviour
         //midiStreamPlayer.MPTK_Channels[playChannel].ForcedPreset = 0;
         //midiStreamPlayer.MPTK_PlayEvent(NotePlaying);
         midiCustomPlayer.Play(NotePlaying.Value);
+    }
+
+    public int GetEndFrame()
+    {
+        return Mathf.RoundToInt(  (midiFilePlayer.MPTK_DurationMS - endTime)  / 1000.0f / 0.02f);
     }
 
     public void Pause()

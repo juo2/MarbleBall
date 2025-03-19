@@ -150,6 +150,9 @@ public partial class GameDemo : MonoBehaviour
     private Camera follow_camera;
 
     [SerializeField]
+    private Cinemachine.CinemachineVirtualCamera v_3rd_camera;
+
+    [SerializeField]
     private Cinemachine.CinemachineVirtualCamera v_camera;
 
     [SerializeField]
@@ -287,6 +290,18 @@ public partial class GameDemo : MonoBehaviour
     [SerializeField]
     private BGMPlayer bGMPlayer;
 
+    [SerializeField]
+    private BarsDemo barBeigin0_1;
+
+    [SerializeField]
+    private BarsDemo barBeigin1_1;
+
+    [SerializeField]
+    private BarsCombineDemo barCombine_1;
+
+    [SerializeField]
+    private Light spotLight;
+
     //List<BarsDemo> barsDemoPrefabList = new List<BarsDemo>();
     List<BarsDemo> barsDemoList = new List<BarsDemo>();
     Stack<BarsDemo> barsDemoPool = new Stack<BarsDemo>();
@@ -298,7 +313,10 @@ public partial class GameDemo : MonoBehaviour
 
     private BarsScaleDemo currentBarsScale;
 
-    private Vector3 initialVelocity = new Vector3(1f, 0, 0);
+    //private Vector3 initialVelocity = new Vector3(0.8f, 0, 0);
+    private Vector3 initialVelocity = new Vector3(0f, 0, 0);
+    //private Vector3 initialRotation = new Vector3(0f, 90f, 0);
+    private Vector3 initialRotation = new Vector3(0f, 0f, 0);
     private float barsAppearMinOffset = float.MaxValue;
 
     private float currentTime = 0f;
@@ -641,7 +659,7 @@ public partial class GameDemo : MonoBehaviour
     List<BarsCurve> barsCurveList = new List<BarsCurve>();
     List<PadCurve> padCurveList = new List<PadCurve>();
 
-    bool isFirstAnim = false;
+    bool isFirstAnim = true;
 
     // Start is called before the first frame update
     void Start()
@@ -658,6 +676,7 @@ public partial class GameDemo : MonoBehaviour
         Physics.gravity = new Vector3(0, gravityY, 0);
         Physics.autoSimulation = false;
 
+        //ball.SetVelocity(initialVelocity);
         PhysicsState ps = new PhysicsState();
         ps.position = ball.transform.position;
         ps.rotation = ball.transform.rotation;
@@ -665,7 +684,6 @@ public partial class GameDemo : MonoBehaviour
         ps.angularVelocity = ball.angularVelocity;
         physicsStateList.Add(ps);
         line.AddLineRenderer(ball.transform.position);
-        //ball.SetVelocity(initialVelocity);
 
         Text label = playBtn.transform.Find("Text (Legacy)").GetComponent<Text>();
 
@@ -931,7 +949,7 @@ public partial class GameDemo : MonoBehaviour
             //StartCoroutine(Bars_Simulate7());
             //StartCoroutine(Bars_Simulate8());
             //StartCoroutine(Bars_Simulate9());
-            StartCoroutine(Bars_Simulate10());
+            //StartCoroutine(Bars_Simulate10());
             //StartCoroutine(Bars_Simulate11());
             //StartCoroutine(Bars_Simulate12());
             //StartCoroutine(Bars_Simulate13());
@@ -939,11 +957,17 @@ public partial class GameDemo : MonoBehaviour
 
             //StartCoroutine(Bars_Simulate16());
             //StartCoroutine(Bars_Simulate17()); 
+            StartCoroutine(Bars_Simulate18());
 
         });
 
         LoadBarsConfig();
         LoadPadConfig();
+        
+        if(!isFirstAnim)
+            initialRotation = new Vector3(0f, 90f, 0);
+
+
         //BarsConfig barsConfig = new BarsConfig();
         //barsConfig.BarConfigList = new List<BarConfig>();
 
@@ -1120,6 +1144,9 @@ public partial class GameDemo : MonoBehaviour
             v_camera.gameObject.SetActive(true);
             //follow_camera.gameObject.SetActive(true);
             v_camera_editor.gameObject.SetActive(false);
+
+            if(!isFirstAnim)
+                v_3rd_camera.gameObject.SetActive(true);
         }
     }
 
@@ -1146,6 +1173,15 @@ public partial class GameDemo : MonoBehaviour
                 ps.rotation = ball.transform.rotation;
                 ps.velocity = ball.velocity;
                 ps.angularVelocity = ball.angularVelocity;
+
+                if(physicsStateList.Count == 0)
+                {
+                    ball.velocity = initialVelocity;
+                    ball.transform.eulerAngles = initialRotation;
+
+                    ps.velocity = ball.velocity;
+                    ps.rotation = ball.transform.rotation;
+                }
 
                 physicsStateList.Add(ps);
 
@@ -1567,48 +1603,46 @@ public partial class GameDemo : MonoBehaviour
         }
         else if (offsetFrame > 61)
         {
-            //if (offsetFrame == 100)
-            //{
-            //    if (isVertical)  
-            //    {
-            //        curveType = CurveType.VerticalPipline;
-            //    }
-            //    else
-            //    {
-            //        curveType = CurveType.HorizontalPipline;
-            //    }
-            //}
-            //else
-
-            if (isVertical)
+            if(isFirstAnim)
             {
-                curveType = CurveType.VerticalCombine;
+                if (isVertical)
+                {
+                    curveType = CurveType.VerticalPipline;
+                }
+                else
+                {
+                    curveType = CurveType.HorizontalPipline;
+                }
             }
             else
             {
-                curveType = CurveType.HorizontalCombine;
+                if (offsetFrame < 200)
+                {
+                    if (isVertical)
+                    {
+                        curveType = CurveType.VerticalPipline;
+                    }
+                    else
+                    {
+                        curveType = CurveType.HorizontalPipline;
+                    }
+                }
+                else if (offsetFrame >= 200)
+                {
+                    if (isVertical)
+                    {
+                        curveType = CurveType.VerticalCombine;
+                    }
+                    else
+                    {
+                        curveType = CurveType.HorizontalCombine;
+                    }
+                }
             }
+            
 
-            //if (isVertical)
-            //{
-            //    curveType = CurveType.VerticalCombine;
-            //}
-            //else
-            //{
-            //    curveType = CurveType.HorizontalCombine;
-            //}
-
-            //{
-            //    if (isVertical)
-            //    {
-            //        curveType = CurveType.VerticalPipline2;
-            //    }
-            //    else
-            //    {
-            //        curveType = CurveType.HorizontalPipline2;
-            //    }
-            //}
         }
+       
     }
 
 
@@ -1707,13 +1741,13 @@ public partial class GameDemo : MonoBehaviour
                         }
                     }
                 }
-                else if (playMusicFrame > 36 && playMusicFrame <= 61)
+                else if (playMusicFrame > 36 && playMusicFrame <= 500)
                 {
                     DealWithBarCombine_Internal(0, currentFrame, playMusicFrame);
                 }
-                else if (playMusicFrame > 61)
+                else if (playMusicFrame > 500)
                 {
-                    HorizontalCombine(currentOffsetIndex, playMusicFrame);
+                    HorizontalCombine2(currentOffsetIndex, playMusicFrame);
                 }
 
                 cameraProjection.positionCount = playMusicFrame;
@@ -2254,7 +2288,7 @@ public partial class GameDemo : MonoBehaviour
 
         currentBarsCombine = InstantBarsCombine(bornPos, ball.velocity, currentFrame, null, backFrame, backFrame + offsetFrame);
 
-        //yield return new WaitForEndOfFrame();
+
 
         //阶段1
         for (int _f = 0; _f < lastFrame; _f++)
@@ -2969,8 +3003,10 @@ public partial class GameDemo : MonoBehaviour
     {
         if (isPlay)
         {
-            if (currentFrame == playMusicFrame)
+            if (currentFrame + 200 == playMusicFrame)
             {
+                if (!isFirstAnim)
+                    v_3rd_camera.gameObject.SetActive(false);
                 //midiHelper.Play();
             }
 
