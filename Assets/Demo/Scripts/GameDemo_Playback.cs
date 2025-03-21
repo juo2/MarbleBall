@@ -252,6 +252,12 @@ public partial class GameDemo : MonoBehaviour
 
     void RecordBarsCombine()
     {
+        if (currentBarsCombine == null)
+        {
+            Debug.LogError("currentBarsCombine == null");
+            return;
+        }
+
         BarCombineData barCombineData = new BarCombineData();
         barCombineData.pos = currentBarsCombine.transform.position;
         barCombineData.frame = currentFrame;

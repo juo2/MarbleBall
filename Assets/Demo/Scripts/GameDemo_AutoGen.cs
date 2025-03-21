@@ -167,6 +167,8 @@ public partial class GameDemo : MonoBehaviour
         barLineDataList.Clear();
 
         currentCameraMovement = new CameraMovement();
+
+        curveTypeList.Clear();
     }
 
     void SpaceKeyDown()

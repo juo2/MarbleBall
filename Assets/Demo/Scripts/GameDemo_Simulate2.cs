@@ -57,7 +57,7 @@ public partial class GameDemo : MonoBehaviour
         padCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
         padCurve.minFrame = 6;
         padCurve.maxFrame = 9;
-
+        padCurve.isVertical = true;
         string json_str = JsonUtility.ToJson(padCurve);
         File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "padCurve/temp.json"), json_str);
     }
@@ -111,6 +111,62 @@ public partial class GameDemo : MonoBehaviour
         padCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
         padCurve.minFrame = 10;
         padCurve.maxFrame = 12;
+        padCurve.isVertical = true;
+        string json_str = JsonUtility.ToJson(padCurve);
+        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "padCurve/temp.json"), json_str);
+    }
+
+    void Pad_Simulate3()
+    {
+        SkinManager.Instance.RefreshPad(0);
+
+        bool inverse = true;
+
+        Vector3 v = new Vector3(0.7f, -1f, 0);
+
+        int inv = 1;
+        if (inverse)
+            inv = -1;
+
+        v = new Vector3(v.x * inv, v.y, v.z);
+
+        ball.SetVelocity(v);
+        physicsStateList[0].velocity = v;
+
+        Pad _pad = InstantPad(ball.transform.position, ball.velocity, currentFrame, 0, true);
+
+        Vector3 center = Vector2.zero;
+        Vector3 size = Vector2.zero;
+        Vector3 bestPos = Vector2.zero;
+
+        if (ball.velocity.x > 0)
+        {
+            center = horizontalCenter3;
+            bestPos = horizontalBestPos3;
+        }
+        else
+        {
+            center = horizontalCenter4;
+            bestPos = horizontalBestPos4;
+        }
+
+        _pad.SetBounds(center, horizontalSize2, bestPos);
+        _pad.SetPhysicMaterialBounciness(0.4f);
+        int simlateFrame = 0;
+        for (int i = 0; i < 12; i++)
+        {
+            simulateNextFrame();
+            simlateFrame++;
+        }
+
+        PadCurve padCurve = new PadCurve();
+        padCurve.rotation = 0;
+        padCurve.frame = physicsStateList.Count - 1;
+        padCurve.inverse = inverse;
+        padCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
+        padCurve.minFrame = 12;
+        padCurve.maxFrame = 15;
+        padCurve.isVertical = false;
 
         string json_str = JsonUtility.ToJson(padCurve);
         File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "padCurve/temp.json"), json_str);
@@ -605,7 +661,7 @@ public partial class GameDemo : MonoBehaviour
         Physics.gravity = new Vector3(0, -5f, 0);
 
         int prefabIndex = 7;
-        bool inverse = false;
+        bool inverse = true;
         Vector3 v = new Vector3(0.6f, -1f, 0);
         //Vector3 v = new Vector3(0.6f, -2f, 0);
         int inv = 1;
@@ -620,15 +676,13 @@ public partial class GameDemo : MonoBehaviour
         ball.SetVelocity(v);
         physicsStateList[0].velocity = v;
 
-        for (int i = 8; i < 18; i++)
+        for (int i = 8; i < 9; i++)
         {
-            ModifyFrameVelocity(i, 0.24f, 0);
+            ModifyFrameVelocity(i, 0.34f, 0);
         }
 
         yield return new WaitForSeconds(0.3f);
 
-        ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 1f, ball.angularVelocity.z));
-        physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
 
         //for (int i = 5; i < 21; i++)
         //{
@@ -640,8 +694,6 @@ public partial class GameDemo : MonoBehaviour
             simulateNextFrame(true, false);
             simlateFrame++;
 
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 1f, ball.angularVelocity.z));
-            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
         }
 
         BarsCurve barsCurve = new BarsCurve();
@@ -722,8 +774,8 @@ public partial class GameDemo : MonoBehaviour
     {
         Physics.gravity = new Vector3(0, -5f, 0);
 
-        int prefabIndex = 8;
-        bool inverse = false;
+        int prefabIndex = 9;
+        bool inverse = true;
         Vector3 v = new Vector3(0.6f, -1f, 0);
         //Vector3 v = new Vector3(0.6f, -2f, 0);
         int inv = 1;
@@ -737,35 +789,24 @@ public partial class GameDemo : MonoBehaviour
 
         ball.SetVelocity(v);
         physicsStateList[0].velocity = v;
-        for (int i = 5; i < 7; i++)
-        {
-            ModifyFrameVelocity(i, 0.2f, 0);
-            //ModifyFrameVelocity(i, 0.295f, 0);
-        }
-
-        for (int i = 7; i < 12; i++)
-        {
-            ModifyFrameVelocity(i, 0.31f, 0);
-            //ModifyFrameVelocity(i, 0.295f, 0);
-        }
 
         yield return new WaitForSeconds(0.3f);
 
         //ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 1f, ball.angularVelocity.z));
         //physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
 
-        //for (int i = 5; i < 21; i++)
-        //{
-        //    ModifyFrameVelocity(i, -0.2f, 0);
-        //}
+        for (int i = 5; i < 6; i++)
+        {
+            ModifyFrameVelocity(i, 0.2f, 0);
+        }
+
+        ModifyFrameVelocity(6, 0.32f, 0);
 
         for (int i = 0; i < 33; i++)
         {
             simulateNextFrame(true, false);
             simlateFrame++;
 
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 1f, ball.angularVelocity.z));
-            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
         }
 
         BarsCurve barsCurve = new BarsCurve();
@@ -785,8 +826,8 @@ public partial class GameDemo : MonoBehaviour
     {
         Physics.gravity = new Vector3(0, -5f, 0);
 
-        int prefabIndex = 8;
-        bool inverse = false;
+        int prefabIndex = 10;
+        bool inverse = true;
         Vector3 v = new Vector3(0.6f, -1f, 0);
         //Vector3 v = new Vector3(0.6f, -2f, 0);
         int inv = 1;
@@ -800,10 +841,10 @@ public partial class GameDemo : MonoBehaviour
 
         ball.SetVelocity(v);
         physicsStateList[0].velocity = v;
-        for (int i = 8; i < 17; i++)
+        for (int i = 8; i < 12; i++)
         {
             //ModifyFrameVelocity(i, 0.314f, 0);
-            ModifyFrameVelocity(i, 0.289f, 0);
+            ModifyFrameVelocity(i, 0.284f, 0);
         }
 
         yield return new WaitForSeconds(0.3f);
@@ -821,8 +862,6 @@ public partial class GameDemo : MonoBehaviour
             simulateNextFrame(true, false);
             simlateFrame++;
 
-            ball.SetAngularVelocity(new Vector3(ball.angularVelocity.x, ball.angularVelocity.y - 1f, ball.angularVelocity.z));
-            physicsStateList[physicsStateList.Count - 1].angularVelocity = ball.angularVelocity;
         }
 
         BarsCurve barsCurve = new BarsCurve();

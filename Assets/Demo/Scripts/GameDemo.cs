@@ -582,6 +582,7 @@ public partial class GameDemo : MonoBehaviour
     {
         None,
         HorizontalToHorizontal,
+        HorizontalToHorizontal_Simulate,
         VerticalToVertical,
         VerticalToVertical_Simulate,
         HorizontalToVertical,
@@ -939,6 +940,7 @@ public partial class GameDemo : MonoBehaviour
         {
             //Pad_Simulate2();
             //Bars_Simulate();
+            Pad_Simulate3();
             //StartCoroutine(Bars_Curve(0,40,25));
             //VirtualBarsScale_Simulate();
             //StartCoroutine(Bars_Simulate2());
@@ -957,7 +959,7 @@ public partial class GameDemo : MonoBehaviour
 
             //StartCoroutine(Bars_Simulate16());
             //StartCoroutine(Bars_Simulate17()); 
-            StartCoroutine(Bars_Simulate18());
+            //StartCoroutine(Bars_Simulate18());
 
         });
 
@@ -1581,8 +1583,17 @@ public partial class GameDemo : MonoBehaviour
         }
         else if(offsetFrame < 16)
         {
-            isVertical = true;
-            curveType = CurveType.VerticalToVertical;
+            //if (LastVerticalCurve())
+            //{
+            //    isVertical = false;
+            //    curveType = CurveType.HorizontalToHorizontal_Simulate;
+            //}
+            //else
+            {
+                isVertical = true;
+                curveType = CurveType.VerticalToVertical;
+            }
+            
         }
         else if(offsetFrame >= 16 && offsetFrame < 25)
         {
@@ -1592,6 +1603,11 @@ public partial class GameDemo : MonoBehaviour
         }
         else if (offsetFrame >= 25 && offsetFrame <= 61)
         {
+            if(LastVerticalCurve())
+            {
+                isVertical = false;
+            }
+
             if (isVertical)
             {
                 curveType = CurveType.VerticalPipline;
@@ -1603,20 +1619,20 @@ public partial class GameDemo : MonoBehaviour
         }
         else if (offsetFrame > 61)
         {
-            if(isFirstAnim)
+            //if(isFirstAnim)
+            //{
+            //    if (isVertical)
+            //    {
+            //        curveType = CurveType.VerticalPipline;
+            //    }
+            //    else
+            //    {
+            //        curveType = CurveType.HorizontalPipline;
+            //    }
+            //}
+            //else
             {
-                if (isVertical)
-                {
-                    curveType = CurveType.VerticalPipline;
-                }
-                else
-                {
-                    curveType = CurveType.HorizontalPipline;
-                }
-            }
-            else
-            {
-                if (offsetFrame < 200)
+                if (offsetFrame < 120)
                 {
                     if (isVertical)
                     {
@@ -1627,7 +1643,7 @@ public partial class GameDemo : MonoBehaviour
                         curveType = CurveType.HorizontalPipline;
                     }
                 }
-                else if (offsetFrame >= 200)
+                else
                 {
                     if (isVertical)
                     {
@@ -1665,6 +1681,8 @@ public partial class GameDemo : MonoBehaviour
 
         midiFacter = midiHelper.suitMidiFacter;
 
+        int ccc = 0;
+
         foreach (var mptkEvent in midiHelper.AllMidiEventsSet)
         {
             int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f / midiFacter);
@@ -1686,10 +1704,17 @@ public partial class GameDemo : MonoBehaviour
                     offsetFrame = 0;
                 }
 
+                if(ccc == 2)
+                {
+                    //offsetFrame = 100;
+                }
+
                 frameOffsetList.Add(offsetFrame);
 
                 _lastFrame = _frame;
             }
+
+            ccc++;
         }
         
         if(currentOffsetIndex == 1)
@@ -1754,7 +1779,7 @@ public partial class GameDemo : MonoBehaviour
                 for (int i = 0; i < playMusicFrame; i++)
                 {
                     cameraProjection.SetPosition(i, physicsStateList[i].position);
-                    cameraPathList.Add(physicsStateList[i].position);
+                    cameraPathList.Add(physicsStateList[i].position);                 
                     cameraPosMap.Add(i, i);
                 }
             }
@@ -1861,6 +1886,28 @@ public partial class GameDemo : MonoBehaviour
         currentCameraMovement.endFrame = frameList[currentOffsetIndex-1];
         cameraMovementList.Add(currentCameraMovement);
 
+        //计算尾奏
+        if(!isFirstAnim)
+        {
+            int ef = midiHelper.GetEndFrame();
+
+            if(ef < 120)
+            {
+                HorizontalPipline2(currentOffsetIndex, ef);
+            }
+            else
+            {
+                HorizontalCombine(currentOffsetIndex, ef);
+            }
+            
+            currentCameraMovement = new CameraMovement();
+            currentCameraMovement.isBar = true;
+            currentCameraMovement.beiginFrame = frameList[currentOffsetIndex - 1];
+            currentCameraMovement.endFrame = frameList[currentOffsetIndex - 1] + ef;
+            cameraMovementList.Add(currentCameraMovement);
+        }
+
+        
         int movementIndex = cameraProjection.positionCount;
 
         cameraFollowList.Clear();
@@ -2006,6 +2053,16 @@ public partial class GameDemo : MonoBehaviour
         //处理最后一个
         CalculateCameraPath(-1, -1);
 
+        if(!isFirstAnim)
+        {
+            int ef = midiHelper.GetEndFrame();
+            int _count = cameraFollowList.Count;
+            for (int i = _count; i < _count + ef; i++)
+             {
+                cameraFollowList.Add(physicsStateList[i].position);
+            }
+        }
+
         cameraPathProjection.positionCount = cameraFollowList.Count;
         cameraPathProjection.SetPositions(cameraFollowList.ToArray());
         cameraPathProjection.material.color = Color.cyan;
@@ -2045,7 +2102,7 @@ public partial class GameDemo : MonoBehaviour
             _lastFrame = _lastFrame + offsetFrame;
         }
     }
-
+ 
     private void CalculateCameraPath(int bf,int ef)
     {
         float left = float.MaxValue;
@@ -2060,15 +2117,18 @@ public partial class GameDemo : MonoBehaviour
 
             if (beiginDetetion)
             {
-                PadData pd = padDataList[f];
-                if (pd.pos.x < left)
+                if(f < padDataList.Count)
                 {
-                    left = pd.pos.x;
-                }
+                    PadData pd = padDataList[f];
+                    if (pd.pos.x < left)
+                    {
+                        left = pd.pos.x;
+                    }
 
-                if (pd.pos.x > right)
-                {
-                    right = pd.pos.x;
+                    if (pd.pos.x > right)
+                    {
+                        right = pd.pos.x;
+                    }
                 }
             }
 
@@ -2972,6 +3032,8 @@ public partial class GameDemo : MonoBehaviour
                 currentTime = 0;
                 isPlay = true ;
                 spacePlay = false;
+
+                //bGMPlayer.PlayBgm1();
             }
         }
 
@@ -3003,7 +3065,7 @@ public partial class GameDemo : MonoBehaviour
     {
         if (isPlay)
         {
-            if (currentFrame + 200 == playMusicFrame)
+            if (currentFrame + 250 == playMusicFrame)
             {
                 if (!isFirstAnim)
                     v_3rd_camera.gameObject.SetActive(false);

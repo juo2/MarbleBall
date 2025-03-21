@@ -77,6 +77,23 @@ public class BGMPlayer : MonoBehaviour
         //}
     }
 
+    public void PlayBgm1()
+    {
+        audioSource.Play();
+
+
+        Debug.Log("PlayBgm1 PlayBgm1 PlayBgm1 PlayBgm1");
+        //string nameWithoutExtension = Path.GetFileNameWithoutExtension(midiName);
+
+        //if(audioClipDic.ContainsKey(nameWithoutExtension))
+        //{
+        //    AudioClip clip = audioClipDic[nameWithoutExtension];
+        //    audioSource.clip = clip;
+        //    audioSource.time = time;
+        //    audioSource.Play();
+        //}
+    }
+
     public void StopBgm()
     {
         audioSource.Stop();

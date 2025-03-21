@@ -221,7 +221,7 @@ public class MidiHelper : MonoBehaviour
 
     public int GetEndFrame()
     {
-        return Mathf.RoundToInt(  (midiFilePlayer.MPTK_DurationMS - endTime)  / 1000.0f / 0.02f);
+        return Mathf.RoundToInt( (257.332f - (endTime  / 1000.0f)) / 0.02f);
     }
 
     public void Pause()

@@ -49,7 +49,8 @@ public partial class GameDemo : MonoBehaviour
         public bool inverse;
         public List<PhysicsState> physicsStates;
         public int minFrame;
-        public int maxFrame; 
+        public int maxFrame;
+        public bool isVertical;
     }
 
     bool isPass_Simulate = false;
