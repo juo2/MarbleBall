@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class MidiHelper : MonoBehaviour
@@ -50,7 +51,7 @@ public class MidiHelper : MonoBehaviour
         //Load("2_ΩÒÃÏ.bytes");
     }
 
-    public void Load(string _name)
+    public IEnumerator Load(string _name)
     {
         if(currentMidi != _name)
         {
@@ -59,7 +60,22 @@ public class MidiHelper : MonoBehaviour
             AllMidiEventsSet.Clear();
 
             string _path = Path.Combine(Application.streamingAssetsPath + "/midi", _name + ".mid");
-            byte[] _bytes = File.ReadAllBytes(_path);
+            byte[] _bytes = null;
+#if UNITY_WEBGL
+            UnityWebRequest request = UnityWebRequest.Get(_path);
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                _bytes = request.downloadHandler.data;
+            }
+            else
+            {
+                Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
+            }
+#else
+            yield return null;
+            _bytes = File.ReadAllBytes(_path);
+#endif
 
             midiFilePlayer.midiLoaded = new MidiLoad();
             midiFilePlayer.midiLoaded.MPTK_KeepNoteOff = midiFilePlayer.MPTK_KeepNoteOff;

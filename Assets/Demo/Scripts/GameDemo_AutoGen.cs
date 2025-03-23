@@ -106,7 +106,7 @@ public partial class GameDemo : MonoBehaviour
             }
         }
 
-        midiHelper.Load(midi);
+        yield return midiHelper.Load(midi);
         logger($"midiHelper.suitMidiFacter = {midiHelper.suitMidiFacter}");
 
         SkinManager.Instance.RefreshSkinByName(midiHelper.currentMidi);

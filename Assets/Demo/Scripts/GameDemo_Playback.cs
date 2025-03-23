@@ -96,7 +96,7 @@ public partial class GameDemo : MonoBehaviour
         public List<KeyValuePair> SimulateDataDicList;
     }
 
-    void LoadData()
+    IEnumerator LoadData()
     {
         ResetBeigin();
 
@@ -172,7 +172,7 @@ public partial class GameDemo : MonoBehaviour
 
         LoadSimulateData(savePhysicsData.SimulateDataDicList);
 
-        midiHelper.Load(currentMidi);
+        yield return midiHelper.Load(currentMidi);
     }
 
     void SaveData(string midiName)

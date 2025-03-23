@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using static Cinemachine.CinemachineSmoothPath;
 
@@ -662,11 +663,17 @@ public partial class GameDemo : MonoBehaviour
 
     bool isFirstAnim = true;
 
+    int barsCurveMinIndex = 0;
+    int barsCurveMaxIndex = 11;
+
+    int padCurveMinIndex = 1;
+    int padCurveMaxIndex = 2;
+
+
     // Start is called before the first frame update
     void Start()
     {
         //LoadConfig();
-
         cinemachineTrackedDolly = v_camera.GetCinemachineComponent<Cinemachine.CinemachineTrackedDolly>();
 
         defalutBounciness = h_bouncinessPriorityList1[0];
@@ -839,7 +846,7 @@ public partial class GameDemo : MonoBehaviour
 
         loadData.onClick.AddListener(() =>
         {
-            LoadData();
+            StartCoroutine(LoadData());
         });
 
         saveData.onClick.AddListener(() =>
@@ -962,9 +969,7 @@ public partial class GameDemo : MonoBehaviour
             //StartCoroutine(Bars_Simulate18());
 
         });
-
-        LoadBarsConfig();
-        LoadPadConfig();
+        StartCoroutine(LoadConfig());
         
         if(!isFirstAnim)
             initialRotation = new Vector3(0f, 90f, 0);
@@ -1018,74 +1023,117 @@ public partial class GameDemo : MonoBehaviour
         //File.WriteAllText(config_path, json_str);
     }
 
-    void LoadConfig()
-    {
-        config_path = Path.Combine(Application.streamingAssetsPath, "config.json");
-        string json_str = File.ReadAllText(config_path);
-        Config config = JsonUtility.FromJson<Config>(json_str);
+    //void LoadConfig()
+    //{
+    //    config_path = Path.Combine(Application.streamingAssetsPath, "config.json");
+    //    string json_str = File.ReadAllText(config_path);
+    //    Config config = JsonUtility.FromJson<Config>(json_str);
 
-        gravityY = config.gravityY;
-        ContinuousTryCount = config.continuousTryCount;
-        initialVelocity = config.initialVelocity;
-        h_bouncinessPriorityList1 = config.h_bouncinessPriorityList;
-        v_bouncinessPriorityList = config.v_bouncinessPriorityList;
-        h_rotationList1 = config.h_rotationList;
-        v_rotationList1 = config.v_rotationList1;
-        v_rotationList2 = config.v_rotationList2;
-        horizontalCenter1 = config.horizontalCenter1;
-        horizontalCenter2 = config.horizontalCenter2;
-        horizontalBestPos1 = config.horizontalBestPos1;
-        horizontalBestPos2 = config.horizontalBestPos2;
-        horizontalSize = config.horizontalSize;
-        verticalCenter1 = config.verticalCenter1;
-        verticalCenter2 = config.verticalCenter2;
-        verticalBestPos1 = config.verticalBestPos1;
-        verticalBestPos2 = config.verticalBestPos2;
-        verticalSize = config.verticalSize;
+    //    gravityY = config.gravityY;
+    //    ContinuousTryCount = config.continuousTryCount;
+    //    initialVelocity = config.initialVelocity;
+    //    h_bouncinessPriorityList1 = config.h_bouncinessPriorityList;
+    //    v_bouncinessPriorityList = config.v_bouncinessPriorityList;
+    //    h_rotationList1 = config.h_rotationList;
+    //    v_rotationList1 = config.v_rotationList1;
+    //    v_rotationList2 = config.v_rotationList2;
+    //    horizontalCenter1 = config.horizontalCenter1;
+    //    horizontalCenter2 = config.horizontalCenter2;
+    //    horizontalBestPos1 = config.horizontalBestPos1;
+    //    horizontalBestPos2 = config.horizontalBestPos2;
+    //    horizontalSize = config.horizontalSize;
+    //    verticalCenter1 = config.verticalCenter1;
+    //    verticalCenter2 = config.verticalCenter2;
+    //    verticalBestPos1 = config.verticalBestPos1;
+    //    verticalBestPos2 = config.verticalBestPos2;
+    //    verticalSize = config.verticalSize;
+    //}
+
+    IEnumerator LoadConfig()
+    {
+        yield return LoadBarsConfig();
+        yield return LoadPadConfig();
     }
 
-    void LoadBarsConfig()
+
+    IEnumerator LoadBarsConfig()
     {
+        yield return null;
+
         string barsConfigPath = Path.Combine(Application.streamingAssetsPath, "barsConfig.json");
-        string json_str = File.ReadAllText(barsConfigPath);
-        barsConfig = JsonUtility.FromJson<BarsConfig>(json_str);
+        string json_str = string.Empty;
 
-        string barsCurvePath = Path.Combine(Application.streamingAssetsPath, "barCurve");
-        List<string> outFiles = new List<string>();
-        if (Directory.Exists(barsCurvePath))
+#if UNITY_WEBGL
+        UnityWebRequest request = UnityWebRequest.Get(barsConfigPath);
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            // 获取路径下所有文件
-            string[] files = Directory.GetFiles(barsCurvePath, "*.json");
+            json_str = request.downloadHandler.text;
+        }
+        else
+        {
+            Debug.LogError($"加载失败: {request.error}");
+        }
+#else
+        json_str = File.ReadAllText(barsConfigPath);
+#endif
 
-            if (files.Length > 0)
+        barsConfig = JsonUtility.FromJson<BarsConfig>(json_str);
+        string barsCurvePath = Path.Combine(Application.streamingAssetsPath, "barCurve");
+
+        for (int i = barsCurveMinIndex; i < barsCurveMaxIndex + 1; i++)
+        {
+            for (int j = 0; j < 2; j++)
             {
-                foreach (var file in files)
+                string file = Path.Combine(barsCurvePath, $"barsCurve{i}_{j + 1}.json");
+#if UNITY_WEBGL
+                request = UnityWebRequest.Get(file);
+                yield return request.SendWebRequest();
+                if (request.result == UnityWebRequest.Result.Success)
                 {
-                    json_str = File.ReadAllText(file);
-                    BarsCurve barsCurve = JsonUtility.FromJson<BarsCurve>(json_str);
-                    barsCurveList.Add(barsCurve);
+                    json_str = request.downloadHandler.text;
                 }
+                else
+                {
+                    Debug.LogError($"加载失败: {request.error}");
+                }
+#else
+                json_str = File.ReadAllText(file);
+#endif
+                BarsCurve barsCurve = JsonUtility.FromJson<BarsCurve>(json_str);
+                barsCurveList.Add(barsCurve);
             }
         }
     }
 
-    void LoadPadConfig()
+    IEnumerator LoadPadConfig()
     {
-        string padCurvePath = Path.Combine(Application.streamingAssetsPath, "padCurve");
-        List<string> outFiles = new List<string>();
-        if (Directory.Exists(padCurvePath))
-        {
-            // 获取路径下所有文件
-            string[] files = Directory.GetFiles(padCurvePath, "*.json");
+        yield return null;
 
-            if (files.Length > 0)
+        string barsCurvePath = Path.Combine(Application.streamingAssetsPath, "padCurve");
+        string json_str = string.Empty;
+
+        for (int i = padCurveMinIndex; i < padCurveMaxIndex + 1; i++)
+        {
+            for (int j = 0; j < 2; j++)
             {
-                foreach (var file in files)
+                string file = Path.Combine(barsCurvePath, $"padCurve{i}_{j + 1}.json");
+#if UNITY_WEBGL
+                UnityWebRequest request = UnityWebRequest.Get(file);
+                yield return request.SendWebRequest();
+                if (request.result == UnityWebRequest.Result.Success)
                 {
-                    string json_str = File.ReadAllText(file);
-                    PadCurve padCurve = JsonUtility.FromJson<PadCurve>(json_str);
-                    padCurveList.Add(padCurve);
+                    json_str = request.downloadHandler.text;
                 }
+                else
+                {
+                    Debug.LogError($"加载失败: {request.error}");
+                }
+#else
+                json_str = File.ReadAllText(file);
+#endif
+                BarsCurve barsCurve = JsonUtility.FromJson<BarsCurve>(json_str);
+                barsCurveList.Add(barsCurve);
             }
         }
     }
