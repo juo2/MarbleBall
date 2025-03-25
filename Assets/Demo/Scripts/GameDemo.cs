@@ -1132,8 +1132,8 @@ public partial class GameDemo : MonoBehaviour
 #else
                 json_str = File.ReadAllText(file);
 #endif
-                BarsCurve barsCurve = JsonUtility.FromJson<BarsCurve>(json_str);
-                barsCurveList.Add(barsCurve);
+                PadCurve padCurve = JsonUtility.FromJson<PadCurve>(json_str);
+                padCurveList.Add(padCurve);
             }
         }
     }
@@ -2753,7 +2753,8 @@ public partial class GameDemo : MonoBehaviour
         pad_instance.transform.SetParent(obstaclesParent.transform);
         pad_instance.transform.position = padData.pos;
         pad_instance.transform.localScale = Vector3.one;
-        pad_instance.transform.eulerAngles = new Vector3(0, 0, padData.rotation);
+        //pad_instance.wrapper.eulerAngles = new Vector3(0, 0, padData.rotation);
+        pad_instance.SetRotation(padData.rotation);
         pad_instance.name = $"PAD_{padData.frame}";
         pad_instance.frame = padData.frame;
         pad_instance.mistakeCollisionTimes = 0;

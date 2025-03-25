@@ -40,8 +40,6 @@ public class SkinManager : MonoBehaviour
         public int padSkin;
         public int barSkin;
         public int wallSkin;
-        public int volumeSkin;
-        public int skyBoxSkin;
         public int padMaterialSkin;
     }
 
@@ -89,6 +87,7 @@ public class SkinManager : MonoBehaviour
     public List<MaterialAsset> offMaterialAssetList = new List<MaterialAsset>();
     public List<Volume> volumeList = new List<Volume>();
     public List<Material> skyBoxMatList = new List<Material>();
+    public List<Material> padPiplineMatList = new List<Material>();
     Pad selectPad;
     SkinConfigData skinConfigData = new SkinConfigData();
     //int padMaterialSkin = 0;
@@ -113,13 +112,11 @@ public class SkinManager : MonoBehaviour
         {
             skinConfig.skin = 0;
             //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-
-            skinConfig.ballSkin = 0;
+            skinConfig.lightSkin = 1;
+            skinConfig.padMaterialSkin = 1;
+            
+            skinConfig.barSkin = 1;
+            skinConfig.ballSkin = 4;
             skinConfig.padSkin = 0;
             skinConfig.wallSkin = 0;
 
@@ -131,8 +128,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 1;
@@ -146,8 +143,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 1;
             skinConfig.padSkin = 2;
@@ -161,8 +158,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 2;
             skinConfig.padSkin = 3;
@@ -176,8 +173,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
@@ -192,8 +189,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 1;
@@ -207,8 +204,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 1;
             skinConfig.padSkin = 3;
@@ -223,8 +220,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 2;
             skinConfig.padSkin = 2;
@@ -239,8 +236,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 3;
@@ -254,8 +251,8 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
+            
+            
 
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 2;
@@ -270,10 +267,7 @@ public class SkinManager : MonoBehaviour
             //黑夜
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
-            skinConfig.skyBoxSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
             skinConfig.wallSkin = 0;
@@ -286,9 +280,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 1;
             skinConfig.wallSkin = 0;
@@ -301,9 +292,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
             skinConfig.wallSkin = 1;
@@ -316,9 +304,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 1;
             skinConfig.wallSkin = 0;
@@ -331,9 +316,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 3;
             skinConfig.wallSkin = 0;
@@ -347,9 +329,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
             skinConfig.wallSkin = 1;
@@ -362,9 +341,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
             skinConfig.wallSkin = 0;
@@ -378,9 +354,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 3;
             skinConfig.wallSkin = 1;
@@ -394,9 +367,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 0;
             skinConfig.wallSkin = 0;
@@ -409,9 +379,6 @@ public class SkinManager : MonoBehaviour
             skinConfig.lightSkin = 0;
             skinConfig.padMaterialSkin = 0;
             skinConfig.barSkin = 0;
-            skinConfig.volumeSkin = 0;
-            skinConfig.skyBoxSkin = 0;
-
             skinConfig.ballSkin = 0;
             skinConfig.padSkin = 1;
             skinConfig.wallSkin = 1;
@@ -426,8 +393,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 1;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 2;
         //    skinConfig.barSkin = 1;
@@ -443,8 +410,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 4;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 1;
         //    skinConfig.barSkin = 1;
@@ -459,8 +426,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 7;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 2;
         //    skinConfig.barSkin = 2;
@@ -475,8 +442,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 8;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 1;
         //    skinConfig.barSkin = 1;
@@ -491,8 +458,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 10;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 2;
         //    skinConfig.barSkin = 1;
@@ -507,8 +474,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 13;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 1;
         //    skinConfig.barSkin = 2;
@@ -523,8 +490,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 15;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 2;
         //    skinConfig.barSkin = 1;
@@ -539,8 +506,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 16;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 1;
         //    skinConfig.barSkin = 1;
@@ -555,8 +522,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 17;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 2;
         //    skinConfig.barSkin = 1;
@@ -571,8 +538,8 @@ public class SkinManager : MonoBehaviour
         //    skinConfig.skin = 18;
         //    //白天
         //    skinConfig.lightSkin = 1;
-        //    skinConfig.volumeSkin = 1;
-        //    skinConfig.skyBoxSkin = 1;
+        //    
+        //    
 
         //    skinConfig.padMaterialSkin = 1;
         //    skinConfig.barSkin = 1;
@@ -616,13 +583,12 @@ public class SkinManager : MonoBehaviour
             }
         }
 
-        RefreshBall(currentSkinConfig.ballSkin);
         RefreshLight(currentSkinConfig.lightSkin);
         RefreshPad(currentSkinConfig.padSkin);
         RefreshBars(currentSkinConfig.barSkin);
         RefreshWall(currentSkinConfig.wallSkin);
-        RefreshVolume(currentSkinConfig.volumeSkin);
-        RefreshSkyBox(currentSkinConfig.skyBoxSkin);
+        RefreshBall(currentSkinConfig.ballSkin);
+
     }
 
     public void RefreshVolume(int _skin)
@@ -647,12 +613,24 @@ public class SkinManager : MonoBehaviour
             if(i == _skin)
             {
                 ballRenderList[i].gameObject.SetActive(true);
+                Light light = ballRenderList[i].transform.GetComponentInChildren<Light>();
+
+                if(isDay())
+                {
+                    light.shadows = LightShadows.None;
+                }
+                else
+                {
+                    light.shadows = LightShadows.Soft;
+                }
             }
             else
             {
                 ballRenderList[i].gameObject.SetActive(false);
             }
         }
+
+
     }
 
     public void RefreshLight(int _skin)
@@ -667,6 +645,15 @@ public class SkinManager : MonoBehaviour
             {
                 sunList[i].gameObject.SetActive(false);
             }
+        }
+
+        RefreshSkyBox(_skin);
+        RefreshVolume(_skin);
+
+        Material material = padPiplineMatList[_skin];
+        foreach (var pad in padList)
+        {
+            pad.padSkinInit(material);
         }
     }
 
@@ -711,6 +698,12 @@ public class SkinManager : MonoBehaviour
     {
         return selectPad;
     }
+
+    public bool isDay()
+    {
+        return currentSkinConfig.lightSkin == 1; 
+    }
+
 
     public Material GetMaterial(bool on,int lightIndex)
     {

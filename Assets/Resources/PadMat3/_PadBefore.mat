@@ -147,7 +147,7 @@ Material:
     - __dirty: 1
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 0}
-    - _ColorCubemap: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorCubemap: {r: 0, g: 1, b: 0.25, a: 1}
     - _ColorDecal: {r: 1, g: 1, b: 1, a: 1}
     - _ColorFresnel: {r: 1, g: 1, b: 1, a: 0}
     - _ColorFresnel1: {r: 1, g: 1, b: 1, a: 0}

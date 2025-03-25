@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class Pad : MonoBehaviour
 {
+    public Transform wrapper;
     public ParticleSystem effect;
     public List<Transform> childTransforms = new List<Transform>();
     public SpriteRenderer lightRenderer;
+
+    public SpriteRenderer shadowRenderer;
+    public Transform shadowRendererTran;
+
     public MeshRenderer padRenderer = null;
+    public MeshRenderer padRenderer_pipline = null;
     public Transform padRendererAnim;
     private static Material padAfterMat = null;
     private static List<Material> padAfterMats = new List<Material>();
@@ -74,6 +80,11 @@ public class Pad : MonoBehaviour
         padBefore();
     }
 
+    public void padSkinInit(Material material)
+    {
+        padRenderer_pipline.sharedMaterial = material;
+    }
+
     public void padBefore()
     {
         //padRenderer.material = padBeforeMat;
@@ -91,7 +102,15 @@ public class Pad : MonoBehaviour
         lightRenderer.gameObject.SetActive(true);
         if(ColorUtility.TryParseHtmlString(padLightColorList[lightIndex], out Color color))
         {
-            color.a = 40f / 255f;
+            //if(SkinManager.Instance.isDay())
+            //{
+            //    color.a = 156f / 255f;
+            //}
+            //else
+            {
+                color.a = 40f / 255f;
+            }
+            
             lightRenderer.color = color;
         }
     }
@@ -134,8 +153,13 @@ public class Pad : MonoBehaviour
     public void SetRotation(float rotation)
     {
         transform.eulerAngles = new Vector3(0, 0, rotation);
-    }
+        shadowRendererTran.position = padRenderer_pipline.transform.position;
 
+        //shadowRenderer.transform.rotation = Quaternion.Inverse(transform.rotation);
+
+        shadowRenderer.transform.rotation = Quaternion.identity;
+    }
+     
     public void InitLineRenderer()
     {
         lineRendererDemo.ClearLineRenderer();

@@ -321,7 +321,6 @@ MonoBehaviour:
   skinList:
   - {fileID: 4772231262544667679}
   - {fileID: 7328675543571905656}
-  - {fileID: 8960961270480466255}
   isNeedTurning: 0
 --- !u!1 &2942144854452698738
 GameObject:
@@ -4563,8 +4562,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f54b9ad1b87767e47a1a792308c57566, type: 2}
-  - {fileID: 2100000, guid: 0e6d4293ec61aab4d9696e7df165f389, type: 2}
+  - {fileID: 2100000, guid: 382b3c6f54a540349abb2acd15c989a9, type: 2}
+  - {fileID: 2100000, guid: 382b3c6f54a540349abb2acd15c989a9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7915,7 +7914,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0b1d197ad7d81094a9566bb91a24e26c, type: 2}
+  - {fileID: 2100000, guid: 382b3c6f54a540349abb2acd15c989a9, type: 2}
   - {fileID: 2100000, guid: 0e6d4293ec61aab4d9696e7df165f389, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

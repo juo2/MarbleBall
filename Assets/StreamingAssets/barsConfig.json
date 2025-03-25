@@ -82,7 +82,7 @@
       },
       {
         "prefabIndex": 10,
-        "beiginOffset": 0.1,
+        "beiginOffset": 0.12,
         "endOffset": 0.08,
         "remainFrame": 3,
         "targetMinFrame": 999,
