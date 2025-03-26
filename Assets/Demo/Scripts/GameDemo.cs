@@ -661,7 +661,7 @@ public partial class GameDemo : MonoBehaviour
     List<BarsCurve> barsCurveList = new List<BarsCurve>();
     List<PadCurve> padCurveList = new List<PadCurve>();
 
-    bool isFirstAnim = true;
+    bool isFirstAnim = false;
 
     int barsCurveMinIndex = 0;
     int barsCurveMaxIndex = 11;
@@ -807,35 +807,35 @@ public partial class GameDemo : MonoBehaviour
             Physics.autoSimulation = true;
         });
 
-        simulateV2V.onClick.AddListener(() =>
-        {
-            SimulateV2V();
-        });
+        //simulateV2V.onClick.AddListener(() =>
+        //{
+        //    SimulateV2V();
+        //});
 
-        simulateV2H.onClick.AddListener(() =>
-        {
-            SimulateV2H();
-        });
+        //simulateV2H.onClick.AddListener(() =>
+        //{
+        //    SimulateV2H();
+        //});
 
-        simulateV2P.onClick.AddListener(() =>
-        {
-            StartCoroutine(SimulateV2P());
-        });
+        //simulateV2P.onClick.AddListener(() =>
+        //{
+        //    StartCoroutine(SimulateV2P());
+        //});
 
-        simulateH2H.onClick.AddListener(() =>
-        {
-            SimulateH2H();
-        });
+        //simulateH2H.onClick.AddListener(() =>
+        //{
+        //    SimulateH2H();
+        //});
 
-        simulateH2V.onClick.AddListener(() =>
-        {
-            SimulateH2V();
-        });
+        //simulateH2V.onClick.AddListener(() =>
+        //{
+        //    SimulateH2V();
+        //});
 
-        simulateH2P.onClick.AddListener(() =>
-        {
-            StartCoroutine(SimulateH2P());
-        });
+        //simulateH2P.onClick.AddListener(() =>
+        //{
+        //    StartCoroutine(SimulateH2P());
+        //});
 
         startGenerating.onClick.AddListener(() =>
         {
@@ -1425,7 +1425,7 @@ public partial class GameDemo : MonoBehaviour
                             currentContinuousCountTxt.text = $"count:{padData.continuousCount}";
                         }
                         
-                        currentObjCountTxt.text = $"pad:{(i+1)}";
+                        currentObjCountTxt.text = $"count:{(i+1)}";
 
                         m_currentObjCount = i+1;
                     }

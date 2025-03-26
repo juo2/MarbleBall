@@ -29,7 +29,8 @@ public class MidiHelper : MonoBehaviour
     public float beginTime = 0;
     public float endTime = 0;
     public int beiginFrame = 0;
-
+    AudioClip currentClip;
+    private bool isLoadBgm = true;
     // Start is called before the first frame update
     void Awake()
     {
@@ -208,6 +209,22 @@ public class MidiHelper : MonoBehaviour
         }
 
         currentMidi = _name;
+
+        if (isLoadBgm)
+        {
+            string bgmPath = Path.Combine(Application.streamingAssetsPath, Path.Combine("bgm", currentMidi + ".mp3"));
+            UnityWebRequest bgmRequest = UnityWebRequestMultimedia.GetAudioClip(bgmPath, AudioType.MPEG);
+            yield return bgmRequest.SendWebRequest();
+            if (bgmRequest.result == UnityWebRequest.Result.Success)
+            {
+                currentClip = DownloadHandlerAudioClip.GetContent(bgmRequest);
+            }
+            else
+            {
+                Debug.LogError($"º”‘ÿ ß∞‹: {bgmRequest.error}");
+            }
+
+        }
     }
 
 
@@ -237,7 +254,14 @@ public class MidiHelper : MonoBehaviour
 
     public int GetEndFrame()
     {
-        return Mathf.RoundToInt( (257.332f - (endTime  / 1000.0f)) / 0.02f);
+        if(currentClip != null)
+        {
+            return Mathf.RoundToInt((currentClip.length - (endTime / 1000.0f)) / 0.02f);
+        }
+        else
+        {
+            return Mathf.RoundToInt((255f - (endTime / 1000.0f)) / 0.02f);
+        }
     }
 
     public void Pause()
