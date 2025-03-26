@@ -153,11 +153,17 @@ public class Pad : MonoBehaviour
     public void SetRotation(float rotation)
     {
         transform.eulerAngles = new Vector3(0, 0, rotation);
-        shadowRendererTran.position = padRenderer_pipline.transform.position;
 
-        //shadowRenderer.transform.rotation = Quaternion.Inverse(transform.rotation);
-
-        shadowRenderer.transform.rotation = Quaternion.identity;
+        if(SkinManager.Instance.isDay())
+        {
+            shadowRendererTran.gameObject.SetActive(true);
+            shadowRendererTran.position = padRenderer_pipline.transform.position;
+            shadowRenderer.transform.rotation = Quaternion.identity;
+        }
+        else
+        {
+            shadowRendererTran.gameObject.SetActive(false);
+        }
     }
      
     public void InitLineRenderer()

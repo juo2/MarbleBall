@@ -972,7 +972,8 @@ public partial class GameDemo : MonoBehaviour
         StartCoroutine(LoadConfig());
         
         if(!isFirstAnim)
-            initialRotation = new Vector3(0f, 90f, 0);
+            //initialRotation = new Vector3(0f, 90f, 0);
+            initialRotation = new Vector3(0f, 0f, 0);
 
 
         //BarsConfig barsConfig = new BarsConfig();
@@ -1195,8 +1196,8 @@ public partial class GameDemo : MonoBehaviour
             //follow_camera.gameObject.SetActive(true);
             v_camera_editor.gameObject.SetActive(false);
 
-            if(!isFirstAnim)
-                v_3rd_camera.gameObject.SetActive(true);
+            //if(!isFirstAnim)
+            //    v_3rd_camera.gameObject.SetActive(true);
         }
     }
 
@@ -1820,7 +1821,11 @@ public partial class GameDemo : MonoBehaviour
                 }
                 else if (playMusicFrame > 500)
                 {
-                    HorizontalCombine2(currentOffsetIndex, playMusicFrame);
+                    //HorizontalCombine2(currentOffsetIndex, playMusicFrame);
+
+                    HorizontalCombine(currentOffsetIndex, 500, true);
+                    HorizontalCombine(currentOffsetIndex, 400);
+                    HorizontalCombine(currentOffsetIndex, playMusicFrame - 500 - 400);
                 }
 
                 cameraProjection.positionCount = playMusicFrame;
@@ -2974,12 +2979,12 @@ public partial class GameDemo : MonoBehaviour
 
         if (frameDir.x > 0)
         {
-            bars_instance.transform.eulerAngles = Vector3.zero;
+            bars_instance.SetRotation(Vector3.zero);
             bars_instance.inverse = false;
         }
         else
         {
-            bars_instance.transform.eulerAngles = new Vector3(0, 180f, 0);
+            bars_instance.SetRotation(new Vector3(0, 180f, 0));
             bars_instance.inverse = true;
         }
 
@@ -2988,7 +2993,7 @@ public partial class GameDemo : MonoBehaviour
         if (bars_instance.followRotation)
         {
             float angle = Vector3.Angle(frameDir, Vector3.down);
-            bars_instance.transform.eulerAngles = new Vector3(bars_instance.transform.eulerAngles.x, bars_instance.transform.eulerAngles.y, angle);
+            bars_instance.SetRotation(new Vector3(bars_instance.transform.eulerAngles.x, bars_instance.transform.eulerAngles.y, angle));
         }
 
         bars_instance.gameObject.SetActive(true);

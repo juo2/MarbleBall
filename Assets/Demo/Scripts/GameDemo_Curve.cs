@@ -774,7 +774,7 @@ public partial class GameDemo : MonoBehaviour
         HorizontalCombine(offsetIndex, offsetFrame);
     }
 
-    void HorizontalCombine(int offsetIndex,int offsetFrame)
+    void HorizontalCombine(int offsetIndex,int offsetFrame,bool isFirst = false)
     {
         //int simlateFrame = 0;
         //Vector3 prePos = ball.transform.position;
@@ -824,18 +824,26 @@ public partial class GameDemo : MonoBehaviour
 
         Vector3 prePos = ball.transform.position;
 
-        while (true)
+        if(isFirst)
         {
-            simulateNextFrame();
-            simlateFrame++;
-
-            //找到在beginOffset下方的点
-            if (IsCanBars(prePos, ball.transform.position, barCombine.beiginOffset))
+            g_isPass = true;
+        }
+        else
+        {
+            while (true)
             {
-                g_isPass = true;
-                break;
+                simulateNextFrame();
+                simlateFrame++;
+
+                //找到在beginOffset下方的点
+                if (IsCanBars(prePos, ball.transform.position, barCombine.beiginOffset))
+                {
+                    g_isPass = true;
+                    break;
+                }
             }
         }
+       
 
         BarsCurve barsCurve = FindBarsCurve(0, inverse);
         int remainFrame = offsetFrame - barsCurve.frame;

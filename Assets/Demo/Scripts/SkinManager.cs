@@ -6,35 +6,10 @@ using UnityEngine.Rendering;
 
 public class SkinManager : MonoBehaviour
 {
-    public Dictionary<string, int> skinMap = new Dictionary<string, int>()
-    {
-        { "爱意藏风里",0},
-        { "春江花月夜",1},
-        { "想问情深有几许(恰恰版)",2},
-        { "八小时时差",3},
-        { "你能不能不要离开我(莫叫语版)",4},
-        { "生分",5},
-        { "时间你慢些走",6},
-        { "NewBoy",7},
-        { "墨尔本的秋天",8},
-        { "海与天",9},
-        { "回音(男声版)",10},
-        { "谢谢你的爱",11},
-        { "眼中有泪心中有你",12},
-        { "一路生花",13},
-        { "无归期",14},
-        { "热恋冰淇淋",15},
-        { "请先说你好",16},
-        { "盼君折枝",17},
-        { "后来遇见他-原曲剪辑片段",18},
-        { "我期待的不是雪-原曲剪辑片段",19},
-    };
-
     [System.Serializable]
     public class SkinConfig
     {
-        public int skin;
-
+        public string midi;
         public int ballSkin;
         public int lightSkin;
         public int padSkin;
@@ -43,7 +18,6 @@ public class SkinManager : MonoBehaviour
         public int padMaterialSkin;
     }
 
-    
     [System.Serializable]
     public class SkinConfigData
     {
@@ -71,8 +45,6 @@ public class SkinManager : MonoBehaviour
         }
     }
 
-    public int skin = 0;
-
     public List<MeshRenderer> ballRenderList = new List<MeshRenderer>();
     public List<Pad> padList = new List<Pad>();
     public List<Light> sunList = new List<Light>();
@@ -89,11 +61,12 @@ public class SkinManager : MonoBehaviour
     public List<Material> skyBoxMatList = new List<Material>();
     public List<Material> padPiplineMatList = new List<Material>();
     Pad selectPad;
-    SkinConfigData skinConfigData = new SkinConfigData();
+    SkinConfigData skinConfigData;
     //int padMaterialSkin = 0;
     //public int currentLigthtSkin = 0;
 
     public SkinConfig currentSkinConfig;
+    SkinConfig defalutSkinConfig;
 
     // Start is called before the first frame update
     void Start()
@@ -106,481 +79,61 @@ public class SkinManager : MonoBehaviour
         }
 
 
-        SkinConfig skinConfig = new SkinConfig();
-        skinConfigData.skinConfigs = new List<SkinConfig>();
-
-        {
-            skinConfig.skin = 0;
-            //黑夜
-            skinConfig.lightSkin = 1;
-            skinConfig.padMaterialSkin = 1;
-            
-            skinConfig.barSkin = 1;
-            skinConfig.ballSkin = 4;
-            skinConfig.padSkin = 0;
-            skinConfig.wallSkin = 0;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 2;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 1;
-            skinConfig.wallSkin = 1;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 3;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 1;
-            skinConfig.padSkin = 2;
-            skinConfig.wallSkin = 0;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 5;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 2;
-            skinConfig.padSkin = 3;
-            skinConfig.wallSkin = 1;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 6;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 0;
-            skinConfig.wallSkin = 0;
-
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 9;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 1;
-            skinConfig.wallSkin = 1;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 11;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 1;
-            skinConfig.padSkin = 3;
-            skinConfig.wallSkin = 0;
-
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 12;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 2;
-            skinConfig.padSkin = 2;
-            skinConfig.wallSkin = 1;
-
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 14;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 3;
-            skinConfig.wallSkin = 0;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 19;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            
-            
-
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 2;
-            skinConfig.wallSkin = 1;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-
-        }
-
-        {
-            skinConfig.skin = 1;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 0;
-            skinConfig.wallSkin = 0;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 4;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 1;
-            skinConfig.wallSkin = 0;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 7;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 0;
-            skinConfig.wallSkin = 1;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 8;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 1;
-            skinConfig.wallSkin = 0;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 10;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 3;
-            skinConfig.wallSkin = 0;
-
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 13;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 0;
-            skinConfig.wallSkin = 1;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 15;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 0;
-            skinConfig.wallSkin = 0;
-
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 16;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 3;
-            skinConfig.wallSkin = 1;
-
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 17;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 0;
-            skinConfig.wallSkin = 0;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-            skinConfig = new SkinConfig();
-
-            skinConfig.skin = 18;
-            //黑夜
-            skinConfig.lightSkin = 0;
-            skinConfig.padMaterialSkin = 0;
-            skinConfig.barSkin = 0;
-            skinConfig.ballSkin = 0;
-            skinConfig.padSkin = 1;
-            skinConfig.wallSkin = 1;
-
-            skinConfigData.skinConfigs.Add(skinConfig);
-
-        }
-
-
-        //{
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 1;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 2;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 2;
-        //    skinConfig.ballSkin = 4;
-        //    skinConfig.padSkin = 0;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 4;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 1;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 3;
-        //    skinConfig.ballSkin = 5;
-        //    skinConfig.padSkin = 1;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 7;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 2;
-        //    skinConfig.barSkin = 2;
-
-        //    skinConfig.wallSkin = 3;
-        //    skinConfig.ballSkin = 6;
-        //    skinConfig.padSkin = 2;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 8;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 1;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 2;
-        //    skinConfig.ballSkin = 5;
-        //    skinConfig.padSkin = 0;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 10;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 2;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 3;
-        //    skinConfig.ballSkin = 6;
-        //    skinConfig.padSkin = 1;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 13;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 1;
-        //    skinConfig.barSkin = 2;
-
-        //    skinConfig.wallSkin = 2;
-        //    skinConfig.ballSkin = 4;
-        //    skinConfig.padSkin = 2;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 15;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 2;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 3;
-        //    skinConfig.ballSkin = 5;
-        //    skinConfig.padSkin = 3;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 16;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 1;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 2;
-        //    skinConfig.ballSkin = 6;
-        //    skinConfig.padSkin = 0;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 17;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 2;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 3;
-        //    skinConfig.ballSkin = 6;
-        //    skinConfig.padSkin = 1;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-
-        //    skinConfig = new SkinConfig();
-        //    skinConfig.skin = 18;
-        //    //白天
-        //    skinConfig.lightSkin = 1;
-        //    
-        //    
-
-        //    skinConfig.padMaterialSkin = 1;
-        //    skinConfig.barSkin = 1;
-
-        //    skinConfig.wallSkin = 3;
-        //    skinConfig.ballSkin = 4;
-        //    skinConfig.padSkin = 3;
-
-        //    skinConfigData.skinConfigs.Add(skinConfig);
-        //}
-
+        defalutSkinConfig = new SkinConfig();
+        defalutSkinConfig.midi = "";
+        defalutSkinConfig.lightSkin = 0;
+        defalutSkinConfig.padMaterialSkin = 0;
+        defalutSkinConfig.padSkin = 0;
+        defalutSkinConfig.barSkin = 0;
+        defalutSkinConfig.ballSkin = 0;
+        defalutSkinConfig.wallSkin = 0;
+
+        string path = Path.Combine(Application.streamingAssetsPath, "skinConfig.json");
+        string json_str = File.ReadAllText(path);
+        skinConfigData = JsonUtility.FromJson<SkinConfigData>(json_str);
+
+        //SkinConfig skinConfig = new SkinConfig();
+        //skinConfigData.skinConfigs = new List<SkinConfig>();
+
+        ////黑夜
+        //skinConfig.midi = "A-Lin - 天若有情";
+        //skinConfig.lightSkin = 1;
+        //skinConfig.padMaterialSkin = 0;
+        //skinConfig.padSkin = 0;
+        //skinConfig.barSkin = 0;
+        //skinConfig.ballSkin = 0;
+        //skinConfig.wallSkin = 0;
+
+        //skinConfigData.skinConfigs.Add(skinConfig);
+
+        //string path = Path.Combine(Application.streamingAssetsPath, "skinConfig.json");
+        //string json_str = JsonUtility.ToJson(skinConfigData);
+        //File.WriteAllText(path, json_str);
     }
     
     public void RefreshSkinByName(string midiName)
     {
         string nameWithoutExtension = Path.GetFileNameWithoutExtension(midiName);
-
-        if(skinMap.ContainsKey(nameWithoutExtension))
-        {
-            skin = skinMap[nameWithoutExtension];
-        }
-
-
-        RefreshSkin(skin);
+        RefreshSkin(nameWithoutExtension);
     }
 
 
-    public void RefreshSkin(int _skin = -1)
+    public void RefreshSkin(string nameWithoutExtension)
     {
-        if(_skin != -1)
-        {
-            skin = _skin;
-        }
+        currentSkinConfig = null;
 
         foreach (var sc in skinConfigData.skinConfigs)
         {
-            if(sc.skin == skin)
+            if(sc.midi == nameWithoutExtension)
             {
                 currentSkinConfig = sc;
                 break;
             }
+        }
+
+        if(currentSkinConfig == null)
+        {
+            currentSkinConfig = defalutSkinConfig;
         }
 
         RefreshLight(currentSkinConfig.lightSkin);
@@ -588,7 +141,6 @@ public class SkinManager : MonoBehaviour
         RefreshBars(currentSkinConfig.barSkin);
         RefreshWall(currentSkinConfig.wallSkin);
         RefreshBall(currentSkinConfig.ballSkin);
-
     }
 
     public void RefreshVolume(int _skin)

@@ -10,7 +10,41 @@ public class BarsDemo : MonoBehaviour
     public PadCollider padCollider;
     //[SerializeField]
     //bool isPositive = true;
-    public bool inverse = false;
+
+    private bool m_inverse = false;
+
+    public bool inverse 
+    { 
+        set
+        {
+            m_inverse = value;
+
+            if(SkinManager.Instance.isDay())
+            {
+                if (m_inverse)
+                {
+                    shadow1.SetActive(false);
+                    shadow2.SetActive(true);
+                }
+                else
+                {
+                    shadow1.SetActive(true);
+                    shadow2.SetActive(false);
+                }
+            }
+            else
+            {
+                shadow1.SetActive(false);
+                shadow2.SetActive(false);
+            }
+        }
+        get
+        {
+            return m_inverse;
+        }
+    }
+    
+    
     public int mistakeCollisionTimes = 0;
 
     public int beginFrame = -1;
@@ -29,6 +63,10 @@ public class BarsDemo : MonoBehaviour
 
     public List<GameObject> skinList = new List<GameObject>();
     public bool isNeedTurning = true;
+
+    public GameObject shadow1;
+    public GameObject shadow2;
+
     private void Awake()
     {
         //int n = 0;
@@ -97,7 +135,7 @@ public class BarsDemo : MonoBehaviour
                 }
             }
         }
-        
+
     }
 
     public void refreshSkin(int skin)
@@ -250,6 +288,17 @@ public class BarsDemo : MonoBehaviour
         
 
         return false;
+    }
+
+
+    public void SetRotation(Vector3 rotation)
+    {
+        transform.eulerAngles = rotation;
+    }
+
+    private void Update()
+    {
+        
     }
 
     public int SplineSampleIndex(Vector3 framePos)
