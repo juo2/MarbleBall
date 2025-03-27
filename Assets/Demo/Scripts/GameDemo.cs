@@ -661,7 +661,7 @@ public partial class GameDemo : MonoBehaviour
     List<BarsCurve> barsCurveList = new List<BarsCurve>();
     List<PadCurve> padCurveList = new List<PadCurve>();
 
-    bool isFirstAnim = false;
+    bool isFirstAnim = true;
 
     int barsCurveMinIndex = 0;
     int barsCurveMaxIndex = 11;

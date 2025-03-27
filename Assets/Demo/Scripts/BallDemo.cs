@@ -13,6 +13,9 @@ public class BallDemo : MonoBehaviour
     [SerializeField]
     Transform effectTran;
 
+    [SerializeField]
+    Transform effectTran2;
+
     List<Color> lightColorList = new List<Color>()
     {
         new Color(83f/255f,242f/255f,255f/255f), //À¶
@@ -91,13 +94,27 @@ public class BallDemo : MonoBehaviour
 
     public void PlayEffet()
     {
-        ParticleSystem[] particleSystems = effectTran.GetComponentsInChildren<ParticleSystem>();
-
-        foreach (var p in particleSystems)
+        if(SkinManager.Instance.isDay())
         {
-            ParticleSystem.EmissionModule emissionModule = p.emission;
-            emissionModule.rateOverDistance = 20.0f;
+            ParticleSystem[] particleSystems = effectTran2.GetComponentsInChildren<ParticleSystem>();
+
+            foreach (var p in particleSystems)
+            {
+                ParticleSystem.EmissionModule emissionModule = p.emission;
+                emissionModule.rateOverDistance = 20.0f;
+            }
         }
+        else
+        {
+            ParticleSystem[] particleSystems = effectTran.GetComponentsInChildren<ParticleSystem>();
+
+            foreach (var p in particleSystems)
+            {
+                ParticleSystem.EmissionModule emissionModule = p.emission;
+                emissionModule.rateOverDistance = 20.0f;
+            }
+        }
+        
     }
 
     public void StopEffect()
@@ -109,6 +126,15 @@ public class BallDemo : MonoBehaviour
             ParticleSystem.EmissionModule emissionModule = p.emission;
             emissionModule.rateOverDistance = 0.0f;
         }
+
+        particleSystems = effectTran2.GetComponentsInChildren<ParticleSystem>();
+
+        foreach (var p in particleSystems)
+        {
+            ParticleSystem.EmissionModule emissionModule = p.emission;
+            emissionModule.rateOverDistance = 0.0f;
+        }
+        
     }
 
 }

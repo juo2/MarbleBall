@@ -733,87 +733,11 @@ public partial class GameDemo : MonoBehaviour
 
         SetRotation(offsetIndex - 1, rotation);
 
-        //int simlateFrame = 0;
-        //Vector3 prePos = ball.transform.position;
-
-        //while (true)
-        //{
-        //    simulateNextFrame();
-        //    simlateFrame++;
-
-        //    //找到在beginOffset下方的点
-        //    if (IsCanBars(prePos, ball.transform.position, 0.1f))
-        //    {
-        //        g_isPass = true;
-        //        break;
-        //    }
-        //}
-
-        //Tuple<List<int>, int> tuple = Decompose(offsetFrame - simlateFrame, 35, 47);
-
-        //foreach(var prefabIndex in tuple.Item1)
-        //{
-        //    currentLineBars = InstantBarsLine(ball.transform.position, ball.velocity, prefabIndex, -1, -1);
-
-        //    BarsCurve barsCurve = FindBarsCurve(prefabIndex, currentLineBars.inverse);
-        //    if (barsCurve != null)
-        //    {
-        //        List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
-        //        AddPhysicsState(physicsStates);
-        //        simulateToFrame(currentFrame + physicsStates.Count, true, true);
-        //    }
-        //}
-
-        //for (int i = 0; i < 1; i++)
-        //{
-        //    simulateNextFrame();
-        //}
-
-        ////DealWithBarCombine(offsetIndex, tuple.Item2);
-        //DealWithBarCombine_Internal(0, currentFrame, tuple.Item2 - 1);
         HorizontalCombine(offsetIndex, offsetFrame);
     }
 
     void HorizontalCombine(int offsetIndex,int offsetFrame,bool isFirst = false)
     {
-        //int simlateFrame = 0;
-        //Vector3 prePos = ball.transform.position;
-
-        //while (true)
-        //{
-        //    simulateNextFrame();
-        //    simlateFrame++;
-
-        //    //找到在beginOffset下方的点
-        //    if (IsCanBars(prePos, ball.transform.position, 0.1f))
-        //    {
-        //        g_isPass = true;
-        //        break;
-        //    }
-        //}
-
-        //Tuple<List<int>, int> tuple = Decompose(offsetFrame - simlateFrame, 40, 52);
-
-        //foreach (var prefabIndex in tuple.Item1)
-        //{
-        //    currentLineBars = InstantBarsLine(ball.transform.position, ball.velocity, prefabIndex, -1, -1);
-
-        //    BarsCurve barsCurve = FindBarsCurve(prefabIndex, currentLineBars.inverse);
-        //    if (barsCurve != null)
-        //    {
-        //        List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
-        //        AddPhysicsState(physicsStates);
-        //        simulateToFrame(currentFrame + physicsStates.Count, true, true);
-        //    }
-        //}
-
-        //for(int i = 0;i < 1;i++)
-        //{
-        //    simulateNextFrame();
-        //}
-
-        ////DealWithBarCombine(offsetIndex, tuple.Item2);
-        //DealWithBarCombine_Internal(0, currentFrame, tuple.Item2 - 1);
         bool inverse = false;
 
         int simlateFrame = 0;
@@ -863,6 +787,8 @@ public partial class GameDemo : MonoBehaviour
                 AddPhysicsState(physicsStates);
                 simulateToFrame(currentFrame + physicsStates.Count, true, true);
             }
+            RecordBarsLine();
+
             //13 14 15  1 2 3
             int curveIndex = -1;
             int remainFrame1 = -1;
@@ -909,6 +835,8 @@ public partial class GameDemo : MonoBehaviour
                 simulateToFrame(currentFrame + physicsStates.Count, true, true);
             }
 
+            RecordBarsLine();
+
             for (int i = 0; i < remainFrame2; i++)
             {
                 simulateNextFrame();
@@ -919,6 +847,8 @@ public partial class GameDemo : MonoBehaviour
             remainFrame = remainFrame - 15 - 2;
 
             DealWithBarCombine_Internal(0, currentFrame, remainFrame);
+
+            RecordBarsCombine();
 
             for (int i = 0; i < 2; i++)
             {
@@ -934,6 +864,8 @@ public partial class GameDemo : MonoBehaviour
                 AddPhysicsState(physicsStates);
                 simulateToFrame(currentFrame + physicsStates.Count, true, true);
             }
+
+            RecordBarsLine();
 
             for (int i = 0; i < 15; i++)
             {
@@ -948,6 +880,8 @@ public partial class GameDemo : MonoBehaviour
             remainFrame = remainFrame - barsCurve.frame;
 
             DealWithBarCombine_Internal(0, currentFrame, remainFrame);
+            
+            RecordBarsCombine();
 
             for (int i = 0; i < 2; i++)
             {
@@ -963,6 +897,8 @@ public partial class GameDemo : MonoBehaviour
                 AddPhysicsState(physicsStates);
                 simulateToFrame(currentFrame + physicsStates.Count, true, true);
             }
+
+            RecordBarsLine();
 
             for (int i = 0; i < 15; i++)
             {
@@ -978,6 +914,8 @@ public partial class GameDemo : MonoBehaviour
                 AddPhysicsState(physicsStates);
                 simulateToFrame(currentFrame + physicsStates.Count, true, true);
             }
+
+            RecordBarsLine();
 
             for (int i = 0; i < 10; i++)
             {

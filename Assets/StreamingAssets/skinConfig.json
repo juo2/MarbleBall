@@ -2,12 +2,12 @@
     "skinConfigs": [
         {
             "midi": "A-Lin - 天若有情",
-            "ballSkin": 5,
-            "lightSkin": 0,
+            "ballSkin": 0,
+            "lightSkin": 1,
             "padSkin": 0,
             "barSkin": 1,
-            "wallSkin": 4,
-            "padMaterialSkin": 2
+            "wallSkin": 9,
+            "padMaterialSkin": 1
         }
     ]
 }

@@ -30,7 +30,7 @@ public class MidiHelper : MonoBehaviour
     public float endTime = 0;
     public int beiginFrame = 0;
     AudioClip currentClip;
-    private bool isLoadBgm = true;
+    private bool isLoadBgm = false;
     // Start is called before the first frame update
     void Awake()
     {
