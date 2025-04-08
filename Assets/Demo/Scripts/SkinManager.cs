@@ -128,7 +128,8 @@ public class SkinManager : MonoBehaviour
             Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
         }
 #else
-        json_str = File.ReadAllText(barsConfigPath);
+        yield return null;
+        json_str = File.ReadAllText(path);
 #endif
         skinConfigData = JsonUtility.FromJson<SkinConfigData>(json_str);
     }
@@ -187,16 +188,19 @@ public class SkinManager : MonoBehaviour
             if(i == _skin)
             {
                 ballRenderList[i].gameObject.SetActive(true);
-                Light light = ballRenderList[i].transform.GetComponentInChildren<Light>();
+                Light light = ballRenderList[i].transform.GetComponentInChildren<Light>(true);
 
-                if(isDay())
+                if (isDay())
                 {
                     light.shadows = LightShadows.None;
+                    light.intensity = 0.02f;
                 }
                 else
                 {
                     light.shadows = LightShadows.Soft;
+                    light.intensity = 0.05f;
                 }
+
             }
             else
             {
