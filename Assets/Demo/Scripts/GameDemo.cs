@@ -730,12 +730,12 @@ public partial class GameDemo : MonoBehaviour
             isPlay = !isPlay;
             if (isPlay)
             {
-                label.text = "暂停";
+                label.text = "pause";
                 //midiHelper.Play();
             }
             else
             {
-                label.text = "播放";
+                label.text = "play";
                 midiHelper.Pause();
             }
         });
@@ -921,7 +921,7 @@ public partial class GameDemo : MonoBehaviour
         UpdateCamera();
 
 #if UNITY_WEBGL
-        currentMidi = "A-Lin - 天若有情";
+        currentMidi = "0105FC8C9CE6AB6B66C709F4E596C369";
 #else
         string _path = Path.Combine(Application.streamingAssetsPath, "midi");
         List<string> _files = CheckForMidiFiles(_path);
@@ -3156,7 +3156,7 @@ public partial class GameDemo : MonoBehaviour
             {
                 isPlay = false;
                 Text label = playBtn.transform.Find("Text (Legacy)").GetComponent<Text>();
-                label.text = "播放";
+                label.text = "play";
             }
 
             MoveCamera(currentFrame);

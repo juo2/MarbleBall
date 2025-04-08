@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using static Cinemachine.CinemachineSmoothPath;
 
@@ -99,9 +100,28 @@ public partial class GameDemo : MonoBehaviour
     IEnumerator LoadData()
     {
         ResetBeigin();
+        string json_str = string.Empty;
+        string path = GameConfig.Instance.GetJsonPath();
 
-        string path = Path.Combine(Application.streamingAssetsPath, currentMidi + ".json");
-        string json_str = File.ReadAllText(path);
+#if UNITY_WEBGL
+        path = Path.Combine(path, currentMidi + ".json");
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        request.certificateHandler = new AcceptAllCertificatesSignedHandler();
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json_str = request.downloadHandler.text;
+        }
+        else
+        {
+            Debug.LogError($"加载失败: {request.error}");
+        }
+#else
+        path = Path.Combine(path, currentMidi + ".json");
+        json_str = File.ReadAllText(path);
+#endif
+
+        SkinManager.Instance.RefreshSkinByName(currentMidi);
 
         SavePhysicsData savePhysicsData = JsonUtility.FromJson<SavePhysicsData>(json_str);
         playMusicFrame = savePhysicsData.playMusicFrame;
@@ -168,7 +188,7 @@ public partial class GameDemo : MonoBehaviour
 
         Debug.Log($"LoadData path:{path}");
 
-        startGenerating.transform.Find("Text").GetComponent<Text>().text = "继续生成";
+        //startGenerating.transform.Find("Text").GetComponent<Text>().text = "继续生成";
 
         LoadSimulateData(savePhysicsData.SimulateDataDicList);
 
