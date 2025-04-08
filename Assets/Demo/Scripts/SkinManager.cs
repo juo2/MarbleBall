@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Rendering;
 
 public class SkinManager : MonoBehaviour
@@ -78,7 +79,6 @@ public class SkinManager : MonoBehaviour
             barsDemoList.Add(barsDemo);
         }
 
-
         defalutSkinConfig = new SkinConfig();
         defalutSkinConfig.midi = "";
         defalutSkinConfig.lightSkin = 0;
@@ -88,9 +88,9 @@ public class SkinManager : MonoBehaviour
         defalutSkinConfig.ballSkin = 0;
         defalutSkinConfig.wallSkin = 0;
 
-        string path = Path.Combine(Application.streamingAssetsPath, "skinConfig.json");
-        string json_str = File.ReadAllText(path);
-        skinConfigData = JsonUtility.FromJson<SkinConfigData>(json_str);
+        StartCoroutine(LoadConfig());
+
+
 
         //SkinConfig skinConfig = new SkinConfig();
         //skinConfigData.skinConfigs = new List<SkinConfig>();
@@ -111,6 +111,28 @@ public class SkinManager : MonoBehaviour
         //File.WriteAllText(path, json_str);
     }
     
+    IEnumerator LoadConfig()
+    {
+        string json_str = string.Empty;
+        string path = GameConfig.Instance.GetSkinConfigPath();
+#if UNITY_WEBGL
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        request.certificateHandler = new AcceptAllCertificatesSignedHandler();
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json_str = request.downloadHandler.text;
+        }
+        else
+        {
+            Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
+        }
+#else
+        json_str = File.ReadAllText(barsConfigPath);
+#endif
+        skinConfigData = JsonUtility.FromJson<SkinConfigData>(json_str);
+    }
+
     public void RefreshSkinByName(string midiName)
     {
         string nameWithoutExtension = Path.GetFileNameWithoutExtension(midiName);

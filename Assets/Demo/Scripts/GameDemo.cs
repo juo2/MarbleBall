@@ -920,6 +920,9 @@ public partial class GameDemo : MonoBehaviour
 
         UpdateCamera();
 
+#if UNITY_WEBGL
+        currentMidi = "A-Lin - 天若有情";
+#else
         string _path = Path.Combine(Application.streamingAssetsPath, "midi");
         List<string> _files = CheckForMidiFiles(_path);
 
@@ -938,8 +941,9 @@ public partial class GameDemo : MonoBehaviour
         dropdown.value = 0;
         dropdown.captionText.text = _files[0];
         currentMidi = _files[0];
+#endif
 
-        inputField.text = "0";
+        inputField.text = "22";
 
         captureBase = captureObj.GetComponent<RenderHeads.Media.AVProMovieCapture.CaptureBase>();
 
@@ -1061,11 +1065,12 @@ public partial class GameDemo : MonoBehaviour
     {
         yield return null;
 
-        string barsConfigPath = Path.Combine(Application.streamingAssetsPath, "barsConfig.json");
+        string barsConfigPath = GameConfig.Instance.GetBarsConfigPath();
         string json_str = string.Empty;
 
 #if UNITY_WEBGL
         UnityWebRequest request = UnityWebRequest.Get(barsConfigPath);
+        request.certificateHandler = new AcceptAllCertificatesSignedHandler();
         yield return request.SendWebRequest();
         if (request.result == UnityWebRequest.Result.Success)
         {
@@ -1080,7 +1085,7 @@ public partial class GameDemo : MonoBehaviour
 #endif
 
         barsConfig = JsonUtility.FromJson<BarsConfig>(json_str);
-        string barsCurvePath = Path.Combine(Application.streamingAssetsPath, "barCurve");
+        string barsCurvePath = GameConfig.Instance.GetBarCurvePath();
 
         for (int i = barsCurveMinIndex; i < barsCurveMaxIndex + 1; i++)
         {
@@ -1089,6 +1094,7 @@ public partial class GameDemo : MonoBehaviour
                 string file = Path.Combine(barsCurvePath, $"barsCurve{i}_{j + 1}.json");
 #if UNITY_WEBGL
                 request = UnityWebRequest.Get(file);
+                request.certificateHandler = new AcceptAllCertificatesSignedHandler();
                 yield return request.SendWebRequest();
                 if (request.result == UnityWebRequest.Result.Success)
                 {
@@ -1111,7 +1117,7 @@ public partial class GameDemo : MonoBehaviour
     {
         yield return null;
 
-        string barsCurvePath = Path.Combine(Application.streamingAssetsPath, "padCurve");
+        string barsCurvePath = GameConfig.Instance.GetPadCurvePath();
         string json_str = string.Empty;
 
         for (int i = padCurveMinIndex; i < padCurveMaxIndex + 1; i++)
@@ -1121,6 +1127,7 @@ public partial class GameDemo : MonoBehaviour
                 string file = Path.Combine(barsCurvePath, $"padCurve{i}_{j + 1}.json");
 #if UNITY_WEBGL
                 UnityWebRequest request = UnityWebRequest.Get(file);
+                request.certificateHandler = new AcceptAllCertificatesSignedHandler();
                 yield return request.SendWebRequest();
                 if (request.result == UnityWebRequest.Result.Success)
                 {

@@ -60,10 +60,11 @@ public class MidiHelper : MonoBehaviour
             timeSet.Clear();
             AllMidiEventsSet.Clear();
 
-            string _path = Path.Combine(Application.streamingAssetsPath + "/midi", _name + ".mid");
+            string _path = Path.Combine(GameConfig.Instance.GetMidiPath(), _name + ".mid");
             byte[] _bytes = null;
 #if UNITY_WEBGL
             UnityWebRequest request = UnityWebRequest.Get(_path);
+            request.certificateHandler = new AcceptAllCertificatesSignedHandler();
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.Success)
             {
