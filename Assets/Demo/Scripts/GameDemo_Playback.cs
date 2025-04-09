@@ -47,8 +47,8 @@ public partial class GameDemo : MonoBehaviour
         public Vector3 debugCenter;
         public Vector3 debugSize;
         public Vector3 debugBestPos;
-        public TryingType tryingType;
-        public int continuousCount;
+        //public TryingType tryingType;
+        //public int continuousCount;
         public bool inverse;
     }
 
@@ -59,6 +59,7 @@ public partial class GameDemo : MonoBehaviour
         public int frame;
         public Vector3 eulerAngles;
         public int prefabIndex;
+        public bool inverse;
     }
 
     [System.Serializable]
@@ -78,6 +79,7 @@ public partial class GameDemo : MonoBehaviour
         public int frame;
         public Vector3 eulerAngles;
         public float scaleX;
+        public bool inverse;
     }
 
     [System.Serializable]
@@ -93,8 +95,8 @@ public partial class GameDemo : MonoBehaviour
 
         public List<PhysicsState> PhysicsStateList;
         public List<Vector3> CameraPathList;
-        public List<Vector3> CameraFollowList;
-        public List<KeyValuePair> SimulateDataDicList;
+        //public List<Vector3> CameraFollowList;
+        //public List<KeyValuePair> SimulateDataDicList;
     }
 
     IEnumerator LoadData()
@@ -144,12 +146,14 @@ public partial class GameDemo : MonoBehaviour
         cameraProjection.material.color = Color.white;
 
         //镜头移动
-        cameraFollowList = savePhysicsData.CameraFollowList;
-        cameraPathProjection.positionCount = cameraFollowList.Count;
-        cameraPathProjection.SetPositions(cameraFollowList.ToArray());
+        //cameraFollowList = savePhysicsData.CameraFollowList;
+        //cameraPathProjection.positionCount = cameraFollowList.Count;
+        //cameraPathProjection.SetPositions(cameraFollowList.ToArray());
         cameraPathProjection.material.color = Color.cyan;
         List<Waypoint> waypoints = new List<Waypoint>();
-        foreach (var pos in cameraFollowList)
+
+        foreach (var pos in cameraPathList)
+        //foreach (var pos in cameraFollowList)
         {
             Waypoint waypoint = new Waypoint();
             waypoint.position = pos;
@@ -169,8 +173,20 @@ public partial class GameDemo : MonoBehaviour
             barCombine_instance.transform.eulerAngles = bar.eulerAngles;
             barCombine_instance.updateVirtualBars(false);
             barCombine_instance.SetScaleX(bar.scaleX);
-
+            barCombine_instance.inverse = bar.inverse;
             barCombine_instance.gameObject.SetActive(true);
+
+            if (bar.inverse)
+            {
+                barCombine_instance.transform.eulerAngles = new Vector3(0, 180f, 0);
+            }
+            else
+            {
+                barCombine_instance.transform.eulerAngles = Vector3.zero;
+            }
+
+            barCombine_instance.refreshBarDir();
+
             barCombine_instance.name = $"BARS_{bar.frame}";
         }
 
@@ -181,8 +197,20 @@ public partial class GameDemo : MonoBehaviour
             bar_instance.transform.position = bar.pos;
             bar_instance.transform.localScale = Vector3.one;
             bar_instance.transform.eulerAngles = bar.eulerAngles;
-
+            bar_instance.inverse = bar.inverse;
             bar_instance.gameObject.SetActive(true);
+
+            if (bar.inverse)
+            {
+                bar_instance.transform.eulerAngles = new Vector3(0, 180f, 0);
+            }
+            else
+            {
+                bar_instance.transform.eulerAngles = Vector3.zero;
+            }
+
+            bar_instance.refreshBarDir();
+
             bar_instance.name = $"BARS_{bar.frame}";
         }
 
@@ -190,7 +218,7 @@ public partial class GameDemo : MonoBehaviour
 
         //startGenerating.transform.Find("Text").GetComponent<Text>().text = "继续生成";
 
-        LoadSimulateData(savePhysicsData.SimulateDataDicList);
+        //LoadSimulateData(savePhysicsData.SimulateDataDicList);
 
         yield return midiHelper.Load(currentMidi);
     }
@@ -210,7 +238,7 @@ public partial class GameDemo : MonoBehaviour
         
         savePhysicsData.PhysicsStateList = physicsStateList;
         savePhysicsData.CameraPathList = cameraPathList;
-        savePhysicsData.CameraFollowList = cameraFollowList;
+        //savePhysicsData.CameraFollowList = cameraFollowList;
 
         List<KeyValuePair> keyValueList = new List<KeyValuePair>();
         foreach (var pair in simulateDataDic)
@@ -218,7 +246,7 @@ public partial class GameDemo : MonoBehaviour
             keyValueList.Add(new KeyValuePair(pair.Key, pair.Value));
         }
 
-        savePhysicsData.SimulateDataDicList = keyValueList;
+        //savePhysicsData.SimulateDataDicList = keyValueList;
 
         string json_str = JsonUtility.ToJson(savePhysicsData);
 
@@ -234,6 +262,7 @@ public partial class GameDemo : MonoBehaviour
         barLineData.frame = currentFrame;
         barLineData.eulerAngles = currentLineBars.transform.eulerAngles;
         barLineData.prefabIndex = currentLineBars.prefabIndex;
+        barLineData.inverse = currentLineBars.inverse;
 
         barLineDataList.Add(barLineData);
         barsLineDemoList.Add(currentLineBars);
@@ -283,6 +312,7 @@ public partial class GameDemo : MonoBehaviour
         barCombineData.frame = currentFrame;
         barCombineData.eulerAngles = currentBarsCombine.transform.eulerAngles;
         barCombineData.scaleX = currentBarsCombine.getScaleX();
+        barCombineData.inverse = currentBarsCombine.inverse;
 
         barCombineDataList.Add(barCombineData);
         barsCombineDemoList.Add(currentBarsCombine);

@@ -697,30 +697,31 @@ public partial class GameDemo : MonoBehaviour
 
         beiginBtn.onClick.AddListener(() =>
         {
-            if(padDataList.Count > 0)
-            {
-                //Time.timeScale = midiHelper.suitMidiFacter;
-                Physics.autoSimulation = false;
-                isPlay = true;
-                currentFrame = 0;
-                visiblePadRange(0, 10);
-                cinemachineTrackedDolly.m_PathPosition = 0;
-                cameraPos.transform.position = Vector3.zero;
-                midiHelper.Stop();
+            SpaceKeyDown();
+            //if(padDataList.Count > 0)
+            //{
+            //    //Time.timeScale = midiHelper.suitMidiFacter;
+            //    Physics.autoSimulation = false;
+            //    isPlay = true;
+            //    currentFrame = 0;
+            //    visiblePadRange(0, 10);
+            //    cinemachineTrackedDolly.m_PathPosition = 0;
+            //    cameraPos.transform.position = Vector3.zero;
+            //    midiHelper.Stop();
 
-                m_currentObjCount = -1;
-                m_preObjCount = -1;
+            //    m_currentObjCount = -1;
+            //    m_preObjCount = -1;
 
-                isEditorCamera = false;
-                UpdateCamera();
+            //    isEditorCamera = false;
+            //    UpdateCamera();
 
-                bGMPlayer.StopBgm();
-            }
-            else
-            {
-                isPlay = true;
-                currentFrame = 0;
-            }
+            //    bGMPlayer.StopBgm();
+            //}
+            //else
+            //{
+            //    isPlay = true;
+            //    currentFrame = 0;
+            //}
 
         });
 
@@ -1428,8 +1429,8 @@ public partial class GameDemo : MonoBehaviour
                             currentBouncessTxt.text = $"bouncess:{padData.bounciness}";
                             currentRotationTxt.text = $"rotation:{padData.rotation}";
                             currentOffsetFrameTxt.text = $"offsetFrame:{padData.offsetFrame}";
-                            currentTryingTypeTxt.text = padData.tryingType.ToString();
-                            currentContinuousCountTxt.text = $"count:{padData.continuousCount}";
+                            //currentTryingTypeTxt.text = padData.tryingType.ToString();
+                            //currentContinuousCountTxt.text = $"count:{padData.continuousCount}";
                         }
                         
                         currentObjCountTxt.text = $"count:{(i+1)}";
@@ -2679,8 +2680,8 @@ public partial class GameDemo : MonoBehaviour
         PadData padData = new PadData();
         padData.pos = framePos;
         padData.frame = _frame;
-        padData.tryingType = tryingType;
-        padData.continuousCount = ContinuousCount;
+        //padData.tryingType = tryingType;
+        //padData.continuousCount = ContinuousCount;
 
         if (currentOffsetIndex < frameOffsetList.Count)
         {
