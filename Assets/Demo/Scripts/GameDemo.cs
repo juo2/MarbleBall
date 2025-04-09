@@ -3191,7 +3191,7 @@ public partial class GameDemo : MonoBehaviour
         //    //trackedDolly.m_PathPosition = cameraPosMap[frame];
         //}
 
-        if(frame < cameraFollowList.Count )
+        if(frame < cameraPathList.Count )
             cinemachineTrackedDolly.m_PathPosition = frame;
 
         //v_camera_editor.
