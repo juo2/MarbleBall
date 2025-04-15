@@ -16,10 +16,6 @@ public partial class GameDemo : MonoBehaviour
     private List<BarLineData> barLineDataList = new List<BarLineData>();
     private List<BarsDemo> barsLineDemoList = new List<BarsDemo>();
 
-    private List<BarData> barDataList = new List<BarData>();
-    private List<BarsDemo> barsDemoList2 = new List<BarsDemo>();
-
-
     [System.Serializable]
     public class KeyValuePair
     {
@@ -47,8 +43,6 @@ public partial class GameDemo : MonoBehaviour
         public Vector3 debugCenter;
         public Vector3 debugSize;
         public Vector3 debugBestPos;
-        //public TryingType tryingType;
-        //public int continuousCount;
         public bool inverse;
     }
 
@@ -95,8 +89,6 @@ public partial class GameDemo : MonoBehaviour
 
         public List<PhysicsState> PhysicsStateList;
         public List<Vector3> CameraPathList;
-        //public List<Vector3> CameraFollowList;
-        //public List<KeyValuePair> SimulateDataDicList;
     }
 
     IEnumerator LoadData()
@@ -217,7 +209,6 @@ public partial class GameDemo : MonoBehaviour
         Debug.Log($"LoadData path:{path}");
 
         //startGenerating.transform.Find("Text").GetComponent<Text>().text = "继续生成";
-
         //LoadSimulateData(savePhysicsData.SimulateDataDicList);
 
         yield return midiHelper.Load(currentMidi);
@@ -253,152 +244,6 @@ public partial class GameDemo : MonoBehaviour
         File.WriteAllText(path, json_str);
 
         Debug.Log($"SaveData path:{path}");
-    }
-
-    void RecordBarsLine()
-    {
-        BarLineData barLineData = new BarLineData();
-        barLineData.pos = currentLineBars.transform.position;
-        barLineData.frame = currentFrame;
-        barLineData.eulerAngles = currentLineBars.transform.eulerAngles;
-        barLineData.prefabIndex = currentLineBars.prefabIndex;
-        barLineData.inverse = currentLineBars.inverse;
-
-        barLineDataList.Add(barLineData);
-        barsLineDemoList.Add(currentLineBars);
-
-        BarsDemo bars = currentLineBars;
-
-        bars.padCollider.collisionAction = () => 
-        {
-            if (currentFrame < bars.beginFrame || currentFrame > bars.endFrame)
-            {
-                bars.mistakeCollisionTimes++;
-            }
-        };
-    }
-
-    void RecordBars()
-    {
-        BarData barData = new BarData();
-        barData.pos = currentBars.transform.position;
-        barData.frame = currentFrame;
-        barData.eulerAngles = currentBars.transform.eulerAngles;
-
-        barDataList.Add(barData);
-        barsDemoList2.Add(currentBars);
-
-        BarsDemo bars = currentBars;
-
-        bars.padCollider.collisionAction = () =>
-        {
-            if (currentFrame < bars.beginFrame || currentFrame > bars.endFrame)
-            {
-                bars.mistakeCollisionTimes++;
-            }
-        };
-    }
-
-    void RecordBarsCombine()
-    {
-        if (currentBarsCombine == null)
-        {
-            Debug.LogError("currentBarsCombine == null");
-            return;
-        }
-
-        BarCombineData barCombineData = new BarCombineData();
-        barCombineData.pos = currentBarsCombine.transform.position;
-        barCombineData.frame = currentFrame;
-        barCombineData.eulerAngles = currentBarsCombine.transform.eulerAngles;
-        barCombineData.scaleX = currentBarsCombine.getScaleX();
-        barCombineData.inverse = currentBarsCombine.inverse;
-
-        barCombineDataList.Add(barCombineData);
-        barsCombineDemoList.Add(currentBarsCombine);
-
-        BarsCombineDemo barsCombine = currentBarsCombine;
-
-        //添加事件
-        barsCombine.padCollider1.collisionAction = () =>
-        {
-            if (currentFrame < barsCombine.beginFrame || currentFrame > barsCombine.endFrame)
-            {
-                barsCombine.mistakeCollisionTimes++;
-            }
-        };
-
-        barsCombine.padCollider2.collisionAction = () =>
-        {
-            if (currentFrame < barsCombine.beginFrame || currentFrame > barsCombine.endFrame)
-            {
-                barsCombine.mistakeCollisionTimes++;
-            }
-        };
-
-        barsCombine.padCollider3.collisionAction = () =>
-        {
-            if (currentFrame < barsCombine.beginFrame || currentFrame > barsCombine.endFrame)
-            {
-                barsCombine.mistakeCollisionTimes++;
-            }
-        };
-    }
-
-    void SetPhysicMaterialBounciness(int _index, float bounciness)
-    {
-        if (visiblePadDic.TryGetValue(_index, out Pad pad))
-        {
-            pad.SetPhysicMaterialBounciness(bounciness);
-        }
-
-        if (_index < padDataList.Count)
-        {
-            padDataList[_index].bounciness = bounciness;
-        }
-    }
-
-    void SetBounds(int _index, Vector3 center, Vector3 size, Vector3 bestPos)
-    {
-        if (visiblePadDic.TryGetValue(_index, out Pad pad))
-        {
-            pad.SetBounds(center, size, bestPos);
-        }
-
-        if (_index < padDataList.Count)
-        {
-            padDataList[_index].debugCenter = center;
-            padDataList[_index].debugSize = size;
-            padDataList[_index].debugBestPos = bestPos;
-        }
-    }
-
-
-    void SetColor(int _index, Color color)
-    {
-        if (visiblePadDic.TryGetValue(_index, out Pad pad))
-        {
-            pad.SetLineRenererColor(color);
-        }
-
-        if (_index < padDataList.Count)
-        {
-            padDataList[_index].debugColor = color;
-        }
-
-    }
-
-    void SetRotation(int _index, float rotation)
-    {
-        if (visiblePadDic.TryGetValue(_index, out Pad pad))
-        {
-            pad.SetRotation(rotation);
-        }
-
-        if (_index < padDataList.Count)
-        {
-            padDataList[_index].rotation = rotation;
-        }
     }
 
 }

@@ -34,22 +34,7 @@ public class MidiHelper : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        //midiFilePlayer.MPTK_Channels[1].ForcedPreset = 10;
-        //midiFilePlayer.MPTK_MidiName = "audio.mid";
-        //midiFilePlayer.MPTK_MidiName = "1_蒲公英的约定";
-        //midiFilePlayer.MPTK_MidiName = "2_一路生花-片段";
-        //midiFilePlayer.MPTK_MidiName = "2_离别开出花-片段";
-        //midiFilePlayer.MPTK_MidiName = "2_audio";
 
-        //midiFilePlayer.MPTK_MidiName = "2_今天"; //209
-        //midiFilePlayer.MPTK_MidiName = "2_十七岁"; //173
-        //midiFilePlayer.MPTK_MidiName = "2_守望";
-        //midiFilePlayer.MPTK_MidiName = "2_小城夏天";
-        //midiFilePlayer.MPTK_MidiName = "2_小苹果";
-        //midiFilePlayer.MPTK_MidiName = "2_青藏高原";
-        //midiFilePlayer.MPTK_Load();
-
-        //Load("2_今天.bytes");
     }
 
     public IEnumerator Load(string _name)
@@ -132,76 +117,6 @@ public class MidiHelper : MonoBehaviour
 
             beiginFrame = Mathf.RoundToInt(beginTime / 0.02f);
 
-            //Dictionary<float, int> tempDic = new Dictionary<float, int>();
-
-            //List<float> tempFrameOffsetList = new List<float>();
-            //float midiFacter = 1f;
-            //float originMidiFacter = 1f;
-            //for (int i = 0;i < 10;i++)
-            //{
-            //    midiFacter = originMidiFacter - i * 0.1f;
-            //    bool isFirst = true;
-
-            //    tempFrameOffsetList.Clear();
-
-            //    foreach (var mptkEvent in AllMidiEventsSet)
-            //    {
-            //        int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f / midiFacter);
-            //        //Debug.Log($"_frame:{_frame}");
-
-            //        int offsetFrame = _frame - _lastFrame;
-
-            //        //if (offsetFrame >= 100)
-            //        //{
-            //        //    offsetFrame = 100;
-            //        //}
-
-            //        //if(offsetFrame > 5)
-            //        {
-            //            if (isFirst)
-            //            {
-            //                //playMusicOffsetFrame = _frame;
-            //                isFirst = false;
-            //                offsetFrame = 0;
-            //            }
-
-            //            tempFrameOffsetList.Add(offsetFrame);
-            //            _lastFrame = _frame;
-            //        }
-            //    }
-
-            //    int suitFrameCount = 0;
-            //    isFirst = true;
-            //    foreach (var offsetFrame in tempFrameOffsetList)
-            //    {
-            //        if(offsetFrame >= 10 && offsetFrame <= 24)
-            //        {
-            //            suitFrameCount++;
-            //        }
-
-            //        if(!isFirst && offsetFrame <= 5)
-            //        {
-            //            suitFrameCount = 0;
-            //            break;
-            //        }
-
-            //        if (isFirst)
-            //            isFirst = false;
-            //    }
-
-            //    tempDic.Add(midiFacter, suitFrameCount);
-            //}
-
-            //int maxSuitFrameCount = int.MinValue;
-            //foreach (var key in tempDic.Keys)
-            //{
-            //    if(tempDic[key] > maxSuitFrameCount)
-            //    {
-            //        maxSuitFrameCount = tempDic[key];
-            //        suitMidiFacter = key;
-            //    }
-            //}
-
             //File.WriteAllText(Path.Combine(Application.dataPath, "test.txt"), contents);
             Debug.Log($"AllMidiEvents.Count:{AllMidiEvents.Count}");
             //Debug.Log($"ind:{ind}");
@@ -231,25 +146,9 @@ public class MidiHelper : MonoBehaviour
 
     public void Play(int index)
     {
-        //midiFilePlayer.MPTK_Play(true);
-        //midiFilePlayer.MPTK_Channels[playChannel].ForcedPreset = 11;
-
-        //MPTKEvent NotePlaying = new MPTKEvent()
-        //{
-        //    Command = MPTKCommand.NoteOn,
-        //    Value = 60, // note to played, ex 60=C5. Use the method from class HelperNoteLabel to convert to string
-        //    Channel = 0,
-        //    Duration = Convert.ToInt64(1 * 1000f), // millisecond, -1 to play indefinitely
-        //    Velocity = 100, // Sound can vary depending on the velocity
-        //    Delay = Convert.ToInt64(0 * 1000f),
-        //};
 
         MPTKEvent NotePlaying = AllMidiEventsSet[index];
 
-        //Debug.Log($"NotePlaying:{NotePlaying}");
-
-        //midiStreamPlayer.MPTK_Channels[playChannel].ForcedPreset = 0;
-        //midiStreamPlayer.MPTK_PlayEvent(NotePlaying);
         midiCustomPlayer.Play(NotePlaying.Value);
     }
 

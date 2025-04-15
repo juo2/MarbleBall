@@ -89,26 +89,6 @@ public class SkinManager : MonoBehaviour
         defalutSkinConfig.wallSkin = 0;
 
         StartCoroutine(LoadConfig());
-
-
-
-        //SkinConfig skinConfig = new SkinConfig();
-        //skinConfigData.skinConfigs = new List<SkinConfig>();
-
-        ////∫⁄“π
-        //skinConfig.midi = "A-Lin - ÃÏ»Ù”–«È";
-        //skinConfig.lightSkin = 1;
-        //skinConfig.padMaterialSkin = 0;
-        //skinConfig.padSkin = 0;
-        //skinConfig.barSkin = 0;
-        //skinConfig.ballSkin = 0;
-        //skinConfig.wallSkin = 0;
-
-        //skinConfigData.skinConfigs.Add(skinConfig);
-
-        //string path = Path.Combine(Application.streamingAssetsPath, "skinConfig.json");
-        //string json_str = JsonUtility.ToJson(skinConfigData);
-        //File.WriteAllText(path, json_str);
     }
     
     IEnumerator LoadConfig()

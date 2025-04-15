@@ -33,13 +33,13 @@ public partial class GameDemo : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
-            yield return StartGenerating(file, 0);
-
             yield return new WaitForSeconds(3f);
 
             Debug.Log("生成完毕！！！！！！！！！！！！！");
 
-            SaveData(file);
+            currentMidi = file;
+
+            LoadData();
 
             SpaceKeyDown();
 
@@ -81,40 +81,6 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    IEnumerator StartGenerating(string midi,int count)
-    {
-        initLogger(midi);
-
-        foreach (Pad pad in showPadList)
-        {
-            pad.gameObject.SetActive(false);
-        }
-
-        if (currentOffsetIndex != 1)
-        {
-            PhysicsState ps = physicsStateList[physicsStateList.Count - 1];
-            ball.ResetState(ps);
-            currentFrame = physicsStateList.Count - 1;
-
-            int _key = padDataList.Count - 1;
-            //最后一个踢掉
-            padDataList.RemoveAt(_key);
-
-            if (visiblePadDic.ContainsKey(_key))
-            {
-                visiblePadDic.Remove(_key);
-            }
-        }
-
-        yield return midiHelper.Load(midi);
-        logger($"midiHelper.suitMidiFacter = {midiHelper.suitMidiFacter}");
-
-        SkinManager.Instance.RefreshSkinByName(midiHelper.currentMidi);
-
-        LOOPCOUNT = count;
-
-        yield return GameInit();
-    }
 
     void ResetBeigin()
     {
@@ -158,15 +124,12 @@ public partial class GameDemo : MonoBehaviour
         ContinuousCount = 0;
 
         padDataList.Clear();
-        BestPointDic.Clear();
 
         frameVelocityOffsetList.Clear();
         frameVelocityList.Clear();
 
         barCombineDataList.Clear();
         barLineDataList.Clear();
-
-        currentCameraMovement = new CameraMovement();
 
         curveTypeList.Clear();
     }
