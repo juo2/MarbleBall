@@ -23,17 +23,6 @@ public class CameraMovement
     public bool isBar;
 }
 
-[System.Serializable]
-public class BarPrefabs
-{
-    public int prefabIndex;
-    public int barsAppearFrame;
-    public int barsMaxFrame;
-    public int barsFrontFrame;
-    public int barsFallFrame;
-}
-
-
 public class FrameVelocityOffset
 {
     public float offsetX;
@@ -43,38 +32,12 @@ public class FrameVelocityOffset
     public Vector3 offsetRotation;
 }
 
-[System.Serializable]
-public class BarConfig
-{
-    public int prefabIndex;
-    public float beiginOffset;
-    public float endOffset;
-    public int remainFrame;
-    public int targetMinFrame;
-    public int targetMaxFrame;
-}
-
 public partial class GameDemo : MonoBehaviour
 {
-    [System.Serializable]
-    public class RecordJson
-    {
-        public List<CurveType> curveTypeList = new List<CurveType>();
-        public int offsetIndex;
-        public int offsetFrame;
-        public int continuousCount;
-        public TryingType tryingType;
-        public bool isBackUp = false;
-        public CurveType successCurveType;
-    }
-
     private bool isPlay = false;
     private bool isGening = false;
 
     private bool isEditorCamera = true;
-
-    [SerializeField]
-    private InputField inputField;
 
     [SerializeField]
     private GameObject captureObj;
@@ -87,12 +50,6 @@ public partial class GameDemo : MonoBehaviour
 
     [SerializeField]
     private Cinemachine.CinemachineSmoothPath cinemachineSmoothPath;
-
-    [SerializeField]
-    private Camera follow_camera;
-
-    [SerializeField]
-    private Cinemachine.CinemachineVirtualCamera v_3rd_camera;
 
     [SerializeField]
     private Cinemachine.CinemachineVirtualCamera v_camera;
@@ -137,16 +94,7 @@ public partial class GameDemo : MonoBehaviour
     private Text currentContinuousCountTxt;
 
     [SerializeField]
-    private Button startGenerating;
-
-    [SerializeField]
     private Button loadData;
-
-    [SerializeField]
-    private Button saveData;
-
-    [SerializeField]
-    private Button cameraBtn;
 
     [SerializeField]
     private Button beiginBtn;
@@ -154,41 +102,6 @@ public partial class GameDemo : MonoBehaviour
     [SerializeField]
     private Button playBtn;
 
-    [SerializeField]
-    private Button nextFrameBtn;
-
-    [SerializeField]
-    private Button preFrameBtn;
-
-    [SerializeField]
-    private Button nextObjBtn;
-
-    [SerializeField]
-    private Button preObjBtn;
-
-    [SerializeField]
-    private Button simulateBtn;
-
-    [SerializeField]
-    private Button simulateV2V;
-
-    [SerializeField]
-    private Button simulateV2H;
-
-    [SerializeField]
-    private Button simulateV2P;
-
-    [SerializeField]
-    private Button simulateH2H;
-
-    [SerializeField]
-    private Button simulateH2V;
-
-    [SerializeField]
-    private Button simulateH2P;
-
-    [SerializeField]
-    private Button boundsBtn;
 
     [SerializeField]
     private Pad padSimulate;
@@ -212,16 +125,10 @@ public partial class GameDemo : MonoBehaviour
     private Transform barPrefabParent;
 
     [SerializeField]
-    public TextAsset physicBarPrefabJson;
-
-    [SerializeField]
     private BarsDemo bar1;
 
     [SerializeField]
     private BarsCombineDemo barCombine;
-
-    [SerializeField]
-    private BarsScaleDemo barScale;
 
     [SerializeField]
     private Transform simulateParent;
@@ -233,30 +140,11 @@ public partial class GameDemo : MonoBehaviour
     private BGMPlayer bGMPlayer;
 
     [SerializeField]
-    private BarsDemo barBeigin0_1;
-
-    [SerializeField]
-    private BarsDemo barBeigin1_1;
-
-    [SerializeField]
-    private BarsCombineDemo barCombine_1;
-
-    [SerializeField]
-    private Light spotLight;
+    List<BarsDemo> barsDemoPrefabList;
 
     List<BarsDemo> barsDemoList = new List<BarsDemo>();
     Stack<BarsDemo> barsDemoPool = new Stack<BarsDemo>();
     Dictionary<int ,Stack<BarsDemo>> barsLineDemoPool = new Dictionary<int, Stack<BarsDemo>>();
-    List<BarsScaleDemo> barsScaleDemoList = new List<BarsScaleDemo>();
-    private BarsCombineDemo currentBarsCombine;
-    private BarsDemo currentBars;
-    private BarsDemo currentLineBars;
-
-    private BarsScaleDemo currentBarsScale;
-
-    private Vector3 initialVelocity = new Vector3(0f, 0, 0);
-    private Vector3 initialRotation = new Vector3(0f, 0f, 0);
-    private float barsAppearMinOffset = float.MaxValue;
 
     private float currentTime = 0f;
     private float spacePlayTime = 3f;
@@ -266,7 +154,6 @@ public partial class GameDemo : MonoBehaviour
     private int m_currentObjCount = -1;
     private int m_preObjCount = -1;
 
-    private List<int> frameOffsetList = new List<int>();
     private List<int> frameList = new List<int>();
     private List<CameraMovement> cameraMovementList = new List<CameraMovement>();
     private List<CameraMovement> cameraFollowMovementList = new List<CameraMovement>();
@@ -274,44 +161,22 @@ public partial class GameDemo : MonoBehaviour
     private List<Vector3> cameraPathList = new List<Vector3>();
 
     private List<PhysicsState> physicsStateList = new List<PhysicsState>();
-    private List<BarsDemo> BarsDemoPrefabList = new List<BarsDemo>();
 
     private Dictionary<int, Pad> visiblePadDic = new Dictionary<int, Pad>();
     private int m_visibleCount = 40;
 
     private Stack<Pad> padPool = new Stack<Pad>();
 
-    private List<Pad> showPadList = new List<Pad>();
-
     private Stack<BarsCombineDemo> barsCombineDemoPool = new Stack<BarsCombineDemo>();
 
     int playMusicFrame = 0;
 
-    bool g_isPass = false;
-
-    int LOOPCOUNT = 95;
     int currentOffsetIndex = 1;
-    bool isVertical = false;
-    Pad currentPad = null;
 
     private string logPath = string.Empty;
     private string logJsonPath = string.Empty;
-    bool isRecordJson = true;
-    List<RecordJson> recordJsons = new List<RecordJson>();
-    Stack<RecordJson> recordJsonPool = new Stack<RecordJson>();
-    RecordJson currentRecordJson;
-
-    int lightIndex = 0;
-
-    [System.Serializable]
-    class RecordJsonData
-    {
-        public List<RecordJson> recordJsons;
-    }
 
     Cinemachine.CinemachineTrackedDolly cinemachineTrackedDolly;
-
-    string config_path = string.Empty;
 
     /// <summary>
     /// 大类
@@ -348,14 +213,6 @@ public partial class GameDemo : MonoBehaviour
         Speed
     }
 
-    private enum PassType
-    {
-        None,
-        greater,
-        less,
-        pass,
-    }
-
     Dictionary<int, FrameVelocityOffset> frameVelocityOffsetList = new Dictionary<int, FrameVelocityOffset>();
     Dictionary<int, Vector3> frameVelocityList = new Dictionary<int, Vector3>();
     Dictionary<int, int> cameraPosMap = new Dictionary<int, int>();
@@ -377,27 +234,22 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    bool isFirstAnim = true;
-
-
     // Start is called before the first frame update
     void Start()
     {
-        //LoadConfig();
         cinemachineTrackedDolly = v_camera.GetCinemachineComponent<Cinemachine.CinemachineTrackedDolly>();
 
         Application.targetFrameRate = 60;
         Physics.autoSimulation = false;
 
-        //ball.SetVelocity(initialVelocity);
         PhysicsState ps = new PhysicsState();
         ps.position = ball.transform.position;
         ps.rotation = ball.transform.rotation;
         ps.velocity = ball.velocity;
         ps.angularVelocity = ball.angularVelocity;
         physicsStateList.Add(ps);
-        line.AddLineRenderer(ball.transform.position);
 
+        line.AddLineRenderer(ball.transform.position);
         Text label = playBtn.transform.Find("Text (Legacy)").GetComponent<Text>();
 
         beiginBtn.onClick.AddListener(() =>
@@ -422,40 +274,11 @@ public partial class GameDemo : MonoBehaviour
             }
         });
 
-        nextFrameBtn.onClick.AddListener(() =>
-        {
-            Physics.autoSimulation = false;
-            simulateNextFrame();
-
-            //Debug.Log($"speed:{ball.velocity.magnitude}");
-        });
-
-
-        simulateBtn.onClick.AddListener(() =>
-        {
-            Physics.autoSimulation = true;
-        });
-
 
         loadData.onClick.AddListener(() =>
         {
+            initLogger(currentMidi);
             StartCoroutine(LoadData());
-        });
-
-        saveData.onClick.AddListener(() =>
-        {
-            SaveData(currentMidi);
-        });
-
-        cameraBtn.onClick.AddListener(() =>
-        {
-            isEditorCamera = !isEditorCamera;
-            UpdateCamera();
-        });
-
-        genAllBtn.onClick.AddListener(() => 
-        {
-            StartCoroutine(GenAll());
         });
 
         UpdateCamera();
@@ -483,13 +306,7 @@ public partial class GameDemo : MonoBehaviour
         currentMidi = _files[0];
 #endif
 
-        inputField.text = "22";
-
         captureBase = captureObj.GetComponent<RenderHeads.Media.AVProMovieCapture.CaptureBase>();
-
-        if(!isFirstAnim)
-            //initialRotation = new Vector3(0f, 90f, 0);
-            initialRotation = new Vector3(0f, 0f, 0);
     }
 
 
@@ -538,28 +355,15 @@ public partial class GameDemo : MonoBehaviour
     {
         if (isEditorCamera)
         {
-            cameraBtn.transform.Find("Text").GetComponent<Text>().text = "运行时镜头";
             v_camera.gameObject.SetActive(false);
             v_camera_editor.gameObject.SetActive(true);
         }
         else
         {
-            cameraBtn.transform.Find("Text").GetComponent<Text>().text = "编辑器镜头";
             v_camera.gameObject.SetActive(true);
             v_camera_editor.gameObject.SetActive(false);
         }
     }
-
-    void simulateNextFrame(bool record = true, bool changeVelocity = true)
-    {
-        if (currentFrame + 1 < physicsStateList.Count)
-        {
-            currentFrame = currentFrame + 1;
-            PhysicsState ps = physicsStateList[currentFrame];
-            ball.ResetState(ps);
-        }
-    }
-
 
     void initLogger(string midi)
     {
@@ -620,8 +424,6 @@ public partial class GameDemo : MonoBehaviour
                             currentBouncessTxt.text = $"bouncess:{padData.bounciness}";
                             currentRotationTxt.text = $"rotation:{padData.rotation}";
                             currentOffsetFrameTxt.text = $"offsetFrame:{padData.offsetFrame}";
-                            //currentTryingTypeTxt.text = padData.tryingType.ToString();
-                            //currentContinuousCountTxt.text = $"count:{padData.continuousCount}";
                         }
                         
                         currentObjCountTxt.text = $"count:{(i+1)}";
@@ -718,44 +520,6 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    IEnumerator DealFirstBars()
-    {
-        playMusicFrame = 0;
-
-        InstantBars(ball.transform.position, Vector3.one, bar1, 0);
-
-        yield return new WaitForEndOfFrame();
-
-        for (int i = 0; i < 9999; i++)
-        {
-            simulateNextFrame();
-            playMusicFrame++;
-
-            if (barsDemoList[0].isPass(ball.transform.position))
-            {
-                break;
-            }
-        }
-
-        //额外simulate
-        for (int i = 0; i < 12; i++)
-        {
-            simulateNextFrame();
-            playMusicFrame++;
-        }
-    }
-    int CalculateLightIndex()
-    {
-        lightIndex++;
-
-        if (lightIndex >= SkinManager.Instance.GetMaterialCount())
-        {
-            lightIndex = 0;
-        }
-
-        return lightIndex;
-    }
-
     Pad InstantByPadData(PadData padData,bool debug = false)
     {
         Pad pad_instance = null;
@@ -820,61 +584,6 @@ public partial class GameDemo : MonoBehaviour
         _pad.padCollider.collisionAction = null;
 
         padPool.Push(_pad);
-    }
-
-    BarsCombineDemo InstantBarsCombine(Vector3 bornPos, Vector3 frameDir, int _frame = 0,Transform parentTran = null, int beiginFrame = -1,int endFrame = -1)
-    {
-        BarsCombineDemo barCombine_instance = null;
-        if (barsCombineDemoPool.Count > 0)
-        {
-            barCombine_instance = barsCombineDemoPool.Pop();
-        }
-        else
-        {
-            barCombine_instance = Instantiate<BarsCombineDemo>(barCombine);
-            barCombine_instance.gameObject.SetActive(true);
-        }
-
-        if(parentTran == null)
-        {
-            barCombine_instance.transform.SetParent(obstaclesParent.transform);
-        }
-        else
-        {
-            barCombine_instance.transform.SetParent(parentTran);
-        }
-
-        barCombine_instance.beginFrame = beiginFrame;
-        barCombine_instance.endFrame = endFrame;
-
-        barCombine_instance.transform.position = bornPos;
-        barCombine_instance.transform.localScale = Vector3.one;
-
-        if (frameDir.x > 0)
-        {
-            barCombine_instance.inverse = false;
-            barCombine_instance.transform.eulerAngles = Vector3.zero;
-        }
-        else
-        {
-            barCombine_instance.transform.eulerAngles = new Vector3(0, 180f, 0);
-            barCombine_instance.inverse = true;
-        }
-
-        barCombine_instance.refreshBarDir();
-
-        //float angle = Vector3.Angle(frameDir, Vector3.down);
-        //barCombine_instance.transform.eulerAngles = new Vector3(barCombine_instance.transform.eulerAngles.x, barCombine_instance.transform.eulerAngles.y, angle);
-
-        //barCombine_instance.updateBar(stage1Pos, framePos);
-        barCombine_instance.updateVirtualBars(true);
-        barCombine_instance.SetScaleX(1.0f);
-        //barsCombineDemoList.Add(barCombine_instance);
-
-        barCombine_instance.gameObject.SetActive(true);
-        barCombine_instance.name = $"BARS_{_frame}";
-
-        return barCombine_instance;
     }
 
     void RecycleBarsCombine(BarsCombineDemo _bars)
@@ -947,58 +656,6 @@ public partial class GameDemo : MonoBehaviour
 
         return bars_instance;
     }
-
-    BarsDemo InstantBarsLine(Vector3 framePos, Vector3 frameDir, int prefabIndex, int beiginFrame = -1, int endFrame = -1)
-    {
-        if(prefabIndex == 5)
-        {
-            int i = 0;
-        }
-        BarsDemo bars_instance = null;
-        if (barsLineDemoPool.ContainsKey(prefabIndex) && barsLineDemoPool[prefabIndex].Count > 0)
-        {
-            bars_instance = barsLineDemoPool[prefabIndex].Pop();
-        }
-        else
-        {
-            bars_instance = Instantiate<BarsDemo>(barsDemoPrefabList[prefabIndex]);
-            bars_instance.gameObject.SetActive(true);
-        }
-
-        bars_instance.transform.SetParent(obstaclesParent.transform);
-        bars_instance.transform.position = framePos;
-        bars_instance.transform.localScale = Vector3.one;
-
-        bars_instance.beginFrame = beiginFrame;
-        bars_instance.endFrame = endFrame;
-
-        if (frameDir.x > 0)
-        {
-            bars_instance.SetRotation(Vector3.zero);
-            bars_instance.inverse = false;
-        }
-        else
-        {
-            bars_instance.SetRotation(new Vector3(0, 180f, 0));
-            bars_instance.inverse = true;
-        }
-
-        bars_instance.refreshBarDir();
-
-        if (bars_instance.followRotation)
-        {
-            float angle = Vector3.Angle(frameDir, Vector3.down);
-            bars_instance.SetRotation(new Vector3(bars_instance.transform.eulerAngles.x, bars_instance.transform.eulerAngles.y, angle));
-        }
-
-        bars_instance.gameObject.SetActive(true);
-        bars_instance.name = $"BARS_{beiginFrame}_{endFrame}_{barsDemoPrefabList[prefabIndex].name}";
-        bars_instance.prefabIndex = prefabIndex;
-
-        return bars_instance;
-    }
-
-    LineRendererDemo linePadTest = null;
 
     private void Update()
     {
@@ -1092,13 +749,6 @@ public partial class GameDemo : MonoBehaviour
     {
         if (isPlay)
         {
-            if (currentFrame + 250 == playMusicFrame)
-            {
-                if (!isFirstAnim)
-                    v_3rd_camera.gameObject.SetActive(false);
-                //midiHelper.Play();
-            }
-
             if (currentFrame < physicsStateList.Count)
             {
                 ball.ResetState(physicsStateList[currentFrame]);

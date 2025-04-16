@@ -8,65 +8,11 @@ using static Cinemachine.CinemachineSmoothPath;
 
 public partial class GameDemo : MonoBehaviour
 {
-    [SerializeField]
-    Button genAllBtn;
-
     CaptureBase captureBase;
 
     bool isAutoGen = false;
 
     float recordPreTime = 0.0f;
-
-    IEnumerator GenAll()
-    {
-        canvasObj.SetActive(false);
-        captureGUI.enabled = false;
-        isAutoGen = true;
-        string _path = Path.Combine(Application.streamingAssetsPath, "midi");
-        List<string> _files = CheckForMidiFiles(_path);
-
-        foreach(var file in _files)
-        {
-            ResetBeigin();
-
-            Debug.Log($"正在生成 {file} 中......");
-
-            yield return new WaitForSeconds(1f);
-
-            yield return new WaitForSeconds(3f);
-
-            Debug.Log("生成完毕！！！！！！！！！！！！！");
-
-            currentMidi = file;
-
-            LoadData();
-
-            SpaceKeyDown();
-
-            captureObj.SetActive(true);
-            captureBase.FilenamePrefix = file;
-
-            yield return new WaitForSeconds(spacePlayTime-1);
-
-            Debug.Log("开始录像！！！！！！！！！！！！！");
-
-            captureBase.StartCapture();
-
-            recordPreTime = Time.time;
-
-            yield return new WaitForSeconds(2f);
-
-            Debug.Log("开始检测 isPlay！！！！！！！！！！！！！");
-
-            yield return new WaitUntil(() => isPlay == false);
-            yield return new WaitForSeconds(1f);
-
-            Debug.Log("停止录像 ！！！！！！！！！！！！！");
-
-            captureBase.StopCapture();
-            captureObj.SetActive(false);
-        }
-    }
 
     private void OnGUI()
     {
@@ -80,7 +26,6 @@ public partial class GameDemo : MonoBehaviour
             GUI.Label(new Rect(10, 10, 200, 30), captureBase.CaptureStats.FPS.ToString(), style);
         }
     }
-
 
     void ResetBeigin()
     {
@@ -113,15 +58,10 @@ public partial class GameDemo : MonoBehaviour
         m_currentObjCount = -1;
         m_preObjCount = -1;
 
-        Clear_Simulate();
-
         isEditorCamera = true;
         UpdateCamera();
 
         ball.ResetState();
-
-        isVertical = false;
-        ContinuousCount = 0;
 
         padDataList.Clear();
 
@@ -130,8 +70,6 @@ public partial class GameDemo : MonoBehaviour
 
         barCombineDataList.Clear();
         barLineDataList.Clear();
-
-        curveTypeList.Clear();
     }
 
     void SpaceKeyDown()

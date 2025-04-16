@@ -15,21 +15,7 @@ public partial class GameDemo : MonoBehaviour
 
     private List<BarLineData> barLineDataList = new List<BarLineData>();
     private List<BarsDemo> barsLineDemoList = new List<BarsDemo>();
-
-    [System.Serializable]
-    public class KeyValuePair
-    {
-        public int key;
-        public List<SimulateData> value;
-
-        public KeyValuePair(int key, List<SimulateData> value)
-        {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-
+    
     [System.Serializable]
     public class PadData
     {
@@ -138,9 +124,6 @@ public partial class GameDemo : MonoBehaviour
         cameraProjection.material.color = Color.white;
 
         //镜头移动
-        //cameraFollowList = savePhysicsData.CameraFollowList;
-        //cameraPathProjection.positionCount = cameraFollowList.Count;
-        //cameraPathProjection.SetPositions(cameraFollowList.ToArray());
         cameraPathProjection.material.color = Color.cyan;
         List<Waypoint> waypoints = new List<Waypoint>();
 
@@ -207,10 +190,6 @@ public partial class GameDemo : MonoBehaviour
         }
 
         Debug.Log($"LoadData path:{path}");
-
-        //startGenerating.transform.Find("Text").GetComponent<Text>().text = "继续生成";
-        //LoadSimulateData(savePhysicsData.SimulateDataDicList);
-
         yield return midiHelper.Load(currentMidi);
     }
 
@@ -229,15 +208,6 @@ public partial class GameDemo : MonoBehaviour
         
         savePhysicsData.PhysicsStateList = physicsStateList;
         savePhysicsData.CameraPathList = cameraPathList;
-        //savePhysicsData.CameraFollowList = cameraFollowList;
-
-        List<KeyValuePair> keyValueList = new List<KeyValuePair>();
-        foreach (var pair in simulateDataDic)
-        {
-            keyValueList.Add(new KeyValuePair(pair.Key, pair.Value));
-        }
-
-        //savePhysicsData.SimulateDataDicList = keyValueList;
 
         string json_str = JsonUtility.ToJson(savePhysicsData);
 
