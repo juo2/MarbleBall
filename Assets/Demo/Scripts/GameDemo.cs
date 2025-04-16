@@ -23,15 +23,6 @@ public class CameraMovement
     public bool isBar;
 }
 
-public class FrameVelocityOffset
-{
-    public float offsetX;
-    public float offsetY;
-    public float modifyVelocityX;
-    public float modifyVelocityY;
-    public Vector3 offsetRotation;
-}
-
 public partial class GameDemo : MonoBehaviour
 {
     private bool isPlay = false;
@@ -178,43 +169,6 @@ public partial class GameDemo : MonoBehaviour
 
     Cinemachine.CinemachineTrackedDolly cinemachineTrackedDolly;
 
-    /// <summary>
-    /// 大类
-    /// </summary>
-    /// 
-    [System.Serializable]
-    public enum CurveType
-    {
-        None,
-        HorizontalToHorizontal,
-        HorizontalToHorizontal_Simulate,
-        VerticalToVertical,
-        VerticalToVertical_Simulate,
-        HorizontalToVertical,
-        VerticalToHorizontal,
-        HorizontalLine,
-        VerticalLine,
-        HorizontalLine2,
-        VerticalLine2,
-        HorizontalPipline,
-        VerticalPipline,
-        HorizontalPipline2,
-        VerticalPipline2,
-        HorizontalCombine,
-        VerticalCombine,
-    }
-
-    [System.Serializable]
-    public enum DistanceType
-    {
-        None,
-        Near,
-        Far,
-        Speed
-    }
-
-    Dictionary<int, FrameVelocityOffset> frameVelocityOffsetList = new Dictionary<int, FrameVelocityOffset>();
-    Dictionary<int, Vector3> frameVelocityList = new Dictionary<int, Vector3>();
     Dictionary<int, int> cameraPosMap = new Dictionary<int, int>();
     List<Vector3> cameraFollowList = new List<Vector3>();
     string currentMidi = string.Empty;
@@ -285,6 +239,18 @@ public partial class GameDemo : MonoBehaviour
 
 #if UNITY_WEBGL
         currentMidi = "0105FC8C9CE6AB6B66C709F4E596C369";
+#elif UNITY_ANDROID
+        if (GameConfig.Instance.skinConfigData != null)
+        {
+            ReadConfig();
+        }
+        else
+        {
+            GameConfig.Instance.callBack += () =>
+            {
+                ReadConfig();
+            };
+        }
 #else
         string _path = Path.Combine(Application.streamingAssetsPath, "midi");
         List<string> _files = CheckForMidiFiles(_path);
@@ -307,6 +273,30 @@ public partial class GameDemo : MonoBehaviour
 #endif
 
         captureBase = captureObj.GetComponent<RenderHeads.Media.AVProMovieCapture.CaptureBase>();
+    }
+
+    void ReadConfig()
+    {
+        List<string> _files = new List<string>();
+        foreach (var config in GameConfig.Instance.skinConfigData.skinConfigs)
+        {
+            _files.Add(config.midi);
+        }
+        dropdown.onValueChanged.AddListener((int index) =>
+        {
+            currentMidi = _files[index];
+        });
+
+        dropdown.options = new List<Dropdown.OptionData>();
+        for (int i = 0; i < _files.Count; i++)
+        {
+            Dropdown.OptionData optionData = new Dropdown.OptionData();
+            optionData.text = _files[i];
+            dropdown.options.Add(optionData);
+        }
+        dropdown.value = 0;
+        dropdown.captionText.text = _files[0];
+        currentMidi = _files[0];
     }
 
 
@@ -367,23 +357,23 @@ public partial class GameDemo : MonoBehaviour
 
     void initLogger(string midi)
     {
-        string folderPath = Path.Combine(Application.dataPath, "../1_logs");
-        if (!Directory.Exists(folderPath))
-        {
-            Directory.CreateDirectory(folderPath);
-        }
+        //string folderPath = Path.Combine(Application.dataPath, "../1_logs");
+        //if (!Directory.Exists(folderPath))
+        //{
+        //    Directory.CreateDirectory(folderPath);
+        //}
 
-        logPath = Path.Combine(folderPath, $"{midi}_log.txt");
+        //logPath = Path.Combine(folderPath, $"{midi}_log.txt");
 
-        string folderPath2 = Path.Combine(Application.dataPath, "../1_jsons");
-        if (!Directory.Exists(folderPath2))
-        {
-            Directory.CreateDirectory(folderPath2);
-        }
+        //string folderPath2 = Path.Combine(Application.dataPath, "../1_jsons");
+        //if (!Directory.Exists(folderPath2))
+        //{
+        //    Directory.CreateDirectory(folderPath2);
+        //}
 
-        logJsonPath = Path.Combine(folderPath2, $"{midi}_log.json");
+        //logJsonPath = Path.Combine(folderPath2, $"{midi}_log.json");
 
-        File.WriteAllText(logPath,"");
+        //File.WriteAllText(logPath,"");
     }
 
     void logger(string logStr)
@@ -392,7 +382,7 @@ public partial class GameDemo : MonoBehaviour
         {
             return;
         }
-        File.AppendAllText(logPath, logStr + "\n");
+        //File.AppendAllText(logPath, logStr + "\n");
     }
 
     void padStatusUpdate(int _frame)

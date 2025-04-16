@@ -63,8 +63,6 @@ public class SkinManager : MonoBehaviour
     public List<Material> padPiplineMatList = new List<Material>();
     Pad selectPad;
     SkinConfigData skinConfigData;
-    //int padMaterialSkin = 0;
-    //public int currentLigthtSkin = 0;
 
     public SkinConfig currentSkinConfig;
     SkinConfig defalutSkinConfig;
@@ -88,31 +86,19 @@ public class SkinManager : MonoBehaviour
         defalutSkinConfig.ballSkin = 0;
         defalutSkinConfig.wallSkin = 0;
 
-        StartCoroutine(LoadConfig());
-    }
-    
-    IEnumerator LoadConfig()
-    {
-        string json_str = string.Empty;
-        string path = GameConfig.Instance.GetSkinConfigPath();
-#if UNITY_WEBGL
-        UnityWebRequest request = UnityWebRequest.Get(path);
-        request.certificateHandler = new AcceptAllCertificatesSignedHandler();
-        yield return request.SendWebRequest();
-        if (request.result == UnityWebRequest.Result.Success)
+        if(GameConfig.Instance.skinConfigData != null)
         {
-            json_str = request.downloadHandler.text;
+            skinConfigData = GameConfig.Instance.skinConfigData;
         }
         else
         {
-            Debug.LogError($"¼ÓÔØÊ§°Ü: {request.error}");
+            GameConfig.Instance.callBack += () =>
+            {
+                skinConfigData = GameConfig.Instance.skinConfigData;
+            };
         }
-#else
-        yield return null;
-        json_str = File.ReadAllText(path);
-#endif
-        skinConfigData = JsonUtility.FromJson<SkinConfigData>(json_str);
     }
+   
 
     public void RefreshSkinByName(string midiName)
     {
@@ -281,5 +267,10 @@ public class SkinManager : MonoBehaviour
     {
         MaterialAsset materialAsset = onMaterialAssetList[currentSkinConfig.padMaterialSkin];
         return materialAsset.materials.Count;
+    }
+
+    private void OnDestroy()
+    {
+        GameConfig.Instance.callBack = null;
     }
 }

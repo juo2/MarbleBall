@@ -59,6 +59,17 @@ public class MidiHelper : MonoBehaviour
             {
                 Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
             }
+#elif UNITY_ANDROID
+            UnityWebRequest request = UnityWebRequest.Get(_path);
+            yield return request.SendWebRequest();
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                _bytes = request.downloadHandler.data;
+            }
+            else
+            {
+                Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
+            }
 #else
             yield return null;
             _bytes = File.ReadAllBytes(_path);

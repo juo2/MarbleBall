@@ -96,6 +96,18 @@ public partial class GameDemo : MonoBehaviour
         {
             Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
         }
+#elif UNITY_ANDROID
+        path = Path.Combine(path, currentMidi + ".json");
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json_str = request.downloadHandler.text;
+        }
+        else
+        {
+            Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
+        }
 #else
         path = Path.Combine(path, currentMidi + ".json");
         json_str = File.ReadAllText(path);

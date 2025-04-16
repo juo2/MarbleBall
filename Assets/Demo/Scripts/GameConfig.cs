@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 
 public class AcceptAllCertificatesSignedHandler : CertificateHandler
@@ -42,44 +43,67 @@ public class GameConfig : MonoBehaviour
     static string headUrl = "https://172.19.11.101:8777";
 
     string midiPath = headUrl + "/midi";
-    string barsConfigPath = headUrl + "/barsConfig.json";
     string skinConfigPath = headUrl + "/skinConfig.json";
-    string barCurvePath = headUrl + "/barCurve";
-    string padCurvePath = headUrl + "/padCurve";
     string jsonPath = headUrl + "/json";
 
 #else 
     string midiPath = Application.streamingAssetsPath + "/midi";
-    string barsConfigPath = Application.streamingAssetsPath + "/barsConfig.json";
     string skinConfigPath = Application.streamingAssetsPath + "/skinConfig.json";
-    string barCurvePath = Application.streamingAssetsPath + "/barCurve";
-    string padCurvePath = Application.streamingAssetsPath + "/padCurve";
     string jsonPath = Application.streamingAssetsPath + "/json";
 #endif
+
+    public SkinManager.SkinConfigData skinConfigData = null;
+    public UnityAction callBack;
+
+    private void Awake()
+    {
+        StartCoroutine(LoadConfig());
+    }
+
+    IEnumerator LoadConfig()
+    {
+        string json_str = string.Empty;
+        string path = GameConfig.Instance.GetSkinConfigPath();
+#if UNITY_WEBGL
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        request.certificateHandler = new AcceptAllCertificatesSignedHandler();
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json_str = request.downloadHandler.text;
+        }
+        else
+        {
+            Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
+        }
+#elif UNITY_ANDROID
+        UnityWebRequest request = UnityWebRequest.Get(path);
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json_str = request.downloadHandler.text;
+            Debug.Log($"json_str:{json_str}");
+        }
+        else
+        {
+            Debug.LogError($"º”‘ÿ ß∞‹: {request.error}");
+        }
+#else
+        yield return null;
+        json_str = File.ReadAllText(path);
+#endif
+        skinConfigData = JsonUtility.FromJson<SkinManager.SkinConfigData>(json_str);
+        callBack?.Invoke();
+    }
 
     public string GetMidiPath()
     {
         return midiPath;
     }
 
-    public string GetBarsConfigPath()
-    {
-        return barsConfigPath;
-    }
-
     public string GetSkinConfigPath()
     {
         return skinConfigPath;
-    }
-
-    public string GetBarCurvePath()
-    {
-        return barCurvePath;
-    }
-
-    public string GetPadCurvePath()
-    {
-        return padCurvePath;
     }
 
     public string GetJsonPath()

@@ -5,9 +5,9 @@
             "ballSkin": 0,
             "lightSkin": 0,
             "padSkin": 0,
-            "barSkin": 1,
-            "wallSkin": 8,
-            "padMaterialSkin": 1
+            "barSkin": 0,
+            "wallSkin": 0,
+            "padMaterialSkin": 0
         }
     ]
 }

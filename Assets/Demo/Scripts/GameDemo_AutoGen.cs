@@ -65,9 +65,6 @@ public partial class GameDemo : MonoBehaviour
 
         padDataList.Clear();
 
-        frameVelocityOffsetList.Clear();
-        frameVelocityList.Clear();
-
         barCombineDataList.Clear();
         barLineDataList.Clear();
     }
