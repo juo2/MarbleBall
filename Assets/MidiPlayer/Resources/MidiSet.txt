@@ -12,8 +12,6 @@
   <IndexSelectedSF>0</IndexSelectedSF>
   <MidiFiles>
     <string>@ All Rights Reserved for these Midi Files</string>
-    <string>A-Lin - 天若有情</string>
     <string>北国之春</string>
-    <string>月下旅人  BPM92 86拍(3)</string>
   </MidiFiles>
 </MidiSet>

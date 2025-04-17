@@ -8,6 +8,15 @@
             "barSkin": 0,
             "wallSkin": 0,
             "padMaterialSkin": 0
+        },
+        {
+            "midi": "BEYOND - 海阔天空",
+            "ballSkin": 0,
+            "lightSkin": 0,
+            "padSkin": 0,
+            "barSkin": 0,
+            "wallSkin": 0,
+            "padMaterialSkin": 0
         }
     ]
 }

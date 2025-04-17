@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Pad : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class Pad : MonoBehaviour
     public Bounds bounds;
 
     public float currentBounciness = 0;
-
+    public Text label;
     private static float intensity = 2.5f;
 
     static List<Color> padAfterColorList = new List<Color>()
@@ -79,6 +80,12 @@ public class Pad : MonoBehaviour
         centerRendererDemo.SetColor(Color.yellow);
         padBefore();
     }
+
+    public void on_enable(string lyric)
+    {
+        label.text = lyric;
+    }
+
 
     public void padSkinInit(Material material)
     {
@@ -152,7 +159,7 @@ public class Pad : MonoBehaviour
 
     public void SetRotation(float rotation)
     {
-        transform.eulerAngles = new Vector3(0, 0, rotation);
+        wrapper.eulerAngles = new Vector3(0, 0, rotation);
 
         if(SkinManager.Instance.isDay())
         {

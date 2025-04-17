@@ -39,17 +39,16 @@ public class GameConfig : MonoBehaviour
     }
 
 #if UNITY_WEBGL
-
     static string headUrl = "https://172.19.11.101:8777";
-
     string midiPath = headUrl + "/midi";
     string skinConfigPath = headUrl + "/skinConfig.json";
     string jsonPath = headUrl + "/json";
-
+    string lyricPath = headUrl + "/lyric";
 #else 
     string midiPath = Application.streamingAssetsPath + "/midi";
     string skinConfigPath = Application.streamingAssetsPath + "/skinConfig.json";
     string jsonPath = Application.streamingAssetsPath + "/json";
+    string lyricPath = Application.streamingAssetsPath + "/lyric";
 #endif
 
     public SkinManager.SkinConfigData skinConfigData = null;
@@ -99,6 +98,11 @@ public class GameConfig : MonoBehaviour
     public string GetMidiPath()
     {
         return midiPath;
+    }
+
+    public string GetLyricPath()
+    {
+        return lyricPath;
     }
 
     public string GetSkinConfigPath()

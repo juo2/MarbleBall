@@ -500,6 +500,16 @@ public partial class GameDemo : MonoBehaviour
                 {
                     PadData padData = padDataList[i];
                     Pad pad_instance = InstantByPadData(padData);
+
+                    if(lyricDic.ContainsKey(i))
+                    {
+                        pad_instance.on_enable(lyricDic[i]);
+                    }
+                    else
+                    {
+                        pad_instance.on_enable("");
+                    }
+                    
                     visiblePadDic.Add(i, pad_instance);
                 }
             }

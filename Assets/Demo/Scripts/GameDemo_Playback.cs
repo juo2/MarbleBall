@@ -15,7 +15,9 @@ public partial class GameDemo : MonoBehaviour
 
     private List<BarLineData> barLineDataList = new List<BarLineData>();
     private List<BarsDemo> barsLineDemoList = new List<BarsDemo>();
-    
+
+    private Dictionary<int, string> lyricDic = new Dictionary<int, string>();
+
     [System.Serializable]
     public class PadData
     {
@@ -119,6 +121,7 @@ public partial class GameDemo : MonoBehaviour
         playMusicFrame = savePhysicsData.playMusicFrame;
         currentOffsetIndex = savePhysicsData.currentOffsetIndex;
         frameList = savePhysicsData.FrameList;
+        midiHelper.frameList = frameList;
         physicsStateList = savePhysicsData.PhysicsStateList;
 
         line.ResetLineRenderer(physicsStateList);
@@ -203,6 +206,8 @@ public partial class GameDemo : MonoBehaviour
 
         Debug.Log($"LoadData path:{path}");
         yield return midiHelper.Load(currentMidi);
+        lyricDic = midiHelper.lyricDic;
+
     }
 
     void SaveData(string midiName)
