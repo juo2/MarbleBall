@@ -27,7 +27,7 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator TryCurve(int offsetIndex, int offsetFrame)
     {
-        if (offsetIndex == 219)
+        if (offsetIndex == 50)
         {
             logger($"¿ªÊ¼³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical}");
         }
@@ -733,10 +733,10 @@ public partial class GameDemo : MonoBehaviour
 
         SetRotation(offsetIndex - 1, rotation);
 
-        HorizontalCombine(offsetIndex, offsetFrame);
+        HorizontalCombine(offsetIndex, offsetFrame,false,true);
     }
 
-    void HorizontalCombine(int offsetIndex,int offsetFrame,bool isFirst = false)
+    void HorizontalCombine(int offsetIndex,int offsetFrame,bool isFirst = false,bool isVer = false)
     {
         bool inverse = false;
 
@@ -744,6 +744,11 @@ public partial class GameDemo : MonoBehaviour
         if (ball.velocity.x > 0)
         {
             inverse = true;
+        }
+
+        if(isVer)
+        {
+            inverse = !inverse;
         }
 
         Vector3 prePos = ball.transform.position;
@@ -767,7 +772,6 @@ public partial class GameDemo : MonoBehaviour
                 }
             }
         }
-       
 
         BarsCurve barsCurve = FindBarsCurve(0, inverse);
         int remainFrame = offsetFrame - barsCurve.frame;
@@ -844,7 +848,8 @@ public partial class GameDemo : MonoBehaviour
         }
         if (remainFrame > 52 && remainFrame < 155)
         {
-            remainFrame = remainFrame - 15 - 2;
+            int endFrame = 15;
+            remainFrame = remainFrame - endFrame - 2;
 
             DealWithBarCombine_Internal(0, currentFrame, remainFrame);
 
@@ -856,8 +861,15 @@ public partial class GameDemo : MonoBehaviour
             }
 
             currentLineBars = InstantBarsLine(ball.transform.position, ball.velocity, 0, -1, -1);
-
             barsCurve = FindBarsCurve(0, currentLineBars.inverse);
+
+            int tempOffsetFrame = 0;
+            if (currentLineBars.inverse != inverse)
+            {
+                BarsCurve tempBarsCurve = FindBarsCurve(0, inverse);
+                tempOffsetFrame = tempBarsCurve.frame - barsCurve.frame;
+            }
+
             if (barsCurve != null)
             {
                 List<PhysicsState> physicsStates = TransformPhysicsState(barsCurve.physicsStates);
@@ -867,7 +879,7 @@ public partial class GameDemo : MonoBehaviour
 
             RecordBarsLine();
 
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < tempOffsetFrame + endFrame; i++)
             {
                 simulateNextFrame();
             }
