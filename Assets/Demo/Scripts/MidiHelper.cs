@@ -141,7 +141,7 @@ public class MidiHelper : MonoBehaviour
 
         currentMidi = _name;
 
-        yield return LoadLyric(_name);
+        //yield return LoadLyric(_name);
 
         if (isLoadBgm)
         {
