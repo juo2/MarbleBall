@@ -176,7 +176,6 @@ public partial class GameDemo : MonoBehaviour
     void HorizontalCombineSuccess(int offsetIndex, int offsetFrame)
     {
         logger($"    ≥¢ ‘ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
-
         
         EndCameraMovement(true);
 
@@ -187,7 +186,6 @@ public partial class GameDemo : MonoBehaviour
     {
         logger($"    ≥¢ ‘ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
 
-        RecordBarsCombine();
         EndCameraMovement(true);
 
         UpdateCurveType(curveType);

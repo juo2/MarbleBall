@@ -301,6 +301,8 @@ public partial class GameDemo : MonoBehaviour
 
     void RecordBarsCombine()
     {
+        logger($"BarCombine ¼ÇÂ¼ {currentBarsCombine.GetInstanceID()}");
+
         if (currentBarsCombine == null)
         {
             Debug.LogError("currentBarsCombine == null");
@@ -343,6 +345,8 @@ public partial class GameDemo : MonoBehaviour
                 barsCombine.mistakeCollisionTimes++;
             }
         };
+
+        currentBarsCombine = null;
     }
 
     void SetPhysicMaterialBounciness(int _index, float bounciness)

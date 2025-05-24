@@ -306,7 +306,9 @@ public partial class GameDemo : MonoBehaviour
     //List<BarsDemo> barsDemoPrefabList = new List<BarsDemo>();
     List<BarsDemo> barsDemoList = new List<BarsDemo>();
     Stack<BarsDemo> barsDemoPool = new Stack<BarsDemo>();
+
     Dictionary<int ,Stack<BarsDemo>> barsLineDemoPool = new Dictionary<int, Stack<BarsDemo>>();
+
     List<BarsScaleDemo> barsScaleDemoList = new List<BarsScaleDemo>();
     private BarsCombineDemo currentBarsCombine;
     private BarsDemo currentBars;
@@ -1362,6 +1364,11 @@ public partial class GameDemo : MonoBehaviour
             return;
         }
         File.AppendAllText(logPath, logStr + "\n");
+
+        if(logStr.Contains("BarLine"))
+        {
+            Debug.Log(logStr);
+        }
     }
 
     RecordJson getRecordJson()
@@ -2199,7 +2206,7 @@ public partial class GameDemo : MonoBehaviour
             }
         }
 
-        Debug.Log($"physicsStateList.Count:{physicsStateList.Count}    beforeBarbeiginFrame:{beforeBarbeiginFrame}    beforeBarEndFrame:{beforeBarEndFrame}");
+        //Debug.Log($"physicsStateList.Count:{physicsStateList.Count}    beforeBarbeiginFrame:{beforeBarbeiginFrame}    beforeBarEndFrame:{beforeBarEndFrame}");
 
         Vector3 posPath1 = new Vector3((left + right) / 2, physicsStateList[beforeBarbeiginFrame].position.y, physicsStateList[beforeBarbeiginFrame].position.z);
         Vector3 posPath2 = new Vector3((left + right) / 2, physicsStateList[beforeBarEndFrame].position.y, physicsStateList[beforeBarEndFrame].position.z);
@@ -2388,10 +2395,7 @@ public partial class GameDemo : MonoBehaviour
 
         if (!g_isPass)
         {
-            if (currentBarsCombine != null)
-                RecycleBarsCombine(currentBarsCombine);
-
-            currentBarsCombine = null;
+            RecycleBarsCombine();
             //回到之前
             simulateToFrame(backFrame, true, true);
         }
@@ -2408,8 +2412,6 @@ public partial class GameDemo : MonoBehaviour
         int backFrame_create = currentFrame;
 
         currentBarsCombine = InstantBarsCombine(bornPos, ball.velocity, currentFrame, null, backFrame, backFrame + offsetFrame);
-
-
 
         //阶段1
         for (int _f = 0; _f < lastFrame; _f++)
@@ -2819,10 +2821,15 @@ public partial class GameDemo : MonoBehaviour
         if (barsCombineDemoPool.Count > 0)
         {
             barCombine_instance = barsCombineDemoPool.Pop();
+
+            logger($"BarCombine 复用 {barCombine_instance.GetInstanceID()}");
         }
         else
         {
             barCombine_instance = Instantiate<BarsCombineDemo>(barCombine);
+
+            logger($"BarCombine 创建 {barCombine_instance.GetInstanceID()}");
+
             barCombine_instance.gameObject.SetActive(true);
         }
 
@@ -2868,17 +2875,30 @@ public partial class GameDemo : MonoBehaviour
         return barCombine_instance;
     }
 
-    void RecycleBarsCombine(BarsCombineDemo _bars)
+    void RecycleBarsCombine(BarsCombineDemo bars = null)
     {
-        _bars.transform.SetParent(padPoolParent);
-        _bars.transform.position = new Vector3(9999, 9999, 9999);
-        _bars.padCollider1.collisionAction = null;
-        _bars.padCollider2.collisionAction = null;
-        _bars.padCollider3.collisionAction = null;
-        _bars.updateVirtualBars(false);
-        _bars.SetScaleX(1.0f);
+        if(bars == null)
+        {
+            bars = currentBarsCombine;
+        }
 
-        barsCombineDemoPool.Push(_bars);
+        if(bars != null)
+        {
+            bars.transform.SetParent(padPoolParent);
+            bars.transform.position = new Vector3(9999, 9999, 9999);
+            bars.padCollider1.collisionAction = null;
+            bars.padCollider2.collisionAction = null;
+            bars.padCollider3.collisionAction = null;
+            bars.updateVirtualBars(false);
+            bars.SetScaleX(1.0f);
+
+            barsCombineDemoPool.Push(bars);
+
+            logger($"BarCombine 回收 {bars.GetInstanceID()}");
+        }
+
+        if(bars == currentBarsCombine)
+            currentBarsCombine = null;
     }
 
     void RecycleBars(BarsDemo _bars)

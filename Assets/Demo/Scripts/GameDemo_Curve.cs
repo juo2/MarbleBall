@@ -495,8 +495,6 @@ public partial class GameDemo : MonoBehaviour
 
     void HorizontalPipline2(int offsetIndex, int offsetFrame)
     {
-        currentBarsCombine = null;
-
         int backFrame = currentFrame;
 
         foreach (var rotation in h_rotationList1)
@@ -518,8 +516,7 @@ public partial class GameDemo : MonoBehaviour
                 {
                     if (currentBarsCombine != null)
                     {
-                        RecycleBarsCombine(currentBarsCombine);
-                        currentBarsCombine = null;
+                        RecycleBarsCombine();
                         //回到之前
                         simulateToFrame(backFrame, true, true);
                     }
@@ -666,7 +663,6 @@ public partial class GameDemo : MonoBehaviour
 
     void VerticalPipline2(int offsetIndex, int offsetFrame)
     {
-        currentBarsCombine = null;
 
         int backFrame = currentFrame;
 
@@ -707,8 +703,7 @@ public partial class GameDemo : MonoBehaviour
                 {
                     if (currentBarsCombine != null)
                     {
-                        RecycleBarsCombine(currentBarsCombine);
-                        currentBarsCombine = null;
+                        RecycleBarsCombine();
                         //回到之前
                         simulateToFrame(backFrame, true, true);
                     }
@@ -828,7 +823,7 @@ public partial class GameDemo : MonoBehaviour
                 simulateNextFrame();
             }
 
-            Debug.Log($"curveIndex:{curveIndex}");
+            //Debug.Log($"curveIndex:{curveIndex}");
             currentLineBars = InstantBarsLine(ball.transform.position, ball.velocity, curveIndex, -1, -1);
 
             barsCurve = FindBarsCurve(curveIndex, currentLineBars.inverse);
@@ -1535,7 +1530,7 @@ public partial class GameDemo : MonoBehaviour
                         //UpdateFrameList(currentOffsetIndex, totalFrame);
                     }
 
-                    Debug.Log($"offsetIndex:{_offsetIndex}   barsCurve.frame:{barsCurve.frame}   prefabIndex:{prefabIndex}  simlateFrame:{simlateFrame}");
+                    //Debug.Log($"offsetIndex:{_offsetIndex}   barsCurve.frame:{barsCurve.frame}   prefabIndex:{prefabIndex}  simlateFrame:{simlateFrame}");
                 }
                 else
                 {

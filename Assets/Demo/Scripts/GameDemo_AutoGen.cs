@@ -125,7 +125,7 @@ public partial class GameDemo : MonoBehaviour
         ClearAllPad();
 
         //临时清除
-        DestoryAllBars();
+        //DestoryAllBars();
 
         currentOffsetIndex = 1;
 
@@ -197,33 +197,33 @@ public partial class GameDemo : MonoBehaviour
 
     void DestoryAllBars()
     {
-        while(barsDemoPool.Count > 0)
-        {
-            var bars = barsDemoPool.Pop();
-            DestroyImmediate(bars.gameObject);
-        }
+        //while(barsDemoPool.Count > 0)
+        //{
+        //    var bars = barsDemoPool.Pop();
+        //    DestroyImmediate(bars.gameObject);
+        //}
 
-        while (barsCombineDemoPool.Count > 0)
-        {
-            var bars = barsCombineDemoPool.Pop();
-            DestroyImmediate(bars.gameObject);
-        }
+        //while (barsCombineDemoPool.Count > 0)
+        //{
+        //    var bars = barsCombineDemoPool.Pop();
+        //    DestroyImmediate(bars.gameObject);
+        //}
 
-        foreach(var key in barsLineDemoPool.Keys)
-        {
-            var barPools = barsLineDemoPool[key];
-            while (barPools.Count > 0)
-            {
-                var bars = barPools.Pop();
-                DestroyImmediate(bars.gameObject);
-            }
-        }
+        //foreach(var key in barsLineDemoPool.Keys)
+        //{
+        //    var barPools = barsLineDemoPool[key];
+        //    while (barPools.Count > 0)
+        //    {
+        //        var bars = barPools.Pop();
+        //        DestroyImmediate(bars.gameObject);
+        //    }
+        //}
 
-        while(padPool.Count > 0)
-        {
-            var pad = padPool.Pop();
-            DestroyImmediate(pad.gameObject);
-        }
+        //while(padPool.Count > 0)
+        //{
+        //    var pad = padPool.Pop();
+        //    DestroyImmediate(pad.gameObject);
+        //}
 
     }
 
@@ -247,6 +247,12 @@ public partial class GameDemo : MonoBehaviour
         {
             RecycleLineBars(bar);
         }
+
+        foreach(var key in barsLineDemoPool.Keys)
+        {
+            logger($"BarLine {key} 有对象 {barsLineDemoPool[key].Count} 个");
+        }
+
 
         barsLineDemoList.Clear();
     }
