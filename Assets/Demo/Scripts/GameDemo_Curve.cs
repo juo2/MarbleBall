@@ -841,7 +841,7 @@ public partial class GameDemo : MonoBehaviour
                 simulateNextFrame();
             }
         }
-        if (remainFrame > 52 && remainFrame < 155)
+        else if (remainFrame > 52 && remainFrame < 155)
         {
             int endFrame = 15;
             remainFrame = remainFrame - endFrame - 2;
