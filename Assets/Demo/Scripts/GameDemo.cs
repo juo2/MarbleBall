@@ -468,6 +468,24 @@ public partial class GameDemo : MonoBehaviour
        //-10f,
     };
 
+    List<float> h_rotationList_fail = new List<float>()
+    {
+         0f,
+         2f,
+        -2f,
+         4f,
+        -4f,
+         6f,
+        -6f,
+         8f,
+        -8f,
+        10f,
+       -10f,
+        12f,
+       -12f,
+
+    };
+
     List<float> h_bouncinessPriorityList2 = new List<float>()
     {
         0.6f,
@@ -1917,6 +1935,15 @@ public partial class GameDemo : MonoBehaviour
             yield return TryCurve(offsetIndex, offsetFrame);
             
             if(!g_isPass)
+            {
+                logger($"第 {offsetIndex} 个发生错误 正在进行重试!!!!");
+                Debug.Log($"第 {offsetIndex} 个发生错误 正在进行重试!!!!");
+
+                RefreshCurveType(offsetIndex, offsetFrame);
+                yield return TryCurve(offsetIndex, offsetFrame,true);
+            }
+
+            if (!g_isPass)
             {
                 logger($"第 {offsetIndex} 个发生错误 已退出循环!!!!");
                 Debug.Log($"第 {offsetIndex} 个发生错误 已退出循环!!!!");

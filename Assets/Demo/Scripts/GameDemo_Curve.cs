@@ -25,7 +25,7 @@ public partial class GameDemo : MonoBehaviour
 
     TryingType tryingType = TryingType.None;
 
-    IEnumerator TryCurve(int offsetIndex, int offsetFrame)
+    IEnumerator TryCurve(int offsetIndex, int offsetFrame,bool isFail = false)
     {
         if (offsetIndex == 50)
         {
@@ -178,7 +178,7 @@ public partial class GameDemo : MonoBehaviour
         {
             stopwatch.Restart();
 
-            HorizontalToHorizontal(offsetIndex, offsetFrame);
+            HorizontalToHorizontal(offsetIndex, offsetFrame, isFail);
 
             stopwatch.Stop();
 
@@ -241,7 +241,7 @@ public partial class GameDemo : MonoBehaviour
         {
             stopwatch.Restart();
 
-            HorizontalLine(offsetIndex, offsetFrame, spBarsCount, barsDemoPrefabList.Count - 2);
+            HorizontalLine(offsetIndex, offsetFrame, spBarsCount, barsDemoPrefabList.Count - 2, isFail);
 
             stopwatch.Stop();
 
@@ -262,7 +262,7 @@ public partial class GameDemo : MonoBehaviour
         {
             stopwatch.Restart();
 
-            HorizontalLine(offsetIndex, offsetFrame, spBarsCount, barsDemoPrefabList.Count);
+            HorizontalLine(offsetIndex, offsetFrame, spBarsCount, barsDemoPrefabList.Count, isFail);
 
             stopwatch.Stop();
 
@@ -283,11 +283,11 @@ public partial class GameDemo : MonoBehaviour
         {
             if (offsetIndex == 27)
             {
-                HorizontalPipline(offsetIndex, offsetFrame);
+                HorizontalPipline(offsetIndex, offsetFrame, isFail);
             }
             else
             {
-                HorizontalPipline(offsetIndex, offsetFrame);
+                HorizontalPipline(offsetIndex, offsetFrame, isFail);
             }
 
             if (g_isPass)
@@ -365,7 +365,7 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    void HorizontalToHorizontal(int offsetIndex, int offsetFrame)
+    void HorizontalToHorizontal(int offsetIndex, int offsetFrame,bool isFail)
     {
         Vector3 center = Vector2.zero;
         Vector3 size = Vector2.zero;
@@ -387,7 +387,14 @@ public partial class GameDemo : MonoBehaviour
 
         distanceType = DistanceType.Far;
 
-        HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList2, h_bouncinessPriorityList2);
+        if(isFail)
+        {
+            HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList_fail, h_bouncinessPriorityList2);
+        }
+        else
+        {
+            HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList2, h_bouncinessPriorityList2);
+        }
 
         //if (!g_isPass)
         //{
@@ -440,13 +447,23 @@ public partial class GameDemo : MonoBehaviour
         HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList1, h_bouncinessPriorityList);
     }
 
-    void HorizontalLine(int offsetIndex, int offsetFrame, int startIndex, int endIndex)
+    void HorizontalLine(int offsetIndex, int offsetFrame, int startIndex, int endIndex,bool isFail)
     {
         currentLineBars = null;
 
         int backFrame = currentFrame;
 
-        foreach (var rotation in h_rotationList1)
+        List<float> h_rotation = null;
+        if(isFail)
+        {
+            h_rotation = h_rotationList_fail;
+        }
+        else
+        {
+            h_rotation = h_rotationList1;
+        }
+
+        foreach (var rotation in h_rotation)
         {
             for (int j = 0; j < h_bouncinessPriorityList.Count; j++)
             {
@@ -488,9 +505,9 @@ public partial class GameDemo : MonoBehaviour
         }
     }
 
-    void HorizontalPipline(int offsetIndex, int offsetFrame)
+    void HorizontalPipline(int offsetIndex, int offsetFrame,bool isFail)
     {
-        HorizontalLine(offsetIndex, offsetFrame, 2, barsDemoPrefabList.Count);
+        HorizontalLine(offsetIndex, offsetFrame, 2, barsDemoPrefabList.Count, isFail);
     }
 
     void HorizontalPipline2(int offsetIndex, int offsetFrame)
