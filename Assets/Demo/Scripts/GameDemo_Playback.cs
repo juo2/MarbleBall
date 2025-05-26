@@ -225,7 +225,8 @@ public partial class GameDemo : MonoBehaviour
 
     void SaveData(string midiName)
     {
-        string path = Path.Combine(Application.streamingAssetsPath, midiName + ".json");
+        string path = GameConfig.Instance.GetJsonPath();
+        path = Path.Combine(path, midiName + ".json");
 
         SavePhysicsData savePhysicsData = new SavePhysicsData();
         savePhysicsData.playMusicFrame = playMusicFrame;
