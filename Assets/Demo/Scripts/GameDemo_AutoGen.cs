@@ -107,13 +107,17 @@ public partial class GameDemo : MonoBehaviour
         }
 
         yield return midiHelper.Load(midi);
-        logger($"midiHelper.suitMidiFacter = {midiHelper.suitMidiFacter}");
 
-        SkinManager.Instance.RefreshSkinByName(midiHelper.currentMidi);
+        if(midiHelper.midiCount != 0)
+        {
+            logger($"midiHelper.suitMidiFacter = {midiHelper.suitMidiFacter}");
 
-        LOOPCOUNT = count;
+            SkinManager.Instance.RefreshSkinByName(midiHelper.currentMidi);
 
-        yield return GameInit();
+            LOOPCOUNT = count;
+
+            yield return GameInit();
+        }
     }
 
     void ResetBeigin()
@@ -182,7 +186,9 @@ public partial class GameDemo : MonoBehaviour
 
         //ÖØÖÃÎ»ÖÃ
         currentFrame = 0;
-        ball.ResetState(physicsStateList[currentFrame]);
+        if(physicsStateList.Count > 0)
+            ball.ResetState(physicsStateList[currentFrame]);
+
         visiblePadRange(0, 10);
         midiHelper.Stop();
         isPlay = false;

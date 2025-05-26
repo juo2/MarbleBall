@@ -31,6 +31,7 @@ public class MidiHelper : MonoBehaviour
     public int beiginFrame = 0;
     AudioClip currentClip;
     private bool isLoadBgm = false;
+    public int midiCount = 0;
     // Start is called before the first frame update
     void Awake()
     {
@@ -84,7 +85,16 @@ public class MidiHelper : MonoBehaviour
             midiFilePlayer.midiLoaded.MPTK_KeepEndTrack = midiFilePlayer.MPTK_KeepEndTrack;
             midiFilePlayer.midiLoaded.MPTK_LogLoadEvents = midiFilePlayer.MPTK_LogLoadEvents;
             midiFilePlayer.midiLoaded.MPTK_EnableChangeTempo = midiFilePlayer.MPTK_EnableChangeTempo;
-            midiFilePlayer.midiLoaded.MPTK_Load(_bytes);
+             
+            try
+            {
+                midiFilePlayer.midiLoaded.MPTK_Load(_bytes);
+            }
+            catch (Exception e)
+            {
+                //  Block of code to handle errors
+                Debug.LogError($"{e.Message} ∂¡»°midi ß∞‹ {_name}");
+            }
 
             midiStreamPlayer.MPTK_CorePlayer = false;
             List<MPTKEvent> AllMidiEvents = midiFilePlayer.MPTK_ReadMidiEvents();
@@ -207,6 +217,8 @@ public class MidiHelper : MonoBehaviour
             //Debug.Log($"ind:{ind}");
             midiFilePlayer.MPTK_StartPlayAtFirstNote = true;
             midiFilePlayer.MPTK_MidiAutoRestart = false;
+
+            midiCount = AllMidiEvents.Count;
         }
 
         currentMidi = _name;
@@ -224,7 +236,6 @@ public class MidiHelper : MonoBehaviour
             {
                 Debug.LogError($"º”‘ÿ ß∞‹: {bgmRequest.error}");
             }
-
         }
     }
 
