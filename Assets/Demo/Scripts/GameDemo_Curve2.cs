@@ -379,29 +379,46 @@ public partial class GameDemo : MonoBehaviour
     }
 
 
-    IEnumerator HorizontalCurveFail(int offsetIndex, int offsetFrame)
+    IEnumerator HorizontalCurveFail(int offsetIndex, int offsetFrame,bool isFail)
     {
-        if (offsetFrame >= 16 && offsetFrame <= 27)
+
+        if(!isFail)
         {
-            if (CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal) && !CurveTypeRecord.Contains(CurveType.HorizontalPipline))
+            if (offsetFrame >= 16 && offsetFrame <= 27)
             {
-                curveType = CurveType.HorizontalPipline;
-                yield return TryCurve(offsetIndex, offsetFrame);
+                if (CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal) && !CurveTypeRecord.Contains(CurveType.HorizontalPipline))
+                {
+                    curveType = CurveType.HorizontalPipline;
+                    yield return TryCurve(offsetIndex, offsetFrame);
+                }
+                else if (CurveTypeRecord.Contains(CurveType.HorizontalPipline) && !CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal))
+                {
+                    curveType = CurveType.HorizontalToHorizontal;
+                    yield return TryCurve(offsetIndex, offsetFrame);
+                }
+                else
+                {
+                    BackupPlan(currentFrame, offsetIndex, offsetFrame);
+                }
             }
-            else if (CurveTypeRecord.Contains(CurveType.HorizontalPipline) && !CurveTypeRecord.Contains(CurveType.HorizontalToHorizontal))
+            else if (offsetFrame > 50)
             {
-                curveType = CurveType.HorizontalToHorizontal;
+                curveType = CurveType.HorizontalPipline2;
                 yield return TryCurve(offsetIndex, offsetFrame);
-            }
-            else
-            {
-                BackupPlan(currentFrame, offsetIndex, offsetFrame);
             }
         }
-        else if (offsetFrame > 50)
+        else
         {
-            curveType = CurveType.HorizontalPipline2;
-            yield return TryCurve(offsetIndex, offsetFrame);
+            if(!CurveTypeRecord.Contains(CurveType.HorizontalPipline))
+            {
+                curveType = CurveType.HorizontalPipline;
+                yield return TryCurve(offsetIndex, offsetFrame,isFail);
+            }
+            else if(!CurveTypeRecord.Contains(CurveType.HorizontalPipline2))
+            {
+                curveType = CurveType.HorizontalPipline2;
+                yield return TryCurve(offsetIndex, offsetFrame, isFail);
+            }
         }
 
     }

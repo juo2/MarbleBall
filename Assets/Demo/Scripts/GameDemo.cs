@@ -438,6 +438,21 @@ public partial class GameDemo : MonoBehaviour
         //0.0f,
     };
 
+    List<float> h_bouncinessPriorityList_fail = new List<float>()
+    {
+        0.3f,
+        0.4f,
+        0.5f,
+        0.2f,
+        0.6f,
+        0.7f,
+        0.8f,
+        0.9f,
+        1.0f,
+        0.1f,
+        0.0f,
+    };
+
     List<float> h_bouncinessPriorityList1 = new List<float>()
     {
         0.3f,
@@ -1743,7 +1758,17 @@ public partial class GameDemo : MonoBehaviour
        
     }
 
-
+    void RefreshCurveType_Fail(int offsetIndex, int offsetFrame)
+    {
+        if(!isVertical)
+        {
+            curveType = CurveType.HorizontalToHorizontal;
+        }
+        else
+        {
+            RefreshCurveType(offsetIndex, offsetFrame);
+        }
+    }
 
     IEnumerator GameInit()
     {
@@ -1938,8 +1963,9 @@ public partial class GameDemo : MonoBehaviour
             {
                 logger($"第 {offsetIndex} 个发生错误 正在进行重试!!!!");
                 Debug.Log($"第 {offsetIndex} 个发生错误 正在进行重试!!!!");
-
-                RefreshCurveType(offsetIndex, offsetFrame);
+                
+                CurveTypeRecord.Clear();
+                RefreshCurveType_Fail(offsetIndex, offsetFrame);
                 yield return TryCurve(offsetIndex, offsetFrame,true);
             }
 
@@ -1984,22 +2010,22 @@ public partial class GameDemo : MonoBehaviour
         //计算尾奏
         if(!isFirstAnim)
         {
-            int ef = midiHelper.GetEndFrame();
+            //int ef = midiHelper.GetEndFrame();
 
-            if(ef < 120)
-            {
-                HorizontalPipline2(currentOffsetIndex, ef);
-            }
-            else
-            {
-                HorizontalCombine(currentOffsetIndex, ef);
-            }
+            //if(ef < 120)
+            //{
+            //    HorizontalPipline2(currentOffsetIndex, ef);
+            //}
+            //else
+            //{
+            //    HorizontalCombine(currentOffsetIndex, ef);
+            //}
             
-            currentCameraMovement = new CameraMovement();
-            currentCameraMovement.isBar = true;
-            currentCameraMovement.beiginFrame = frameList[currentOffsetIndex - 1];
-            currentCameraMovement.endFrame = frameList[currentOffsetIndex - 1] + ef;
-            cameraMovementList.Add(currentCameraMovement);
+            //currentCameraMovement = new CameraMovement();
+            //currentCameraMovement.isBar = true;
+            //currentCameraMovement.beiginFrame = frameList[currentOffsetIndex - 1];
+            //currentCameraMovement.endFrame = frameList[currentOffsetIndex - 1] + ef;
+            //cameraMovementList.Add(currentCameraMovement);
         }
 
         

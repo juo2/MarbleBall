@@ -192,7 +192,7 @@ public partial class GameDemo : MonoBehaviour
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
 
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame,isFail);
             }
         }
         else if(curveType == CurveType.HorizontalToHorizontal_Simulate)
@@ -213,7 +213,7 @@ public partial class GameDemo : MonoBehaviour
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
 
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame,isFail);
             }
         }
         else if (curveType == CurveType.HorizontalToVertical)
@@ -234,7 +234,7 @@ public partial class GameDemo : MonoBehaviour
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
 
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame,isFail);
             }
         }
         else if (curveType == CurveType.HorizontalLine)
@@ -255,7 +255,7 @@ public partial class GameDemo : MonoBehaviour
             else
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame,isFail);
             }
         }
         else if (curveType == CurveType.HorizontalLine2)
@@ -276,7 +276,7 @@ public partial class GameDemo : MonoBehaviour
             else
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame,isFail);
             }
         }
         else if (curveType == CurveType.HorizontalPipline)
@@ -298,14 +298,14 @@ public partial class GameDemo : MonoBehaviour
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
 
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame,isFail);
             }
         }
         else if (curveType == CurveType.HorizontalPipline2)
         {
             stopwatch.Restart();
 
-            HorizontalPipline2(offsetIndex, offsetFrame);
+            HorizontalPipline2(offsetIndex, offsetFrame, isFail);
 
             stopwatch.Stop();
 
@@ -318,7 +318,7 @@ public partial class GameDemo : MonoBehaviour
             else
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                //yield return HorizontalCurveFail(offsetIndex, offsetFrame);
             }
         }
         else if (curveType == CurveType.HorizontalCombine)
@@ -338,7 +338,7 @@ public partial class GameDemo : MonoBehaviour
             else
             {
                 logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  --- passType:{passType} --- fail...");
-                yield return HorizontalCurveFail(offsetIndex, offsetFrame);
+                yield return HorizontalCurveFail(offsetIndex, offsetFrame,isFail);
             }
         }
         else if (curveType == CurveType.VerticalCombine)
@@ -389,7 +389,7 @@ public partial class GameDemo : MonoBehaviour
 
         if(isFail)
         {
-            HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList_fail, h_bouncinessPriorityList2);
+            HorizontalToHorizontal_Internal(offsetIndex, offsetFrame, h_rotationList_fail, h_bouncinessPriorityList_fail);
         }
         else
         {
@@ -454,20 +454,23 @@ public partial class GameDemo : MonoBehaviour
         int backFrame = currentFrame;
 
         List<float> h_rotation = null;
-        if(isFail)
+        List<float> h_bouncinessList = null;
+        if (isFail)
         {
             h_rotation = h_rotationList_fail;
+            h_bouncinessList = h_bouncinessPriorityList_fail;
         }
         else
         {
             h_rotation = h_rotationList1;
+            h_bouncinessList = h_bouncinessPriorityList;
         }
 
         foreach (var rotation in h_rotation)
         {
-            for (int j = 0; j < h_bouncinessPriorityList.Count; j++)
+            for (int j = 0; j < h_bouncinessList.Count; j++)
             {
-                float bounciness = h_bouncinessPriorityList[j];
+                float bounciness = h_bouncinessList[j];
                 simulateToFrame(backFrame, true, true);
                 SetRotation(offsetIndex - 1, rotation);
                 SetPhysicMaterialBounciness(offsetIndex - 1, bounciness);
@@ -510,15 +513,28 @@ public partial class GameDemo : MonoBehaviour
         HorizontalLine(offsetIndex, offsetFrame, 2, barsDemoPrefabList.Count, isFail);
     }
 
-    void HorizontalPipline2(int offsetIndex, int offsetFrame)
+    void HorizontalPipline2(int offsetIndex, int offsetFrame,bool isFail)
     {
         int backFrame = currentFrame;
 
-        foreach (var rotation in h_rotationList1)
+        List<float> h_rotation = null;
+        List<float> h_bouncinessList = null;
+        if (isFail)
         {
-            for (int j = 0; j < h_bouncinessPriorityList.Count; j++)
+            h_rotation = h_rotationList_fail;
+            h_bouncinessList = h_bouncinessPriorityList_fail;
+        }
+        else
+        {
+            h_rotation = h_rotationList1;
+            h_bouncinessList = h_bouncinessPriorityList;
+        }
+
+        foreach (var rotation in h_rotation)
+        {
+            for (int j = 0; j < h_bouncinessList.Count; j++)
             {
-                float bounciness = h_bouncinessPriorityList[j];
+                float bounciness = h_bouncinessList[j];
                 simulateToFrame(backFrame, true, true);
                 SetRotation(offsetIndex - 1, rotation);
                 SetPhysicMaterialBounciness(offsetIndex - 1, bounciness);
