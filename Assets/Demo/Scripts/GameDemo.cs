@@ -303,6 +303,8 @@ public partial class GameDemo : MonoBehaviour
     [SerializeField]
     private Light spotLight;
 
+    Dictionary<int, Vector3> verCameraPointDic = new Dictionary<int, Vector3>();
+
     //List<BarsDemo> barsDemoPrefabList = new List<BarsDemo>();
     List<BarsDemo> barsDemoList = new List<BarsDemo>();
     Stack<BarsDemo> barsDemoPool = new Stack<BarsDemo>();
@@ -988,25 +990,7 @@ public partial class GameDemo : MonoBehaviour
             //Pad_Simulate2();
             //Bars_Simulate();
             Pad_Simulate3();
-            //StartCoroutine(Bars_Curve(0,40,25));
-            //VirtualBarsScale_Simulate();
-            //StartCoroutine(Bars_Simulate2());
-            //Bars_Simulate3();
-            //StartCoroutine(Bars_Simulate4());
-            //StartCoroutine(Bars_Simulate5());
-            //StartCoroutine(Bars_Simulate6());
-            //StartCoroutine(Bars_Simulate7());
-            //StartCoroutine(Bars_Simulate8());
-            //StartCoroutine(Bars_Simulate9());
-            //StartCoroutine(Bars_Simulate10());
-            //StartCoroutine(Bars_Simulate11());
-            //StartCoroutine(Bars_Simulate12());
-            //StartCoroutine(Bars_Simulate13());
-            //StartCoroutine(Bars_Simulate14());
-
-            //StartCoroutine(Bars_Simulate16());
-            //StartCoroutine(Bars_Simulate17()); 
-            //StartCoroutine(Bars_Simulate18());
+ 
 
         });
         StartCoroutine(LoadConfig());
@@ -1016,79 +1000,7 @@ public partial class GameDemo : MonoBehaviour
             initialRotation = new Vector3(0f, 0f, 0);
 
 
-        //BarsConfig barsConfig = new BarsConfig();
-        //barsConfig.BarConfigList = new List<BarConfig>();
-
-        //BarConfig barConfig = new BarConfig();
-        //barConfig.prefabIndex = 0;
-        //barConfig.beiginOffset = 0.1f;
-        //barConfig.endOffset = 0.1f;
-        //barConfig.modifyVelocityX = -9999;
-        //barConfig.modifyVelocityY = -9999;
-
-        //barsConfig.BarConfigList.Add(barConfig);
-
-        //barConfig = new BarConfig();
-        //barConfig.prefabIndex = 1;
-        //barConfig.beiginOffset = 0.18f;
-        //barConfig.endOffset = 0.3f;
-        //barConfig.modifyVelocityX = -1.1f;
-        //barConfig.modifyVelocityY = -0.48f;
-
-        //barsConfig.BarConfigList.Add(barConfig);
-
-        //string json_str = JsonUtility.ToJson(barsConfig);
-        //File.WriteAllText(Path.Combine(Application.streamingAssetsPath,"barsConfig.json"), json_str);
-
-        //Config config = new Config();
-        //config.gravityY = gravityY;
-        //config.continuousTryCount = ContinuousTryCount;
-        //config.initialVelocity = initialVelocity;
-        //config.h_bouncinessPriorityList = h_bouncinessPriorityList;
-        //config.v_bouncinessPriorityList = v_bouncinessPriorityList;
-        //config.h_rotationList = h_rotationList;
-        //config.v_rotationList1 = v_rotationList1;
-        //config.v_rotationList2 = v_rotationList2;
-        //config.horizontalCenter1 = horizontalCenter1;
-        //config.horizontalCenter2 = horizontalCenter2;
-        //config.horizontalBestPos1 = horizontalBestPos1;
-        //config.horizontalBestPos2 = horizontalBestPos2;
-        //config.horizontalSize = horizontalSize;
-        //config.verticalCenter1 = verticalCenter1;
-        //config.verticalCenter2 = verticalCenter2;
-        //config.verticalBestPos1 = verticalBestPos1;
-        //config.verticalBestPos2 = verticalBestPos2;
-        //config.verticalSize = verticalSize;
-
-        //string json_str = JsonUtility.ToJson(config);
-        //File.WriteAllText(config_path, json_str);
     }
-
-    //void LoadConfig()
-    //{
-    //    config_path = Path.Combine(Application.streamingAssetsPath, "config.json");
-    //    string json_str = File.ReadAllText(config_path);
-    //    Config config = JsonUtility.FromJson<Config>(json_str);
-
-    //    gravityY = config.gravityY;
-    //    ContinuousTryCount = config.continuousTryCount;
-    //    initialVelocity = config.initialVelocity;
-    //    h_bouncinessPriorityList1 = config.h_bouncinessPriorityList;
-    //    v_bouncinessPriorityList = config.v_bouncinessPriorityList;
-    //    h_rotationList1 = config.h_rotationList;
-    //    v_rotationList1 = config.v_rotationList1;
-    //    v_rotationList2 = config.v_rotationList2;
-    //    horizontalCenter1 = config.horizontalCenter1;
-    //    horizontalCenter2 = config.horizontalCenter2;
-    //    horizontalBestPos1 = config.horizontalBestPos1;
-    //    horizontalBestPos2 = config.horizontalBestPos2;
-    //    horizontalSize = config.horizontalSize;
-    //    verticalCenter1 = config.verticalCenter1;
-    //    verticalCenter2 = config.verticalCenter2;
-    //    verticalBestPos1 = config.verticalBestPos1;
-    //    verticalBestPos2 = config.verticalBestPos2;
-    //    verticalSize = config.verticalSize;
-    //}
 
     IEnumerator LoadConfig()
     {
@@ -2060,6 +1972,11 @@ public partial class GameDemo : MonoBehaviour
                 {
                     Vector3 pos = physicsStateList[i].position;
 
+                    if (verCameraPointDic.ContainsKey(i))
+                    {
+                        pos = verCameraPointDic[i];
+                    }
+
                     if (!cameraPosMap.ContainsKey(i))
                     {
                         cameraPathList.Add(pos);
@@ -2083,7 +2000,17 @@ public partial class GameDemo : MonoBehaviour
             else
             {
                 Vector3 pos1 = physicsStateList[bf].position;
+                if (verCameraPointDic.ContainsKey(bf))
+                {
+                    pos1 = verCameraPointDic[bf];
+                }
+
                 Vector3 pos2 = physicsStateList[ef].position;
+                if (verCameraPointDic.ContainsKey(ef))
+                {
+                    pos2 = verCameraPointDic[ef];
+                }
+
                 movementIndex = movementIndex + 2;
 
                 cameraProjection.positionCount = movementIndex;
@@ -2307,7 +2234,7 @@ public partial class GameDemo : MonoBehaviour
         return null;
     }
 
-    void EndCameraMovement(bool isBar = false)
+    void EndCameraMovement(bool isBar = false,bool isVer = false)
     {
         if(isBar)
         {
@@ -2347,6 +2274,11 @@ public partial class GameDemo : MonoBehaviour
             currentCameraMovement.isBar = isBar;
             currentCameraMovement.endFrame = frameList[currentOffsetIndex];
             cameraMovementList.Add(currentCameraMovement);
+
+            if(isVer)
+            {
+                verCameraPointDic.Add(currentCameraMovement.endFrame, currentPad.transform.position);
+            }
 
             currentCameraMovement = new CameraMovement();
             currentCameraMovement.beiginFrame = frameList[currentOffsetIndex];

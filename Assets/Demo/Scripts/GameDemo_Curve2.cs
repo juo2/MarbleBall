@@ -123,7 +123,7 @@ public partial class GameDemo : MonoBehaviour
         logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} ---  ContinuousCount:{ContinuousCount}  --- success!!!");
 
         RecordBarsLine();
-        EndCameraMovement(true);
+        EndCameraMovement(true, true);
 
         UpdateCurveType(curveType);
 
@@ -156,7 +156,7 @@ public partial class GameDemo : MonoBehaviour
         logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
 
         RecordBarsLine();
-        EndCameraMovement(true);
+        EndCameraMovement(true, true);
 
         UpdateCurveType(curveType);
 
@@ -186,7 +186,7 @@ public partial class GameDemo : MonoBehaviour
     {
         logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
 
-        EndCameraMovement(true);
+        EndCameraMovement(true, true);
 
         UpdateCurveType(curveType);
     }
@@ -196,7 +196,7 @@ public partial class GameDemo : MonoBehaviour
         logger($"    ³¢ÊÔ curveType : {curveType} --- offsetIndex : {offsetIndex} --- offsetFrame : {offsetFrame} --- isVertical:{isVertical} --- ContinuousCount:{ContinuousCount}  ---success!!!");
 
         RecordBarsCombine();
-        EndCameraMovement(true);
+        EndCameraMovement(true, true);
 
         UpdateCurveType(curveType);
     }
@@ -210,7 +210,7 @@ public partial class GameDemo : MonoBehaviour
 
         if (preCurveType == CurveType.HorizontalToHorizontal && (_curveType == CurveType.VerticalToVertical || _curveType == CurveType.VerticalToVertical_Simulate))
         {
-            EndCameraMovement();
+            EndCameraMovement(false,true);
         }
         else if ((preCurveType == CurveType.VerticalToVertical || preCurveType == CurveType.VerticalToVertical_Simulate) && _curveType == CurveType.HorizontalToHorizontal)
         {
