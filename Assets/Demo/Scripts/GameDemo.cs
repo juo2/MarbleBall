@@ -303,6 +303,9 @@ public partial class GameDemo : MonoBehaviour
     [SerializeField]
     private Light spotLight;
 
+    [SerializeField]
+    private KeepRotation keepRotation;
+
     Dictionary<int, Vector3> verCameraPointDic = new Dictionary<int, Vector3>();
 
     //List<BarsDemo> barsDemoPrefabList = new List<BarsDemo>();
@@ -396,6 +399,12 @@ public partial class GameDemo : MonoBehaviour
     Vector2 horizontalBestPos3 = new Vector2(0.16f,-0.08f);
     Vector2 horizontalBestPos4 = new Vector2(-0.16f, -0.08f);
     Vector2 horizontalSize2 = new Vector2(0.12f, 0.12f);
+
+    Vector2 horizontalCenter5 = new Vector2(0.16f, -0.15f);
+    Vector2 horizontalCenter6 = new Vector2(-0.16f, -0.15f);
+    Vector2 horizontalBestPos5 = new Vector2(0.16f, -0.08f);
+    Vector2 horizontalBestPos6 = new Vector2(-0.16f, -0.08f);
+    Vector2 horizontalSize3 = new Vector2(0.12f, 0.15f);
 
 
     Vector2 horizontalToVerticalCenter1 = new Vector2(0.15f, -0.12f);
@@ -500,7 +509,24 @@ public partial class GameDemo : MonoBehaviour
        -10f,
         12f,
        -12f,
-
+         14f,
+        -14f,
+         16f,
+        -16f,
+         18f,
+        -18f,
+         20f,
+        -20f,
+         22f,
+        -22f,
+         24f,
+        -24f,
+         26f,
+        -26f,
+         28f,
+        -28f,
+         30f,
+        -30f
     };
 
     List<float> h_bouncinessPriorityList2 = new List<float>()
@@ -675,6 +701,8 @@ public partial class GameDemo : MonoBehaviour
     int spBarsCount = 4;
     float midiFacter = 1f;
 
+    BarsCurve firstBarsCurve = null;
+
     private int currentFrame
     {
         set
@@ -699,6 +727,7 @@ public partial class GameDemo : MonoBehaviour
     List<PadCurve> padCurveList = new List<PadCurve>();
 
     bool isFirstAnim = true;
+    bool isHoldSong = true;
 
     int barsCurveMinIndex = 0;
     int barsCurveMaxIndex = 11;
@@ -735,31 +764,6 @@ public partial class GameDemo : MonoBehaviour
         beiginBtn.onClick.AddListener(() =>
         {
             SpaceKeyDown();
-            //if(padDataList.Count > 0)
-            //{
-            //    //Time.timeScale = midiHelper.suitMidiFacter;
-            //    Physics.autoSimulation = false;
-            //    isPlay = true;
-            //    currentFrame = 0;
-            //    visiblePadRange(0, 10);
-            //    cinemachineTrackedDolly.m_PathPosition = 0;
-            //    cameraPos.transform.position = Vector3.zero;
-            //    midiHelper.Stop();
-
-            //    m_currentObjCount = -1;
-            //    m_preObjCount = -1;
-
-            //    isEditorCamera = false;
-            //    UpdateCamera();
-
-            //    bGMPlayer.StopBgm();
-            //}
-            //else
-            //{
-            //    isPlay = true;
-            //    currentFrame = 0;
-            //}
-
         });
 
         playBtn.onClick.AddListener(() =>
@@ -842,7 +846,7 @@ public partial class GameDemo : MonoBehaviour
 
         simulateBtn.onClick.AddListener(() =>
         {
-            Physics.autoSimulation = true;
+            DealFirstBars_Simulate();
         });
 
         //simulateV2V.onClick.AddListener(() =>
@@ -1004,8 +1008,33 @@ public partial class GameDemo : MonoBehaviour
 
     IEnumerator LoadConfig()
     {
+        yield return LoadfirstBarCurve();
         yield return LoadBarsConfig();
         yield return LoadPadConfig();
+    }
+
+    IEnumerator LoadfirstBarCurve()
+    {
+        yield return null;
+
+        string firstBarCurvePath = GameConfig.Instance.GetFirstBarCurvePath();
+        string json_str = string.Empty;
+#if UNITY_WEBGL
+        UnityWebRequest request = UnityWebRequest.Get(firstBarCurvePath);
+        request.certificateHandler = new AcceptAllCertificatesSignedHandler();
+        yield return request.SendWebRequest();
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json_str = request.downloadHandler.text;
+        }
+        else
+        {
+            Debug.LogError($"加载失败: {request.error}");
+        }
+#else
+        json_str = File.ReadAllText(firstBarCurvePath);
+#endif
+        firstBarsCurve = JsonUtility.FromJson<BarsCurve>(json_str);
     }
 
 
@@ -1700,8 +1729,6 @@ public partial class GameDemo : MonoBehaviour
 
         midiFacter = midiHelper.suitMidiFacter;
 
-        int ccc = 0;
-
         foreach (var mptkEvent in midiHelper.AllMidiEventsSet)
         {
             int _frame = Mathf.RoundToInt(mptkEvent.RealTime / 1000.0f / 0.02f / midiFacter);
@@ -1723,32 +1750,56 @@ public partial class GameDemo : MonoBehaviour
                     offsetFrame = 0;
                 }
 
-                if(ccc == 2)
-                {
-                    //offsetFrame = 100;
-                }
-
                 frameOffsetList.Add(offsetFrame);
 
                 _lastFrame = _frame;
             }
-
-            ccc++;
         }
         
         if(currentOffsetIndex == 1)
         {
             if (isFirstAnim)
             {
-                yield return DealFirstBars();
+                InstantBars(ball.transform.position, Vector3.one, bar1, 0);
 
-                cameraProjection.positionCount = playMusicFrame;
-                for (int i = 0; i < playMusicFrame; i++)
+                if (isHoldSong)
+                {
+                    playMusicFrame = midiHelper.beiginFrame;
+                    currentFrame = midiHelper.beiginFrame;
+                    if(currentFrame <= firstBarsCurve.frame - 1)
+                    {
+                        int startFrame = (firstBarsCurve.frame - 1) - currentFrame;
+                        physicsStateList = firstBarsCurve.physicsStates.GetRange(startFrame, firstBarsCurve.physicsStates.Count - startFrame);
+                    }
+                    else
+                    {
+                        int standFrame = currentFrame - (firstBarsCurve.frame - 1);
+                        for(int i = 0;i < standFrame;i++)
+                        {
+                            physicsStateList.Add(firstBarsCurve.physicsStates[0]);
+                        }
+                        foreach(var ps in firstBarsCurve.physicsStates)
+                        {
+                            physicsStateList.Add(ps);
+                        }
+                    }
+                }
+                else
+                {
+                    playMusicFrame = firstBarsCurve.frame - 1;
+                    currentFrame = firstBarsCurve.frame - 1;
+                    physicsStateList = firstBarsCurve.physicsStates;
+                }
+
+                cameraProjection.positionCount = physicsStateList.Count;
+                for (int i = 0; i < physicsStateList.Count; i++)
                 {
                     cameraProjection.SetPosition(i, physicsStateList[i].position);
                     cameraPathList.Add(physicsStateList[i].position);
                     cameraPosMap.Add(i, i);
                 }
+                ball.ResetState(physicsStateList[physicsStateList.Count - 1]);
+
             }
             else
             {
@@ -3132,20 +3183,23 @@ public partial class GameDemo : MonoBehaviour
     {
         if (isPlay)
         {
-            if (currentFrame + 250 == playMusicFrame)
-            {
-                if (!isFirstAnim)
-                    v_3rd_camera.gameObject.SetActive(false);
-                //midiHelper.Play();
-            }
+            //if (currentFrame + 250 == playMusicFrame)
+            //{
+            //    if (!isFirstAnim)
+            //        v_3rd_camera.gameObject.SetActive(false);
+            //    //midiHelper.Play();
+            //}
 
             if (currentFrame < physicsStateList.Count)
             {
                 ball.ResetState(physicsStateList[currentFrame]);
                 ball.PlayEffet();
+
                 currentFrame++;
-                
-                if(m_preObjCount != m_currentObjCount)
+
+                keepRotation.SetLabel(currentFrame);
+
+                if (m_preObjCount != m_currentObjCount)
                 {
                     if(m_currentObjCount - 1 == 0)
                     {
@@ -3160,9 +3214,28 @@ public partial class GameDemo : MonoBehaviour
             }
             else
             {
-                isPlay = false;
-                Text label = playBtn.transform.Find("Text (Legacy)").GetComponent<Text>();
-                label.text = "play";
+                if(isHoldSong)
+                {
+                    if (currentFrame < midiHelper.GetEndFrame())
+                    {
+                        //等结束
+                        currentFrame++;
+                    }
+                    else
+                    {
+                        isPlay = false;
+                        Text label = playBtn.transform.Find("Text (Legacy)").GetComponent<Text>();
+                        label.text = "play";
+                    }
+                    ball.StopEffect();
+                }
+                else
+                {
+                    isPlay = false;
+                    Text label = playBtn.transform.Find("Text (Legacy)").GetComponent<Text>();
+                    label.text = "play";
+                    ball.StopEffect();
+                }
             }
 
             MoveCamera(currentFrame);

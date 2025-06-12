@@ -47,7 +47,7 @@ public class GameConfig : MonoBehaviour
     string barCurvePath = headUrl + "/barCurve";
     string padCurvePath = headUrl + "/padCurve";
     string jsonPath = headUrl + "/json";
-
+    string firstBarCurvePath = headUrl + "/firstBarCurve.json";
 #else 
     string midiPath = Application.streamingAssetsPath + "/midi";
     string barsConfigPath = Application.streamingAssetsPath + "/barsConfig.json";
@@ -55,6 +55,7 @@ public class GameConfig : MonoBehaviour
     string barCurvePath = Application.streamingAssetsPath + "/barCurve";
     string padCurvePath = Application.streamingAssetsPath + "/padCurve";
     string jsonPath = Application.streamingAssetsPath + "/json";
+    string firstBarCurvePath = Application.streamingAssetsPath + "/firstBarCurve.json";
 #endif
 
     public string GetMidiPath()
@@ -85,6 +86,11 @@ public class GameConfig : MonoBehaviour
     public string GetJsonPath()
     {
         return jsonPath;
+    }
+
+    public string GetFirstBarCurvePath()
+    {
+        return firstBarCurvePath;
     }
 
 }

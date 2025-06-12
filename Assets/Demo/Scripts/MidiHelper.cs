@@ -29,6 +29,8 @@ public class MidiHelper : MonoBehaviour
     public float beginTime = 0;
     public float endTime = 0;
     public int beiginFrame = 0;
+    public float durationTime = 0;
+
     AudioClip currentClip;
     private bool isLoadBgm = false;
     public int midiCount = 0;
@@ -140,7 +142,12 @@ public class MidiHelper : MonoBehaviour
                 }
             }
 
+            durationTime = midiFilePlayer.MPTK_DurationMS;
             beiginFrame = Mathf.RoundToInt(beginTime / 0.02f);
+
+            Debug.Log($"beginTime:{beginTime}");
+            Debug.Log($"endFrame:{ Mathf.RoundToInt(endTime / 1000.0f / 0.02f)}");
+            Debug.Log($"durationFrame:{ Mathf.RoundToInt(durationTime / 1000.0f / 0.02f)}");
 
             //Dictionary<float, int> tempDic = new Dictionary<float, int>();
 
@@ -266,14 +273,15 @@ public class MidiHelper : MonoBehaviour
 
     public int GetEndFrame()
     {
-        if(currentClip != null)
-        {
-            return Mathf.RoundToInt((currentClip.length - (endTime / 1000.0f)) / 0.02f);
-        }
-        else
-        {
-            return Mathf.RoundToInt((255f - (endTime / 1000.0f)) / 0.02f);
-        }
+        //if(currentClip != null)
+        //{
+        //    return Mathf.RoundToInt((currentClip.length - (endTime / 1000.0f)) / 0.02f);
+        //}
+        //else
+        //{
+        //    return Mathf.RoundToInt( (durationTime - endTime) / 1000.0f / 0.02f);
+        //}
+        return Mathf.RoundToInt(durationTime / 1000.0f / 0.02f);
     }
 
     public void Pause()

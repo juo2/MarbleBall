@@ -41,25 +41,27 @@ public partial class GameDemo : MonoBehaviour
 
             SaveData(file);
 
-            SpaceKeyDown();
+            BeiginPlay_Before();
+            yield return new WaitForSeconds(0.5f);
 
             captureObj.SetActive(true);
             captureBase.FilenamePrefix = file;
-
-            yield return new WaitForSeconds(spacePlayTime-1);
-
             Debug.Log("开始录像！！！！！！！！！！！！！");
-
             captureBase.StartCapture();
+            captureBase.OnCaptureStart.AddListener(() => 
+            {
+                Debug.Log("开始播放动画！！！！！！！！！！！！！");
+                StartCoroutine(Delay_BeiginPlay());
+            });
 
             recordPreTime = Time.time;
 
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(3f);
 
             Debug.Log("开始检测 isPlay！！！！！！！！！！！！！");
 
             yield return new WaitUntil(() => isPlay == false);
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
 
             Debug.Log("停止录像 ！！！！！！！！！！！！！");
 
@@ -173,6 +175,47 @@ public partial class GameDemo : MonoBehaviour
         currentCameraMovement = new CameraMovement();
 
         curveTypeList.Clear();
+
+        verCameraPointDic.Clear();
+    }
+
+    void BeiginPlay_Before()
+    {
+        //Time.timeScale = midiHelper.suitMidiFacter;
+
+        m_currentObjCount = -1;
+        m_preObjCount = -1;
+
+        //重置位置
+        currentFrame = 0;
+
+        keepRotation.SetLabel(currentFrame);
+
+        if (physicsStateList.Count > 0)
+            ball.ResetState(physicsStateList[currentFrame]);
+
+        visiblePadRange(0, 10);
+        midiHelper.Stop();
+        cinemachineTrackedDolly.m_PathPosition = 0;
+        cameraPos.transform.position = Vector3.zero;
+
+        isEditorCamera = false;
+        UpdateCamera();
+
+        bGMPlayer.StopBgm();
+    }
+
+    IEnumerator Delay_BeiginPlay()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        isPlay = true;
     }
 
     void SpaceKeyDown()

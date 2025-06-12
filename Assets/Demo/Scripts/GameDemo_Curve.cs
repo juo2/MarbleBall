@@ -371,17 +371,35 @@ public partial class GameDemo : MonoBehaviour
         Vector3 size = Vector2.zero;
         Vector3 bestPos = Vector2.zero;
 
-        if (ball.velocity.x > 0)
+        if(isFail)
         {
-            center = horizontalCenter3;
-            bestPos = horizontalBestPos3;
+            if (ball.velocity.x > 0)
+            {
+                center = horizontalCenter5;
+                bestPos = horizontalBestPos5;
+            }
+            else
+            {
+                center = horizontalCenter6;
+                bestPos = horizontalBestPos6;
+            }
+            size = horizontalSize3;
         }
         else
         {
-            center = horizontalCenter4;
-            bestPos = horizontalBestPos4;
+            if (ball.velocity.x > 0)
+            {
+                center = horizontalCenter3;
+                bestPos = horizontalBestPos3;
+            }
+            else
+            {
+                center = horizontalCenter4;
+                bestPos = horizontalBestPos4;
+            }
+            size = horizontalSize2;
         }
-        size = horizontalSize2;
+        
 
         SetBounds(offsetIndex - 1, center, size, bestPos);
 
