@@ -1220,4 +1220,43 @@ public partial class GameDemo : MonoBehaviour
         logger($"simlateFrame:{simlateFrame}");
         Debug.Log($"simlateFrame:{simlateFrame}");
     }
+
+    void DealFirstBars_Simulate()
+    {
+        int simlateFrame = 0;
+
+        Vector3 v = new Vector3(0, 0, 0);
+        ball.SetVelocity(v);
+        ball.SetAngularVelocity(v);
+
+        InstantBars(ball.transform.position, Vector3.one, bar1, 0);
+
+        for (int i = 0; i < 9999; i++)
+        {
+            simulateNextFrame(true, false);
+            simlateFrame++;
+
+            if (barsDemoList[0].isPass(ball.transform.position))
+            {
+                break;
+            }
+        }
+
+        for (int i = 0; i < 12; i++)
+        {
+            simulateNextFrame(true, false);
+            simlateFrame++;
+        }
+
+        BarsCurve barsCurve = new BarsCurve();
+        barsCurve.prefabIndex = 0;
+        barsCurve.inverse = false;
+        barsCurve.physicsStates = physicsStateList.GetRange(1, physicsStateList.Count - 1);
+        barsCurve.frame = physicsStateList.Count - 1;
+
+        string json_str = JsonUtility.ToJson(barsCurve);
+        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "firstBarCurve.json"), json_str);
+
+        Debug.Log($"simlateFrame:{simlateFrame}");
+    }
 }
