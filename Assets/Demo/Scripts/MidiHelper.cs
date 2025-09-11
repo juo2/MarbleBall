@@ -108,7 +108,7 @@ public class MidiHelper : MonoBehaviour
             {
                 if (mptkEvent.Command == MPTKCommand.NoteOn)
                 {
-                    if(beginTime == 0)
+                    if (beginTime == 0)
                     {
                         beginTime = mptkEvent.RealTime / 1000f;
                     }
