@@ -726,7 +726,7 @@ public partial class GameDemo : MonoBehaviour
     List<BarsCurve> barsCurveList = new List<BarsCurve>();
     List<PadCurve> padCurveList = new List<PadCurve>();
 
-    bool isFirstAnim = true;
+    bool isFirstAnim = false;
     bool isHoldSong = true;
 
     int barsCurveMinIndex = 0;
@@ -1843,11 +1843,16 @@ public partial class GameDemo : MonoBehaviour
                 else if (playMusicFrame > 500)
                 {
                     //HorizontalCombine2(currentOffsetIndex, playMusicFrame);
+                    HorizontalCombine(currentOffsetIndex, playMusicFrame, true);
 
+                }
+                else if (playMusicFrame > 1000)
+                {
                     HorizontalCombine(currentOffsetIndex, 500, true);
                     HorizontalCombine(currentOffsetIndex, 400);
                     HorizontalCombine(currentOffsetIndex, playMusicFrame - 500 - 400);
                 }
+
 
                 cameraProjection.positionCount = playMusicFrame;
                 for (int i = 0; i < playMusicFrame; i++)
@@ -2152,15 +2157,15 @@ public partial class GameDemo : MonoBehaviour
         //处理最后一个
         CalculateCameraPath(-1, -1);
 
-        if(!isFirstAnim)
-        {
-            int ef = midiHelper.GetEndFrame();
-            int _count = cameraFollowList.Count;
-            for (int i = _count; i < _count + ef; i++)
-             {
-                cameraFollowList.Add(physicsStateList[i].position);
-            }
-        }
+        //if(!isFirstAnim)
+        //{
+        //    int ef = midiHelper.GetEndFrame();
+        //    int _count = cameraFollowList.Count;
+        //    for (int i = _count; i < _count + ef; i++)
+        //    {
+        //        cameraFollowList.Add(physicsStateList[i].position);
+        //    }
+        //}
 
         cameraPathProjection.positionCount = cameraFollowList.Count;
         cameraPathProjection.SetPositions(cameraFollowList.ToArray());
