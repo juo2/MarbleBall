@@ -22,8 +22,8 @@ public partial class GameDemo : MonoBehaviour
         canvasObj.SetActive(false);
         captureGUI.enabled = false;
         isAutoGen = true;
-        string _path = Path.Combine(Application.streamingAssetsPath, "midi");
-        List<string> _files = CheckForMidiFiles(_path);
+        string _path = Path.Combine(Application.streamingAssetsPath, "json");
+        List<string> _files = CheckForJsonFiles(_path);
 
         foreach(var file in _files)
         {
@@ -33,7 +33,8 @@ public partial class GameDemo : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
-            yield return StartGenerating(file, 0);
+            //yield return StartGenerating(file, 0);
+            LoadData();
 
             yield return new WaitForSeconds(3f);
 
@@ -84,54 +85,16 @@ public partial class GameDemo : MonoBehaviour
     {
         if(isAutoGen)
         {
-            // 设置GUI的样式，默认样式即可
-            GUIStyle style = new GUIStyle();
-            style.fontSize = 60;
-            style.normal.textColor = Color.red;
+            //// 设置GUI的样式，默认样式即可
+            //GUIStyle style = new GUIStyle();
+            //style.fontSize = 60;
+            //style.normal.textColor = Color.red;
 
-            GUI.Label(new Rect(10, 10, 200, 30), captureBase.CaptureStats.FPS.ToString(), style);
+            //GUI.Label(new Rect(10, 10, 200, 30), captureBase.CaptureStats.FPS.ToString(), style);
         }
     }
 
-    IEnumerator StartGenerating(string midi,int count)
-    {
-        initLogger(midi);
-
-        foreach (Pad pad in showPadList)
-        {
-            pad.gameObject.SetActive(false);
-        }
-
-        if (currentOffsetIndex != 1)
-        {
-            PhysicsState ps = physicsStateList[physicsStateList.Count - 1];
-            ball.ResetState(ps);
-            currentFrame = physicsStateList.Count - 1;
-
-            int _key = padDataList.Count - 1;
-            //最后一个踢掉
-            padDataList.RemoveAt(_key);
-
-            if (visiblePadDic.ContainsKey(_key))
-            {
-                visiblePadDic.Remove(_key);
-            }
-        }
-
-        yield return midiHelper.Load(midi);
-
-        if(midiHelper.midiCount != 0)
-        {
-            logger($"midiHelper.suitMidiFacter = {midiHelper.suitMidiFacter}");
-
-            SkinManager.Instance.RefreshSkinByName(midiHelper.currentMidi);
-
-            LOOPCOUNT = count;
-
-            yield return GameInit();
-        }
-    }
-
+    
     void ResetBeigin()
     {
         //清空bars
@@ -163,7 +126,7 @@ public partial class GameDemo : MonoBehaviour
         m_currentObjCount = -1;
         m_preObjCount = -1;
 
-        Clear_Simulate();
+        //Clear_Simulate();
 
         isEditorCamera = true;
         UpdateCamera();

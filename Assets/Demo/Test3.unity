@@ -26899,6 +26899,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
+    FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
@@ -99956,6 +99957,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
+    FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
@@ -105857,6 +105859,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
+    FocusDistance: 10
     m_SensorSize: {x: 1, y: 1}
   m_Transitions:
     m_BlendHint: 0
@@ -130152,6 +130155,7 @@ MonoBehaviour:
   captureObj: {fileID: 534208293}
   captureGUI: {fileID: 1116189332}
   canvasObj: {fileID: 631282533}
+  canvasTextObj: {fileID: 1165884951}
   cinemachineSmoothPath: {fileID: 523672108}
   follow_camera: {fileID: 1290303233}
   v_3rd_camera: {fileID: 720529350}
