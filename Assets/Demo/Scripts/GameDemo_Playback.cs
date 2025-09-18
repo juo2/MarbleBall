@@ -162,7 +162,8 @@ public partial class GameDemo : MonoBehaviour
         cinemachineSmoothPath.m_Waypoints = waypoints.ToArray();
 
         //¿ªÊ¼¶¯»­
-        InstantBars(ball.transform.position, Vector3.one, bar1, 0);
+        if(isFirstAnim)
+            InstantBars(ball.transform.position, Vector3.one, bar1, 0);
 
         foreach (var bar in barCombineDataList)
         {
