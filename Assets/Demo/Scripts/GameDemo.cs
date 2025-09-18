@@ -4,8 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 using static Cinemachine.CinemachineSmoothPath;
 
@@ -158,6 +161,9 @@ public partial class GameDemo : MonoBehaviour
 
     [SerializeField]
     private Cinemachine.CinemachineVirtualCamera v_camera_editor;
+
+    [SerializeField]
+    private Transform testCameraPos;
 
     [SerializeField]
     private Transform cameraFollowPos;
@@ -728,6 +734,7 @@ public partial class GameDemo : MonoBehaviour
 
     bool isFirstAnim = false;
     bool isHoldSong = true;
+    bool isUseAVPro = false;
 
     int barsCurveMinIndex = 0;
     int barsCurveMaxIndex = 11;
@@ -1003,7 +1010,16 @@ public partial class GameDemo : MonoBehaviour
             //initialRotation = new Vector3(0f, 90f, 0);
             initialRotation = new Vector3(0f, 0f, 0);
 
-
+        if(isUseAVPro)
+        {
+            follow_camera.gameObject.SetActive(true);
+            testCameraPos.gameObject.SetActive(false);
+        }
+        else
+        {
+            follow_camera.gameObject.SetActive(false);
+            testCameraPos.gameObject.SetActive(true);
+        }
     }
 
     IEnumerator LoadConfig()
@@ -1448,7 +1464,7 @@ public partial class GameDemo : MonoBehaviour
             {
                 if (visiblePadDic.TryGetValue(_currentCount - 1, out Pad _pad))
                 {
-                    _pad.padTrigger();
+                    _pad.padTrigger(currentFrame);
                 }
             }
         }
@@ -1788,7 +1804,10 @@ public partial class GameDemo : MonoBehaviour
                 {
                     playMusicFrame = firstBarsCurve.frame - 1;
                     currentFrame = firstBarsCurve.frame - 1;
-                    physicsStateList = firstBarsCurve.physicsStates;
+                    foreach (var ps in firstBarsCurve.physicsStates)
+                    {
+                        physicsStateList.Add(ps);
+                    }
                 }
 
                 cameraProjection.positionCount = physicsStateList.Count;
@@ -3160,45 +3179,113 @@ public partial class GameDemo : MonoBehaviour
             }
         }
 
-        //if(padsBounds != null)
-        //{
-        //    Vector3 leftUp = new Vector3(padsBounds.min.x, padsBounds.min.y, 0);
-        //    Vector3 rightUp = new Vector3(padsBounds.max.x, padsBounds.min.y, 0);
-        //    Vector3 rightDown = new Vector3(padsBounds.max.x, padsBounds.max.y, 0);
-        //    Vector3 leftDown = new Vector3(padsBounds.min.x, padsBounds.max.y, 0);
-
-        //    if(linePadTest == null)
-        //        linePadTest = Instantiate(line);
-
-        //    linePadTest._line.positionCount = 5;
-        //    linePadTest._line.SetPosition(0, leftUp);
-        //    linePadTest._line.SetPosition(1, rightUp);
-        //    linePadTest._line.SetPosition(2, rightDown);
-        //    linePadTest._line.SetPosition(3, leftDown);
-        //    linePadTest._line.SetPosition(4, leftUp);
-        //    linePadTest.SetWidth(0.3f);
-        //    linePadTest.SetColor(Color.cyan);
-
-        //    linePadTest.gameObject.SetActive(true);
-        //}
-
     }
 
     private void FixedUpdate()
     {
+        //在不使用AVRro录屏的时候不进这里
+        if(!isAutoGen || isUseAVPro)
+            PlayBallAnim();
+    }
+
+    // Texture2D tex;
+
+    int width = 1080;
+    int height = 1920;
+    byte[] bytes;
+
+    private void Awake()
+    {
+    //    tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+
+    }
+
+    IEnumerator PlayLoop()
+    {
+        string capDir = Path.Combine(Application.dataPath, "../Captures", midiHelper.currentMidi);
+        if (!Directory.Exists(capDir))
+        {
+            Directory.CreateDirectory(capDir);
+        }
+
+        // 线性/URP 可靠配置
+        var rt = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32);
+        rt.Create();
+        // 线性色彩空间：最后一个参数 linear = true
+        var tex = new Texture2D(width, height, TextureFormat.RGBA32, false, QualitySettings.activeColorSpace == ColorSpace.Linear);
+
+        while (isPlay)
+        {
+            // 1) 推进一帧的状态/相机/文本
+            PlayBallAnim();
+
+            // 2) 等渲染完成（这样你记录的“帧号文本”已经出现在屏幕上了）
+            yield return new WaitForEndOfFrame();
+
+            ScreenCapture.CaptureScreenshotIntoRenderTexture(rt);
+
+            RenderTexture prev = RenderTexture.active;
+            RenderTexture.active = rt;
+
+            var rect = new Rect(0, 0, width, height);
+            tex.ReadPixels(rect, 0, 0, false);
+            RenderTexture.active = prev;
+
+            if (SystemInfo.graphicsUVStartsAtTop)
+            {
+                FlipYInPlace(tex);
+            }
+            tex.Apply(false, false);
+            
+            string filename = $"cap_{currentFrame}.jpg";    
+            string path = Path.Combine(capDir, filename);
+            // bytes = tex.EncodeToJPG(100);
+            bytes = tex.EncodeToPNG();
+            File.WriteAllBytes(path, bytes);
+
+            // yield return new WaitForEndOfFrame();
+        }
+    }
+
+    static void FlipYInPlace(Texture2D tex)
+    {
+        int w = tex.width;
+        int h = tex.height;
+        // RGBA32 → 4 字节每像素
+        int stride = w * 4;
+
+        var data = tex.GetRawTextureData<byte>(); // NativeArray<byte>
+        byte[] rowBuf = new byte[stride];
+
+        for (int y = 0; y < h / 2; y++)
+        {
+            int top = y * stride;
+            int bot = (h - 1 - y) * stride;
+
+            // 交换 top/bot 两行
+            // 复制 top → rowBuf
+            for (int i = 0; i < stride; i++) rowBuf[i] = data[top + i];
+            // bot → top
+            for (int i = 0; i < stride; i++) data[top + i] = data[bot + i];
+            // rowBuf → bot
+            for (int i = 0; i < stride; i++) data[bot + i] = rowBuf[i];
+        }
+        // 注意：我们直接改了 raw data，仍需要 Apply 把 CPU 改动上传到 GPU
+        // （上面主流程里已经调用了 tex.Apply(false,false)）
+    }
+
+    void PlayBallAnim()
+    {
         if (isPlay)
         {
-            //if (currentFrame + 250 == playMusicFrame)
-            //{
-            //    if (!isFirstAnim)
-            //        v_3rd_camera.gameObject.SetActive(false);
-            //    //midiHelper.Play();
-            //}
-
             if (currentFrame < physicsStateList.Count)
             {
                 ball.ResetState(physicsStateList[currentFrame]);
-                ball.PlayEffet();
+
+                if(isUseAVPro)
+                    ball.PlayEffet();
+                else
+                    ball.StopEffect();
 
                 currentFrame++;
 
@@ -3206,20 +3293,20 @@ public partial class GameDemo : MonoBehaviour
 
                 if (m_preObjCount != m_currentObjCount)
                 {
-                    if(m_currentObjCount - 1 == 0)
+                    if (m_currentObjCount - 1 == 0)
                     {
                         bGMPlayer.PlayBgm(midiHelper.currentMidi, midiHelper.beginTime);
-                        
+
                         logger($"offsetTime:{ Time.time - recordPreTime}");
                         logger($"beginTime:{midiHelper.beginTime}");
                     }
-                    midiHelper.Play(m_currentObjCount-1);
+                    midiHelper.Play(m_currentObjCount - 1);
                 }
                 m_preObjCount = m_currentObjCount;
             }
             else
             {
-                if(isHoldSong)
+                if (isHoldSong) 
                 {
                     if (currentFrame < midiHelper.GetEndFrame())
                     {
@@ -3244,12 +3331,21 @@ public partial class GameDemo : MonoBehaviour
             }
 
             MoveCamera(currentFrame);
-           
+
+            
         }
         else
         {
             ball.StopEffect();
         }
+
+        foreach (var pair in visiblePadDic)
+        {
+            pair.Value.PadFixedUpdate(currentFrame);
+        }
+
+        // if(isPlay)
+        //     Debug.Log($"currentFrame:{currentFrame} 2222222222222222222");
     }
 
     void MoveCamera(int frame)
@@ -3277,7 +3373,75 @@ public partial class GameDemo : MonoBehaviour
         if(frame < cameraPathList.Count )
             cinemachineTrackedDolly.m_PathPosition = frame;
 
+        if (!isUseAVPro)
+            UpdateCameraSmooth();
+
+        //if (currentFrame < cameraPathList.Count)
+        //{
+        //    Vector3 cf_pos = cameraPathList[currentFrame];
+        //    testCameraPos.transform.position = new Vector3(cf_pos.x, cf_pos.y, testCameraPos.transform.position.z);
+        //}
+
         //v_camera_editor.
+    }
+
+    int keyStride = 50;
+
+    void UpdateCameraSmooth()
+    {
+        int N = cameraPathList.Count;
+        if (N == 0) return;
+
+        // 将 currentFrame 映射到“关键点区间”
+        int maxKey = (N - 1) / keyStride;                               // 最后一个关键点索引
+        int keyIdx = Mathf.Clamp(currentFrame / keyStride, 0, maxKey);   // 当前关键点
+        int nextKey = Mathf.Min(keyIdx + 1, maxKey);                     // 下一个关键点
+
+        int aIdx = keyIdx * keyStride;
+        int bIdx = nextKey * keyStride;
+
+        // 本区间内的归一化进度 t ∈ [0,1]
+        float denom = Mathf.Max(1, keyStride);
+        float t = Mathf.Clamp01((currentFrame - aIdx) / denom);
+
+        Vector3 pos;
+        if ( keyIdx > 0 && nextKey < maxKey)
+        {
+            // Catmull-Rom 样条：p1=a, p2=b，前后各取一个控制点
+            int p0Idx = (keyIdx - 1) * keyStride;
+            int p3Idx = Mathf.Min((nextKey + 1) * keyStride, N - 1);
+
+            var p0 = cameraPathList[p0Idx];
+            var p1 = cameraPathList[aIdx];
+            var p2 = cameraPathList[bIdx];
+            var p3 = cameraPathList[p3Idx];
+
+            pos = CatmullRom(p0, p1, p2, p3, t);
+        }
+        else
+        {
+            // 边界或未启用样条：线性插值
+            var a = cameraPathList[aIdx];
+            var b = cameraPathList[bIdx];
+            pos = Vector3.Lerp(a, b, t);
+        }
+
+        // 保持原来的 z
+        pos.z = testCameraPos.transform.position.z;
+        testCameraPos.transform.position = pos;
+    }
+
+    // Catmull–Rom 样条（均匀参数化，t ∈ [0,1]）
+    static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+    {
+        float t2 = t * t;
+        float t3 = t2 * t;
+        return 0.5f * (
+            (2f * p1) +
+            (-p0 + p2) * t +
+            (2f * p0 - 5f * p1 + 4f * p2 - p3) * t2 +
+            (-p0 + 3f * p1 - 3f * p2 + p3) * t3
+        );
     }
 
     void ModifyFrameVelocity(int frame,float offsetX,float offsetY,float modifyVelocityX = -9999, float modifyVelocityY = -9999,Vector3 offsetRotation = default(Vector3))

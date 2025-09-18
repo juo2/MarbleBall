@@ -29,7 +29,7 @@ public partial class GameDemo : MonoBehaviour
         {
             ResetBeigin();
 
-            Debug.Log($"ÕýÔÚÉú³É {file} ÖÐ......");
+            Debug.Log($"æ­£åœ¨ç”Ÿæˆ {file} ä¸­......");
 
             yield return new WaitForSeconds(1f);
 
@@ -37,33 +37,43 @@ public partial class GameDemo : MonoBehaviour
 
             yield return new WaitForSeconds(3f);
 
-            Debug.Log("Éú³ÉÍê±Ï£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡");
+            Debug.Log("ç”Ÿæˆå®Œæ¯•ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼");
 
             SaveData(file);
 
             BeiginPlay_Before();
             yield return new WaitForSeconds(0.5f);
 
-            captureObj.SetActive(true);
-            captureBase.FilenamePrefix = file;
-            Debug.Log("¿ªÊ¼Â¼Ïñ£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡");
-            captureBase.StartCapture();
-            captureBase.OnCaptureStart.AddListener(() => 
+            if(isUseAVPro)
             {
-                Debug.Log("¿ªÊ¼²¥·Å¶¯»­£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡");
-                StartCoroutine(Delay_BeiginPlay());
-            });
+                captureObj.SetActive(true);
+                captureBase.FilenamePrefix = file;
+                Debug.Log("å¼€å§‹å½•åƒï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼");
+                captureBase.StartCapture();
+                captureBase.OnCaptureStart.AddListener(() => 
+                {
+                    Debug.Log("å¼€å§‹æ’­æ”¾åŠ¨ç”»ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼");
+                    StartCoroutine(Delay_BeiginPlay());
+                });
 
-            recordPreTime = Time.time;
+                recordPreTime = Time.time;
+            }
+            else
+            {
+                //å½•å¸§
+                yield return Delay_BeiginPlay();
+                yield return PlayLoop();
+            }
 
+            
             yield return new WaitForSeconds(3f);
 
-            Debug.Log("¿ªÊ¼¼ì²â isPlay£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡");
+            Debug.Log("å¼€å§‹æ£€æµ‹ isPlayï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼");
 
             yield return new WaitUntil(() => isPlay == false);
             //yield return new WaitForSeconds(1f);
 
-            Debug.Log("Í£Ö¹Â¼Ïñ £¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£¡");
+            Debug.Log("åœæ­¢å½•åƒ ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼ï¼");
 
             captureBase.StopCapture();
             captureObj.SetActive(false);
@@ -74,7 +84,7 @@ public partial class GameDemo : MonoBehaviour
     {
         if(isAutoGen)
         {
-            // ÉèÖÃGUIµÄÑùÊ½£¬Ä¬ÈÏÑùÊ½¼´¿É
+            // è®¾ç½®GUIçš„æ ·å¼ï¼Œé»˜è®¤æ ·å¼å³å¯
             GUIStyle style = new GUIStyle();
             style.fontSize = 60;
             style.normal.textColor = Color.red;
@@ -99,7 +109,7 @@ public partial class GameDemo : MonoBehaviour
             currentFrame = physicsStateList.Count - 1;
 
             int _key = padDataList.Count - 1;
-            //×îºóÒ»¸öÌßµô
+            //æœ€åŽä¸€ä¸ªè¸¢æŽ‰
             padDataList.RemoveAt(_key);
 
             if (visiblePadDic.ContainsKey(_key))
@@ -124,18 +134,18 @@ public partial class GameDemo : MonoBehaviour
 
     void ResetBeigin()
     {
-        //Çå¿Õbars
+        //æ¸…ç©ºbars
         ClearAllBars();
         
-        //Çå¿Õpad
+        //æ¸…ç©ºpad
         ClearAllPad();
 
-        //ÁÙÊ±Çå³ý
+        //ä¸´æ—¶æ¸…é™¤
         //DestoryAllBars();
 
         currentOffsetIndex = 1;
 
-        //Çå¿ÕÈýÌõÏß
+        //æ¸…ç©ºä¸‰æ¡çº¿
         line.ClearLineRenderer();
         cameraProjection.positionCount = 0;
         cameraPathProjection.positionCount = 0;
@@ -186,7 +196,7 @@ public partial class GameDemo : MonoBehaviour
         m_currentObjCount = -1;
         m_preObjCount = -1;
 
-        //ÖØÖÃÎ»ÖÃ
+        //é‡ç½®ä½ç½®
         currentFrame = 0;
 
         keepRotation.SetLabel(currentFrame);
@@ -227,7 +237,7 @@ public partial class GameDemo : MonoBehaviour
         m_currentObjCount = -1;
         m_preObjCount = -1;
 
-        //ÖØÖÃÎ»ÖÃ
+        //é‡ç½®ä½ç½®
         currentFrame = 0;
         if(physicsStateList.Count > 0)
             ball.ResetState(physicsStateList[currentFrame]);
@@ -299,7 +309,7 @@ public partial class GameDemo : MonoBehaviour
 
         foreach(var key in barsLineDemoPool.Keys)
         {
-            logger($"BarLine {key} ÓÐ¶ÔÏó {barsLineDemoPool[key].Count} ¸ö");
+            logger($"BarLine {key} æœ‰å¯¹è±¡ {barsLineDemoPool[key].Count} ä¸ª");
         }
 
 

@@ -115,9 +115,13 @@ public class Pad : MonoBehaviour
         }
     }
 
-    public void padTrigger()
+    int startFrame = 0;
+
+    public void padTrigger(int currentFrame)
     {
         isAnim = true;
+        startFrame = currentFrame;
+
         elapsedTime = 0;
         padRendererAnim.transform.localPosition = animPos;
 
@@ -255,27 +259,20 @@ public class Pad : MonoBehaviour
         effect.Play();
     }
 
+
+    int animFrame = 4;
+
     // Update is called once per frame
-    void Update()
+    public void PadFixedUpdate(int currentFrame)
     {
         if(isAnim)
         {
-            if(delateTime > DELATETIME)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedTime / duration);
-                padRendererAnim.transform.localPosition = Vector3.Lerp(animPos, originPos, t);
+            float t = Mathf.Clamp01(   (currentFrame - startFrame) / animFrame  );
+            padRendererAnim.transform.localPosition = Vector3.Lerp(animPos, originPos, t);
 
-                if (t >= 1f)
-                {
-                    isAnim = false;
-                }
-
-                delateTime = 0.0f;
-            }
-            else
+            if (currentFrame - startFrame >= animFrame)
             {
-                delateTime += Time.deltaTime;
+                isAnim = false;
             }
         }
 
